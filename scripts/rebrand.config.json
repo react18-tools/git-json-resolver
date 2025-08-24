@@ -2,5 +2,14 @@
   "packageName": "git-json-resolver",
   "owner": "react18-tools",
   "repo": "git-json-resolver",
-  "title": "Git Json Resolver"
+  "title": "Git Json Resolver",
+  "removedPackages": [
+    "examples/express",
+    "packages/logger"
+  ],
+  "removedFeatures": [
+    "Rebrander",
+    "Generators",
+    "LiteMode"
+  ]
 }
