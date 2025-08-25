@@ -38,7 +38,7 @@ type ForbidBangEnd<T extends string> = T extends `${string}!` ? never : T;
  * - Values: one or more strategies, or nested RuleTree
  */
 export type RuleTree<T extends string = BasicMergeStrategies> = {
-  [fieldGlob: string]: ForbidBangEnd<T>[] | RuleTree<ForbidBangEnd<T>>;
+  [fieldGlob: string]: T[] | RuleTree<T>;
 };
 
 /**
@@ -46,7 +46,7 @@ export type RuleTree<T extends string = BasicMergeStrategies> = {
  */
 export interface Config<T extends string = BasicMergeStrategies, TContext = unknown> {
   /** Fallback strategy when no rule matches */
-  defaultStrategy?: ForbidBangEnd<T> | ForbidBangEnd<T>[];
+  defaultStrategy?: T | T[];
 
   /** Rule tree mapping globs → strategies */
   rules?: RuleTree<T>;

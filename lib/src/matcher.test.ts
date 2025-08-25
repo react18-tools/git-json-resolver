@@ -17,6 +17,7 @@ describe("basicMatcher", () => {
     expect(basicMatcher.isMatch("a.b.c", ["a.**"])).toBe(true);
     expect(basicMatcher.isMatch("a.b.c.d", ["a.**.d"])).toBe(true);
     expect(basicMatcher.isMatch("a.b.c.d", ["**.d"])).toBe(true);
+    expect(basicMatcher.isMatch("a.b.c.d", ["*.d"])).toBe(false);
     expect(basicMatcher.isMatch("a.b.c", ["**"])).toBe(true);
   });
 
@@ -33,6 +34,16 @@ describe("basicMatcher", () => {
 
   it("handles empty patterns", () => {
     expect(basicMatcher.isMatch("foo.bar", [])).toBe(false);
+  });
+
+  it("respects escapes", () => {
+    expect(basicMatcher.isMatch("foo.helloWorld", ["foo.hello*"])).toBe(true);
+    expect(basicMatcher.isMatch("foo.helloWorld", ["foo.hello\\*"])).toBe(false);
+    expect(basicMatcher.isMatch("foo.hello*", ["foo.hello\\*"])).toBe(true);
+
+    expect(basicMatcher.isMatch("a.b.c", ["a.**"])).toBe(true);
+    expect(basicMatcher.isMatch("a.b.c", ["a.\\*\\*"])).toBe(false);
+    expect(basicMatcher.isMatch("a.**", ["a.\\*\\*"])).toBe(true);
   });
 });
 
@@ -56,7 +67,7 @@ describe("loadMatcher", () => {
 
   it("loads picomatch when available", () => {
     const pm = loadMatcher("picomatch");
-    expect(pm.isMatch("ok", ["ok*"])).toBe(true);
+    expect(pm.isMatch("okmyfield", ["ok*"])).toBe(true);
     expect(pm.isMatch("fail", ["pattern"])).toBe(false);
   });
 
