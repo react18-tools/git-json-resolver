@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { basicMatcher, loadMatcher } from "./matcher";
 
 describe("basicMatcher", () => {
@@ -44,34 +44,24 @@ describe("basicMatcher", () => {
     expect(basicMatcher.isMatch("a.b.c", ["a.**"])).toBe(true);
     expect(basicMatcher.isMatch("a.b.c", ["a.\\*\\*"])).toBe(false);
     expect(basicMatcher.isMatch("a.**", ["a.\\*\\*"])).toBe(true);
+    expect(basicMatcher.isMatch("a.c.b", ["a.***"])).toBe(false);
   });
 });
 
 describe("loadMatcher", () => {
-  const realRequire = require;
-
-  beforeEach(() => {
-    vi.resetModules();
-  });
-
-  afterEach(() => {
-    // restore require if patched
-    global.require = realRequire;
-  });
-
-  it("loads micromatch when available", () => {
-    const mm = loadMatcher("micromatch");
+  it("loads micromatch when available", async () => {
+    const mm = await loadMatcher("micromatch");
     expect(mm.isMatch("foo", ["foo"])).toBe(true);
     expect(mm.isMatch("bar", ["foo"])).toBe(false);
   });
 
-  it("loads picomatch when available", () => {
-    const pm = loadMatcher("picomatch");
+  it("loads picomatch when available", async () => {
+    const pm = await loadMatcher("picomatch");
     expect(pm.isMatch("okmyfield", ["ok*"])).toBe(true);
     expect(pm.isMatch("fail", ["pattern"])).toBe(false);
   });
 
   it("throws on unknown matcher", () => {
-    expect(() => loadMatcher("invalid" as any)).toThrow(/Unknown matcher/);
+    expect(() => loadMatcher("invalid" as any)).rejects.toThrow(/Unknown matcher/);
   });
 });

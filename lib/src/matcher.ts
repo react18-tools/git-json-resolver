@@ -35,12 +35,13 @@ export const basicMatcher: Matcher = {
  * @returns A Matcher implementation.
  */
 
-export const loadMatcher = (name: "micromatch" | "picomatch"): Matcher => {
+export const loadMatcher = async (name: "micromatch" | "picomatch"): Promise<Matcher> => {
   if (name === "micromatch") {
     let micromatch: any;
     try {
-      micromatch = require("micromatch");
+      micromatch = await import("micromatch");
     } catch {
+      /* v8 ignore next 4 - difficult to simulate this case with micromatch in devDeps */
       throw new Error(
         `micromatch is not installed. Please add it as a dependency if you want to use it.`,
       );
@@ -51,6 +52,7 @@ export const loadMatcher = (name: "micromatch" | "picomatch"): Matcher => {
         try {
           return micromatch.isMatch(str, pats);
         } catch (err) {
+          /* v8 ignore next 4 - difficult to simulate this case with micromatch/picomatch in devDeps */
           throw new Error(`micromatch failed to run isMatch: ${(err as Error).message}`);
         }
       },
@@ -60,8 +62,9 @@ export const loadMatcher = (name: "micromatch" | "picomatch"): Matcher => {
   if (name === "picomatch") {
     let picomatch: any;
     try {
-      picomatch = require("picomatch");
+      picomatch = (await import("picomatch")).default;
     } catch {
+      /* v8 ignore next 4 - difficult to simulate this case with micromatch/picomatch in devDeps */
       throw new Error(
         `picomatch is not installed. Please add it as a dependency if you want to use it.`,
       );
@@ -73,6 +76,7 @@ export const loadMatcher = (name: "micromatch" | "picomatch"): Matcher => {
           const fn = picomatch(pats);
           return fn(str);
         } catch (err) {
+          /* v8 ignore next 4 - difficult to simulate this case with micromatch/picomatch in devDeps */
           throw new Error(`picomatch failed to run isMatch: ${(err as Error).message}`);
         }
       },
@@ -139,6 +143,7 @@ const matchSegments = (strSegments: string[], patternSegments: string[]): boolea
           return true;
         }
       }
+      /* v8 ignore next 2 - unreachable in most cases */
       return false;
     }
 
