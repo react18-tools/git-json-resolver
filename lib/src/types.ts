@@ -52,7 +52,7 @@ export interface Config<T extends string = BasicMergeStrategies, TContext = unkn
   rules?: RuleTree<T>;
 
   /** Strategy → list of fields to apply it to */
-  byStrategy?: Partial<Record<ForbidBangEnd<T>, string[]>>;
+  byStrategy?: Partial<Record<T, string[]>>;
 
   /** Custom strategies (excluding built-in names) */
   customStrategies?: Record<Exclude<ForbidBangEnd<T>, BasicMergeStrategies>, StrategyFn<TContext>>;

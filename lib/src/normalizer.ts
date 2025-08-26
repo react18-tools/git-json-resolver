@@ -22,7 +22,7 @@ export interface NormalizedRules {
   exact: Record<string, StrategyList[]>;
   exactFields: Record<string, StrategyList[]>;
   patterns: Record<string, StrategyList[]>;
-  default: string[];
+  default: StrategyItem[];
 }
 
 export interface NormalizedConfig {
@@ -109,10 +109,17 @@ export const normalizeConfig = async <T extends string = BasicMergeStrategies>(
 
 /* ---------------- helpers ---------------- */
 
-const normalizeDefault = <T extends string>(def?: T | T[]): string[] => {
-  if (!def) return ["merge"];
-  const arr = Array.isArray(def) ? def : [def];
-  return arr.slice();
+const normalizeDefault = <T extends string>(def?: T | T[]): StrategyItem[] => {
+  const arr = def ? (Array.isArray(def) ? def : [def]) : ["merge"];
+
+  return arr.map(name => {
+    const important = name.endsWith("!");
+    ensureStrategyNameValid(name.slice(0, -1));
+    return {
+      name: important ? name.slice(0, -1) : name,
+      important,
+    };
+  });
 };
 
 const parseStrategyName = (raw: string): StrategyItem => {
