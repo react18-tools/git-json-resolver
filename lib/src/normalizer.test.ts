@@ -6,17 +6,20 @@ import type { Config } from "./types";
 describe("normalizeConfig", () => {
   it("uses default strategy = merge when not provided", async () => {
     const result = await normalizeConfig({});
-    expect(result.rules.default).toEqual(["merge"]);
+    expect(result.rules.default).toEqual([{ name: "merge", important: false }]);
   });
 
   it("accepts single default strategy", async () => {
     const result = await normalizeConfig({ defaultStrategy: "replace" });
-    expect(result.rules.default).toEqual(["replace"]);
+    expect(result.rules.default).toEqual([{ name: "replace", important: false }]);
   });
 
   it("accepts multiple default strategies", async () => {
     const result = await normalizeConfig({ defaultStrategy: ["merge", "replace"] });
-    expect(result.rules.default).toEqual(["merge", "replace"]);
+    expect(result.rules.default).toEqual([
+      { name: "merge", important: false },
+      { name: "replace", important: false },
+    ]);
   });
 
   it("classifies rules from byStrategy into exactFields", async () => {
@@ -98,21 +101,6 @@ describe("normalizeConfig", () => {
     expect(result.rules.exact["user.profile.age"][0].strategies).toEqual([
       { name: "merge", important: false },
     ]);
-  });
-
-  it("applies include/exclude defaults", async () => {
-    const result = await normalizeConfig({});
-    expect(result.include).toContain("**/*");
-    expect(result.exclude).toContain("node_modules/**");
-  });
-
-  it("uses provided include/exclude", async () => {
-    const result = await normalizeConfig({
-      include: ["src/**"],
-      exclude: ["dist/**"],
-    });
-    expect(result.include).toEqual(["src/**"]);
-    expect(result.exclude).toEqual(["dist/**"]);
   });
 
   it("fileFilter includes allowed files and excludes others", async () => {

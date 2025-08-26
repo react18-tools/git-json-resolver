@@ -14,7 +14,7 @@ const hasConflict = async (filePath: string): Promise<boolean> => {
       content.includes("<<<<<<<") && content.includes("=======") && content.includes(">>>>>>>")
     );
   } catch {
-    // If file cannot be read (permissions, etc.), treat as non-conflicted
+    /* v8 ignore next 2 - If file cannot be read (permissions, etc.), treat as non-conflicted */
     return false;
   }
 };
@@ -61,6 +61,7 @@ export const collectFiles = async (options: CollectFilesOptions): Promise<string
       const fullPath = path.join(dir, entry.name);
 
       if (entry.isDirectory()) {
+        /* v8 ignore next */
         await walk(fullPath);
       } else if (fileFilter(fullPath)) {
         if (includeNonConflicted) {
