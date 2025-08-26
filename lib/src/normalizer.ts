@@ -29,8 +29,6 @@ export interface NormalizedConfig {
   rules: NormalizedRules;
   matcher: Matcher;
   fileFilter: (filepath: string) => boolean;
-  include: string[];
-  exclude: string[];
   customStrategies: Record<string, StrategyFn>;
 }
 
@@ -101,8 +99,6 @@ export const normalizeConfig = async <T extends string = BasicMergeStrategies>(
     rules,
     matcher,
     fileFilter,
-    include,
-    exclude,
     customStrategies: config.customStrategies ?? {},
   };
 };
