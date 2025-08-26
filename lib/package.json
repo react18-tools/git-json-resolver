@@ -39,12 +39,16 @@
     "@types/picomatch": "^4.0.2",
     "@vitest/coverage-v8": "^3.2.4",
     "esbuild-plugin-rdi": "^0.0.0",
+    "fast-xml-parser": "^5.2.5",
+    "json5": "^2.2.3",
     "micromatch": "^4.0.8",
     "picomatch": "^4.0.3",
+    "toml": "^3.0.0",
     "tsup": "^8.5.0",
     "typescript": "^5.9.2",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "yaml": "^2.8.1"
   },
   "funding": [
     {
@@ -70,5 +74,33 @@
     "tooling",
     "react18-tools",
     "mayank1513"
-  ]
+  ],
+  "peerDependencies": {
+    "fast-xml-parser": "^5.2.5",
+    "json5": "^2.2.3",
+    "micromatch": "^4.0.8",
+    "picomatch": "^4.0.3",
+    "toml": "^3.0.0",
+    "yaml": "^2.8.1"
+  },
+  "peerDependenciesMeta": {
+    "fast-xml-parser": {
+      "optional": true
+    },
+    "json5": {
+      "optional": true
+    },
+    "micromatch": {
+      "optional": true
+    },
+    "picomatch": {
+      "optional": true
+    },
+    "toml": {
+      "optional": true
+    },
+    "yaml": {
+      "optional": true
+    }
+  }
 }
