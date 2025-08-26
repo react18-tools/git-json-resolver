@@ -39,10 +39,10 @@ export interface CollectFilesOptions {
  * @param options - Collection options, including `fileFilter` and traversal root.
  * @returns A promise that resolves with an array of `{ filePath, content }`.
  */
-export const collectFiles = async (options: CollectFilesOptions): Promise<FileEntry[]> => {
+export const listMatchingFiles = async (options: CollectFilesOptions): Promise<FileEntry[]> => {
   const { root = process.cwd(), fileFilter, includeNonConflicted = false } = options;
 
-  const collected: FileEntry[] = [];
+  const fileEntries: FileEntry[] = [];
 
   /**
    * Recursively traverses a directory, checking each file against
@@ -64,7 +64,7 @@ export const collectFiles = async (options: CollectFilesOptions): Promise<FileEn
           const content = await fs.readFile(fullPath, "utf8");
 
           if (includeNonConflicted || hasConflict(content)) {
-            collected.push({ filePath: fullPath, content });
+            fileEntries.push({ filePath: fullPath, content });
           } else {
             console.info(`Skipped (no conflicts): ${fullPath}`);
           }
@@ -76,5 +76,5 @@ export const collectFiles = async (options: CollectFilesOptions): Promise<FileEn
   };
 
   await walk(root);
-  return collected;
+  return fileEntries;
 };

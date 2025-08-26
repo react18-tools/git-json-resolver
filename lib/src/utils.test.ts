@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import fs from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
-import { collectFiles } from "./utils";
+import { listMatchingFiles } from "./utils";
 
 const conflictContent = `
 {
@@ -43,7 +43,7 @@ describe("collectFiles", () => {
   });
 
   it("collects only conflicted files by default", async () => {
-    const files = await collectFiles({
+    const files = await listMatchingFiles({
       root: tmpDir,
       fileFilter: file => file.endsWith(".json"),
     });
@@ -60,7 +60,7 @@ describe("collectFiles", () => {
   });
 
   it("collects conflicted + clean files when includeNonConflicted is true", async () => {
-    const files = await collectFiles({
+    const files = await listMatchingFiles({
       root: tmpDir,
       fileFilter: file => file.endsWith(".json"),
       includeNonConflicted: true,
@@ -77,7 +77,7 @@ describe("collectFiles", () => {
   });
 
   it("skips files that do not match fileFilter", async () => {
-    const files = await collectFiles({
+    const files = await listMatchingFiles({
       root: tmpDir,
       fileFilter: file => file.endsWith(".json"),
     });
