@@ -26,8 +26,10 @@ describe("normalizeConfig", () => {
       },
     };
     const result = await normalizeConfig(config);
-    expect(result.rules.exactFields.foo[0].strategies).toEqual(["replace"]);
-    expect(result.rules.exactFields.bar[0].important).toBe(true);
+    expect(result.rules.exactFields.foo[0].strategies).toEqual([
+      { name: "replace", important: false },
+    ]);
+    expect(result.rules.exactFields.bar[0].strategies[0].important).toBe(true);
   });
 
   it("classifies dotted keys as exact", async () => {
@@ -90,8 +92,12 @@ describe("normalizeConfig", () => {
       },
     };
     const result = await normalizeConfig(config);
-    expect(result.rules.exact["user.name"][0].strategies).toEqual(["replace"]);
-    expect(result.rules.exact["user.profile.age"][0].strategies).toEqual(["merge"]);
+    expect(result.rules.exact["user.name"][0].strategies).toEqual([
+      { name: "replace", important: false },
+    ]);
+    expect(result.rules.exact["user.profile.age"][0].strategies).toEqual([
+      { name: "merge", important: false },
+    ]);
   });
 
   it("applies include/exclude defaults", async () => {
@@ -130,6 +136,18 @@ describe("normalizeConfig", () => {
     expect(result.fileFilter("other/file.ts")).toBe(false);
   });
 
+  it("fileFilter includes allowed files and excludes others", async () => {
+    const result = await normalizeConfig({
+      include: ["src/**/*.json"],
+      exclude: ["src/ignore/**"],
+    });
+    expect(result.fileFilter("src/index.ts")).toBe(false);
+    expect(result.fileFilter("src/index.json")).toBe(true);
+    expect(result.fileFilter("src/abc/index.json")).toBe(true);
+    expect(result.fileFilter("src/ignore/file.ts")).toBe(false);
+    expect(result.fileFilter("other/file.json")).toBe(false);
+  });
+
   it("uses basicMatcher by default", async () => {
     const result = await normalizeConfig({});
     expect(result.matcher).toBe(basicMatcher);
@@ -146,7 +164,7 @@ describe("normalizeConfig", () => {
   it("throws if strategy name ends with '!'", async () => {
     const config: Config<any> = {
       byStrategy: {
-        "merge!": ["foo"],
+        "merge!!": ["foo"],
       },
     };
     await expect(normalizeConfig(config)).rejects.toThrow(/must not end with "!"/);
@@ -168,7 +186,7 @@ describe("normalizeConfig", () => {
       },
     };
     const result = await normalizeConfig(config);
-    expect(result.rules.exactFields.foo[0].important).toBe(true);
+    expect(result.rules.exactFields.foo[0].strategies[0].important).toBe(true);
   });
 
   it("marks important from rules tree key with '!'", async () => {
@@ -180,7 +198,7 @@ describe("normalizeConfig", () => {
       },
     };
     const result = await normalizeConfig(config);
-    expect(result.rules.exact["user.id"][0].important).toBe(true);
+    expect(result.rules.exact["user.id"][0].strategies[0].important).toBe(true);
   });
 
   it("throws on invalid bracket form with dot", async () => {
@@ -221,7 +239,9 @@ describe("normalizeConfig", () => {
       },
     };
     const result = await normalizeConfig(config);
-    expect(result.rules.exact["root.child.leaf"][0].strategies).toEqual(["merge"]);
+    expect(result.rules.exact["root.child.leaf"][0].strategies).toEqual([
+      { name: "merge", important: false },
+    ]);
   });
 
   it("push appends to same key", async () => {
@@ -232,6 +252,9 @@ describe("normalizeConfig", () => {
       },
     };
     const result = await normalizeConfig(config);
-    expect(result.rules.exactFields.dup.map(r => r.strategies[0])).toEqual(["merge", "replace"]);
+    expect(result.rules.exactFields.dup.map(r => r.strategies[0])).toEqual([
+      { name: "merge", important: false },
+      { name: "replace", important: false },
+    ]);
   });
 });

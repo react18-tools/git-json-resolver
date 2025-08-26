@@ -7,9 +7,13 @@
 import { Matcher, basicMatcher, loadMatcher } from "./matcher";
 import { BasicMergeStrategies, Config, RuleTree, StrategyFn } from "./types";
 
-export interface StrategyList {
-  strategies: string[];
+export interface StrategyItem {
+  name: string;
   important: boolean;
+}
+
+export interface StrategyList {
+  strategies: StrategyItem[]; // instead of string[]
   order: number;
   source: string;
 }
@@ -55,14 +59,13 @@ export const normalizeConfig = async <T extends string = BasicMergeStrategies>(
   let order = 0;
 
   if (config.byStrategy) {
-    for (const [strategy, fields] of Object.entries(config.byStrategy)) {
+    for (const [rawStrategy, fields] of Object.entries(config.byStrategy)) {
       if (!fields) continue;
-      ensureStrategyNameValid(strategy);
+      const { name, important: strategyImportant } = parseStrategyName(rawStrategy);
       for (const raw of fields as string[]) {
-        const { key, important } = parseImportance(raw);
+        const { key, important: keyImportant } = parseImportance(raw);
         addRule(rules, key, {
-          strategies: [strategy],
-          important,
+          strategies: [{ name, important: strategyImportant || keyImportant }],
           order: order++,
           source: key,
         });
@@ -71,12 +74,14 @@ export const normalizeConfig = async <T extends string = BasicMergeStrategies>(
   }
 
   if (config.rules) {
-    expandRuleTree(config.rules, [], (pathKey, strategies) => {
-      strategies.forEach(ensureStrategyNameValid);
-      const { key, important } = parseImportance(pathKey);
+    expandRuleTree(config.rules, [], (pathKey, strategyNames) => {
+      const { key, important: keyImportant } = parseImportance(pathKey);
+      const strategies = strategyNames.map(s => {
+        const { name, important } = parseStrategyName(s);
+        return { name, important: important || keyImportant };
+      });
       addRule(rules, key, {
         strategies,
-        important,
         order: order++,
         source: key,
       });
@@ -108,6 +113,13 @@ const normalizeDefault = <T extends string>(def?: T | T[]): string[] => {
   if (!def) return ["merge"];
   const arr = Array.isArray(def) ? def : [def];
   return arr.slice();
+};
+
+const parseStrategyName = (raw: string): StrategyItem => {
+  const important = raw.endsWith("!");
+  const name = important ? raw.slice(0, -1) : raw;
+  ensureStrategyNameValid(name); // validate AFTER removing !
+  return { name, important };
 };
 
 const ensureStrategyNameValid = (name: string) => {
