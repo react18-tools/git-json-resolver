@@ -30,6 +30,7 @@ export interface NormalizedConfig {
   matcher: Matcher;
   fileFilter: (filepath: string) => boolean;
   customStrategies: Record<string, StrategyFn>;
+  includeNonConflicted: boolean;
 }
 
 /** Defaults */
@@ -100,6 +101,7 @@ export const normalizeConfig = async <T extends string = BasicMergeStrategies>(
     matcher,
     fileFilter,
     customStrategies: config.customStrategies ?? {},
+    includeNonConflicted: config.includeNonConflicted ?? false,
   };
 };
 

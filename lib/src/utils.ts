@@ -1,6 +1,5 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { NormalizedConfig } from "./normalizer";
 
 /**
  * Checks whether the given file contains Git merge conflict markers.
@@ -23,9 +22,13 @@ const hasConflict = async (filePath: string): Promise<boolean> => {
 export interface CollectFilesOptions {
   /** Root directory to start traversal (defaults to `process.cwd()`). */
   root?: string;
+
+  /** Function used to decide if a file should be considered at all. */
+  fileFilter: (filePath: string) => boolean;
+
   /**
-   * Include files that match `fileFilter` even if they do not contain
-   * merge conflicts. Defaults to `false`.
+   * Whether to include files even if they don’t contain conflicts.
+   * Defaults to `false`.
    */
   includeNonConflicted?: boolean;
 }
@@ -35,17 +38,14 @@ export interface CollectFilesOptions {
  *
  * - By default, only conflicted files are returned.
  * - If `includeNonConflicted` is enabled, matching files are always included
- *   (skipping conflict check).
+ *   (conflict check is skipped).
  *
- * @param config - Normalized configuration containing `fileFilter`.
- * @param options - Behavior flags (e.g., `includeNonConflicted`).
+ * @param options - Collection options, including `fileFilter` and traversal root.
  * @returns A promise that resolves with an array of matching file paths.
  */
-export const collectFiles = async (
-  config: NormalizedConfig,
-  options: CollectFilesOptions = {},
-): Promise<string[]> => {
-  const { root = process.cwd(), includeNonConflicted = false } = options;
+export const collectFiles = async (options: CollectFilesOptions): Promise<string[]> => {
+  const { root = process.cwd(), fileFilter, includeNonConflicted = false } = options;
+
   const allFiles: string[] = [];
 
   /**
@@ -62,15 +62,13 @@ export const collectFiles = async (
 
       if (entry.isDirectory()) {
         await walk(fullPath);
-      } else if (config.fileFilter(fullPath)) {
+      } else if (fileFilter(fullPath)) {
         if (includeNonConflicted) {
           allFiles.push(fullPath);
+        } else if (await hasConflict(fullPath)) {
+          allFiles.push(fullPath);
         } else {
-          if (await hasConflict(fullPath)) {
-            allFiles.push(fullPath);
-          } else {
-            console.info(`Skipped (no conflicts): ${fullPath}`);
-          }
+          console.info(`Skipped (no conflicts): ${fullPath}`);
         }
       }
     }

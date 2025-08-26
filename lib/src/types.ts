@@ -65,6 +65,13 @@ export interface Config<T extends string = BasicMergeStrategies, TContext = unkn
 
   /** Glob matcher: `"micromatch"`, `"picomatch"`, or custom implementation */
   matcher?: "micromatch" | "picomatch" | Matcher;
+
+  /**
+   * Whether to include files that do not contain conflicts.
+   * Useful for applying strategies, e.g., drop even when conflicts aren’t present.
+   * Defaults to `false`.
+   */
+  includeNonConflicted?: boolean;
 }
 
 export type { Matcher };
