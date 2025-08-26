@@ -5,7 +5,7 @@
  * - `*`   → matches any single field segment
  * - `**`  → matches any number of nested field segments
  * - Prefix/suffix like `prefix-*`, `*-suffix`
- * - Backslash escaping (micromatch-style): `a\.b` → literal dot, `\*` → literal asterisk
+ * - Backslash escaping (micromatch-style): `a\/b` → literal slash, `\*` → literal asterisk
  *
  * Micromatch/Picomatch can be loaded at runtime as optional peers.
  */
@@ -26,7 +26,10 @@ export interface Matcher {
  * - Backslash escaping for `*` and `.`
  */
 export const basicMatcher: Matcher = {
-  isMatch: (str, patterns) => patterns.some(p => matchOne(str, p)),
+  isMatch: (str, patterns) => {
+    const internalStr = toInternal(str);
+    return patterns.some(p => matchOne(internalStr, toInternal(p)));
+  },
 };
 
 /**
@@ -50,7 +53,7 @@ export const loadMatcher = async (name: "micromatch" | "picomatch"): Promise<Mat
     return {
       isMatch: (str, pats) => {
         try {
-          return micromatch.isMatch(str, pats);
+          return micromatch.isMatch(toInternal(str), pats.map(toInternal));
         } catch (err) {
           /* v8 ignore next 4 - difficult to simulate this case with micromatch/picomatch in devDeps */
           throw new Error(`micromatch failed to run isMatch: ${(err as Error).message}`);
@@ -73,8 +76,8 @@ export const loadMatcher = async (name: "micromatch" | "picomatch"): Promise<Mat
     return {
       isMatch: (str, pats) => {
         try {
-          const fn = picomatch(pats);
-          return fn(str);
+          const fn = picomatch(pats.map(toInternal));
+          return fn(toInternal(str));
         } catch (err) {
           /* v8 ignore next 4 - difficult to simulate this case with micromatch/picomatch in devDeps */
           throw new Error(`picomatch failed to run isMatch: ${(err as Error).message}`);
@@ -87,6 +90,32 @@ export const loadMatcher = async (name: "micromatch" | "picomatch"): Promise<Mat
 };
 
 /* ---------------- Internal helpers ---------------- */
+
+/**
+ * Convert a pattern/field path into internal form (`/` separated).
+ * - Unescaped `.` → `/`
+ * - Unescaped `/` → `/`
+ * - Escaped `\.` → `.`
+ * - Escaped `\/` → `/`
+ */
+const toInternal = (input: string): string => {
+  let out = "";
+  let escaped = false;
+  for (const ch of input) {
+    if (escaped) {
+      out += ch; // take literally
+      escaped = false;
+    } else if (ch === "\\") {
+      escaped = true;
+      out += "\\"; // preserve backslash for downstream escape handling
+    } else if (ch === ".") {
+      out += "/"; // dot becomes slash
+    } else {
+      out += ch;
+    }
+  }
+  return out;
+};
 
 /**
  * Splits a glob pattern into dot-separated segments, honoring backslash escaping.
@@ -108,7 +137,7 @@ const splitPattern = (pattern: string): string[] => {
       escaped = false;
     } else if (ch === "\\") {
       escaped = true;
-    } else if (ch === ".") {
+    } else if (ch === "/") {
       segments.push(buf);
       buf = "";
     } else {
@@ -121,7 +150,7 @@ const splitPattern = (pattern: string): string[] => {
 };
 
 const matchOne = (str: string, pattern: string): boolean => {
-  const strSegments = str.split(".");
+  const strSegments = str.split("/");
   const patSegments = splitPattern(pattern);
   return matchSegments(strSegments, patSegments);
 };
