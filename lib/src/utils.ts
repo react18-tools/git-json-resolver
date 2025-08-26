@@ -1,22 +1,19 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+export interface FileEntry {
+  filePath: string;
+  content: string;
+}
+
 /**
  * Checks whether the given file contains Git merge conflict markers.
  *
- * @param filePath - Absolute path to the file.
+ * @param content - File content to check.
  * @returns `true` if conflict markers exist, otherwise `false`.
  */
-const hasConflict = async (filePath: string): Promise<boolean> => {
-  try {
-    const content = await fs.readFile(filePath, "utf8");
-    return (
-      content.includes("<<<<<<<") && content.includes("=======") && content.includes(">>>>>>>")
-    );
-  } catch {
-    /* v8 ignore next 2 - If file cannot be read (permissions, etc.), treat as non-conflicted */
-    return false;
-  }
+const hasConflict = (content: string): boolean => {
+  return content.includes("<<<<<<<") && content.includes("=======") && content.includes(">>>>>>>");
 };
 
 export interface CollectFilesOptions {
@@ -37,16 +34,15 @@ export interface CollectFilesOptions {
  * Recursively collects files that match the provided `fileFilter`.
  *
  * - By default, only conflicted files are returned.
- * - If `includeNonConflicted` is enabled, matching files are always included
- *   (conflict check is skipped).
+ * - If `includeNonConflicted` is enabled, matching files are always included.
  *
  * @param options - Collection options, including `fileFilter` and traversal root.
- * @returns A promise that resolves with an array of matching file paths.
+ * @returns A promise that resolves with an array of `{ filePath, content }`.
  */
-export const collectFiles = async (options: CollectFilesOptions): Promise<string[]> => {
+export const collectFiles = async (options: CollectFilesOptions): Promise<FileEntry[]> => {
   const { root = process.cwd(), fileFilter, includeNonConflicted = false } = options;
 
-  const allFiles: string[] = [];
+  const collected: FileEntry[] = [];
 
   /**
    * Recursively traverses a directory, checking each file against
@@ -64,17 +60,21 @@ export const collectFiles = async (options: CollectFilesOptions): Promise<string
         /* v8 ignore next */
         await walk(fullPath);
       } else if (fileFilter(fullPath)) {
-        if (includeNonConflicted) {
-          allFiles.push(fullPath);
-        } else if (await hasConflict(fullPath)) {
-          allFiles.push(fullPath);
-        } else {
-          console.info(`Skipped (no conflicts): ${fullPath}`);
+        try {
+          const content = await fs.readFile(fullPath, "utf8");
+
+          if (includeNonConflicted || hasConflict(content)) {
+            collected.push({ filePath: fullPath, content });
+          } else {
+            console.info(`Skipped (no conflicts): ${fullPath}`);
+          }
+        } catch {
+          console.warn(`Skipped (unreadable): ${fullPath}`);
         }
       }
     }
   };
 
   await walk(root);
-  return allFiles;
+  return collected;
 };

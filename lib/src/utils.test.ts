@@ -48,9 +48,15 @@ describe("collectFiles", () => {
       fileFilter: file => file.endsWith(".json"),
     });
 
-    expect(files).toContain(conflictedFile);
-    expect(files).not.toContain(cleanFile);
-    expect(files).not.toContain(ignoredFile);
+    const paths = files.map(f => f.filePath);
+
+    expect(paths).toContain(conflictedFile);
+    expect(paths).not.toContain(cleanFile);
+    expect(paths).not.toContain(ignoredFile);
+
+    // check content as well
+    const conflicted = files.find(f => f.filePath === conflictedFile);
+    expect(conflicted?.content).toContain("<<<<<<<");
   });
 
   it("collects conflicted + clean files when includeNonConflicted is true", async () => {
@@ -60,9 +66,14 @@ describe("collectFiles", () => {
       includeNonConflicted: true,
     });
 
-    expect(files).toContain(conflictedFile);
-    expect(files).toContain(cleanFile);
-    expect(files).not.toContain(ignoredFile);
+    const paths = files.map(f => f.filePath);
+
+    expect(paths).toContain(conflictedFile);
+    expect(paths).toContain(cleanFile);
+    expect(paths).not.toContain(ignoredFile);
+
+    const clean = files.find(f => f.filePath === cleanFile);
+    expect(clean?.content).toContain('"value": 42');
   });
 
   it("skips files that do not match fileFilter", async () => {
@@ -71,6 +82,7 @@ describe("collectFiles", () => {
       fileFilter: file => file.endsWith(".json"),
     });
 
-    expect(files).not.toContain(ignoredFile);
+    const paths = files.map(f => f.filePath);
+    expect(paths).not.toContain(ignoredFile);
   });
 });
