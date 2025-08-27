@@ -7,25 +7,26 @@
 [![Downloads](https://img.jsdelivr.com/img.shields.io/npm/d18m/git-json-resolver.svg)](https://www.npmjs.com/package/git-json-resolver)
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/git-json-resolver)
 
-Git Json Resolver is a comprehensive library designed to unlock the full potential of React 18 server components. It provides customizable loading animation components and a fullscreen loader container, seamlessly integrating with React and Next.js.
+A Git-aware conflict resolver for **JSON-first structured data**.
 
-✅ Fully Treeshakable (import from `git-json-resolver/client/loader-container`)
+## Why?
 
-✅ Fully TypeScript Supported
+- Git merge conflicts in structured files (JSON, YAML, XML, TOML) are painful.
+- Manual resolution is error-prone, time-consuming, and breaks CI/CD pipelines.
+- `git-json-resolver` automates conflict handling with **configurable strategies**.
+- Non-JSON formats are internally normalized to JSON → resolved → converted back.
 
-✅ Leverages the power of React 18 Server components
+## Features
 
-✅ Compatible with all React 18 build systems/tools/frameworks
+- ⚡ **Primary focus on JSON** (first-class support)
+- 🔄 **YAML, XML, TOML** supported via conversion
+- 🧩 **Rule-based strategies** (per path/pattern)
+- 🗂️ Handles small configs to **huge repos** (optimizations built-in)
+- 🔌 **Pluggable matcher** abstraction (picomatch, micromatch supported out of the box with peerDependency)
+- 🛠️ Configurable trade-offs for **speed vs. memory**
+- 🗃️ **Planned**: extend configuration to use **different strategies per file** (ideas and edge cases welcome!)
 
-✅ Documented with [Typedoc](https://react18-tools.github.io/git-json-resolver) ([Docs](https://react18-tools.github.io/git-json-resolver))
-
-✅ Examples for Next.js, and Vite
-
-> <img src="https://raw.githubusercontent.com/mayank1513/mayank1513/main/popper.png" style="height: 20px"/> Star [this repository](https://github.com/react18-tools/git-json-resolver) and share it with your friends.
-
-## Getting Started
-
-### Installation
+## Installation
 
 ```bash
 pnpm add git-json-resolver
@@ -43,92 +44,98 @@ npm install git-json-resolver
 yarn add git-json-resolver
 ```
 
-## Want Lite Version? [![npm bundle size](https://img.shields.io/bundlephobia/minzip/git-json-resolver-lite)](https://www.npmjs.com/package/git-json-resolver-lite) [![Version](https://img.shields.io/npm/v/git-json-resolver-lite.svg?colorB=green)](https://www.npmjs.com/package/git-json-resolver-lite) [![Downloads](https://img.jsdelivr.com/img.shields.io/npm/d18m/git-json-resolver-lite.svg)](https://www.npmjs.com/package/git-json-resolver-lite)
+## Quick Start
+
+Add a custom merge driver to your Git config:
 
 ```bash
-pnpm add git-json-resolver-lite
+git config merge.json-resolver.name "Custom JSON merge driver"
+git config merge.json-resolver.driver "npx git-json-resolver %A %O %B"
 ```
 
-**or**
+Update `.gitattributes` to use it for JSON files:
 
-```bash
-npm install git-json-resolver-lite
+```gitattributes
+*.json merge=json-resolver
 ```
 
-**or**
+## Example Config
 
-```bash
-yarn add git-json-resolver-lite
+```ts
+import { resolveConflicts } from "git-json-resolver";
+
+const result = resolveConflicts({
+  filePath: "package.json",
+  rules: [
+    { pattern: "dependencies.*", strategy: "ours" },
+    { pattern: "version", strategy: "theirs", important: true },
+    { pattern: "scripts.build", strategy: "manual" },
+  ],
+  matcher: "picomatch", // default
+  optimize: {
+    cacheMatchers: true,
+    streamMode: false, // set true for very large repos
+  },
+});
 ```
 
-> You need `r18gs` as a peer-dependency
+### Upcoming: File-Specific Strategies
 
-### Import Styles
+We are exploring the ability to define **per-file strategy sets** in config, e.g.:
 
-You can import styles globally or within specific components.
-
-```css
-/* globals.css */
-@import "git-json-resolver/dist";
+```ts
+rulesByFile: {
+  "package.json": { version: ["theirs"], dependencies: ["ours"] },
+  "*.config.json": { "*": ["merge"] },
+},
 ```
 
-```tsx
-// layout.tsx
-import "git-json-resolver/dist/index.css";
-```
+This raises interesting questions/edge cases:
 
-For selective imports:
+- How to merge file-level vs. global rules?
+- Should `include/exclude` still apply if a file is explicitly listed?
+- Should conflicting rules between file + global fall back to default strategy or error?
 
-```css
-/* globals.css */
-@import "git-json-resolver/dist/client"; /** required if you are using LoaderContainer */
-@import "git-json-resolver/dist/server/bars/bars1";
-```
+We welcome ideas & edge cases here!
 
-### Usage
+## Supported Strategies
 
-Using loaders is straightforward.
+- **ours** → take current branch value
+- **theirs** → take incoming branch value
+- **manual** → mark for human resolution
+- **drop** → remove the key entirely
+- **custom** → user-defined resolver function
 
-```tsx
-import { Bars1 } from "git-json-resolver/dist/server/bars/bars1";
+## Supported Formats
 
-export default function MyComponent() {
-  return someCondition ? <Bars1 /> : <>Something else...</>;
-}
-```
+- **JSON** (native)
+- **YAML, XML, TOML** → converted to JSON → resolved → converted back
 
-For detailed API and options, refer to [the API documentation](https://react18-tools.github.io/git-json-resolver).
+## Performance & Optimization
 
-**Using LoaderContainer**
+- **Matcher caching** for repeated patterns
+- **Streaming mode** for very large repos (low memory footprint)
+- Trade-offs are configurable via `optimize` field
 
-`LoaderContainer` is a fullscreen component. You can add this component directly in your layout and then use `useLoader` hook to toggle its visibility.
+## Roadmap
 
-```tsx
-// layout.tsx
-<LoaderContainer />
-	 ...
-```
+- [ ] Richer strategies via plugins (e.g., semantic version resolver)
+- [ ] CLI UX improvements
+- [ ] Pluggable format converters customizations
+- [ ] VSCode integration for previewing merge resolutions
+- [ ] **Per-file strategies support** (current RFC)
 
-```tsx
-// some other page or component
-import { useLoader } from "git-json-resolver/dist/hooks";
+## Contributing
 
-export default MyComponent() {
-	const { setLoading } = useLoader();
-	useCallback(()=>{
-		setLoading(true);
-		...do some work
-		setLoading(false);
-	}, [])
-	...
-}
-```
+Contributions welcome 🙌
+
+- Fork, branch, PR — with tests (`vitest` required)
+- Docs live in `libDocs/` (tutorials, guides, deep dives)
+- API reference generated into `docs/` via TypeDoc
 
 ## License
 
 This library is licensed under the MPL-2.0 open-source license.
-
-
 
 > <img src="https://raw.githubusercontent.com/mayank1513/mayank1513/main/popper.png" style="height: 20px"/> Please enroll in [our courses](https://mayank-chaudhari.vercel.app/courses) or [sponsor](https://github.com/sponsors/mayank1513) our work.
 
