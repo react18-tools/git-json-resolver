@@ -5,7 +5,7 @@
  */
 
 import { Matcher, basicMatcher, loadMatcher } from "./matcher";
-import { BasicMergeStrategies, Config, RuleTree, StrategyFn } from "./types";
+import { InbuiltMergeStrategies, Config, RuleTree, StrategyFn } from "./types";
 
 export interface StrategyItem {
   name: string;
@@ -31,6 +31,9 @@ export interface NormalizedConfig {
   fileFilter: (filepath: string) => boolean;
   customStrategies: Record<string, StrategyFn>;
   includeNonConflicted: boolean;
+  debug: boolean;
+  strictArrays: boolean;
+  writeConflictSidecar: boolean;
 }
 
 /** Defaults */
@@ -40,7 +43,7 @@ const DEFAULT_EXCLUDE = ["node_modules/**", "dist/**", "build/**"];
 /**
  * Normalize user config into fully expanded and classified form.
  */
-export const normalizeConfig = async <T extends string = BasicMergeStrategies>(
+export const normalizeConfig = async <T extends string = InbuiltMergeStrategies>(
   config: Config<T>,
 ): Promise<NormalizedConfig> => {
   const rules: NormalizedRules = {
@@ -102,13 +105,16 @@ export const normalizeConfig = async <T extends string = BasicMergeStrategies>(
     fileFilter,
     customStrategies: config.customStrategies ?? {},
     includeNonConflicted: config.includeNonConflicted ?? false,
+    debug: config.debug ?? false,
+    strictArrays: config.strictArrays ?? false,
+    writeConflictSidecar: config.writeConflictSidecar ?? false,
   };
 };
 
 /* ---------------- helpers ---------------- */
 
 const normalizeDefault = <T extends string>(def?: T | T[]): StrategyItem[] => {
-  const arr = def ? (Array.isArray(def) ? def : [def]) : ["merge"];
+  const arr = def ? (Array.isArray(def) ? def : [def]) : ["merge", "ours"];
 
   return arr.map(name => {
     const important = name.endsWith("!");

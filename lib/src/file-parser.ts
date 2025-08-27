@@ -13,7 +13,7 @@ export interface ParsedConflict<T = unknown> {
 }
 
 /** A parser function that takes a raw string and returns parsed content. */
-export type Parser = (input: string) => unknown;
+export type Parser = { name: string; parser: (input: string) => unknown };
 
 /** Built-in parser identifiers or a custom parser function. */
 export type SupportedParsers = "json" | "json5" | "yaml" | "toml" | "xml" | Parser;
@@ -116,34 +116,34 @@ export const parseConflictContent = async <T = unknown>(
   return {
     ours: oursParsed as T,
     theirs: theirsParsed as T,
-    format: typeof format === "function" ? "custom" : format,
+    format: typeof format === "string" ? format : format.name,
   };
+};
+
+const FILE_EXTENSION_TO_PARSER_MAP: Record<string, SupportedParsers> = {
+  json: "json",
+  json5: "json5",
+  yaml: "yaml",
+  yml: "yaml",
+  toml: "toml",
+  xml: "xml",
 };
 
 /** Normalize parsers based on filename + options. */
 const normalizeParsers = (options: ParseConflictOptions): SupportedParsers[] => {
+  if (Array.isArray(options.parsers)) return options.parsers;
+
   if (options.parsers) {
-    return Array.isArray(options.parsers)
-      ? options.parsers
-      : options.parsers === "auto"
-        ? ["json", "json5", "yaml", "toml", "xml"]
-        : [options.parsers];
+    return options.parsers === "auto"
+      ? ["json", "json5", "yaml", "toml", "xml"]
+      : [options.parsers];
   }
 
   if (options.filename) {
-    const ext = options.filename.split(".").pop()?.toLowerCase();
-    switch (ext) {
-      case "json":
-        return ["json"];
-      case "json5":
-        return ["json5"];
-      case "yaml":
-      case "yml":
-        return ["yaml"];
-      case "toml":
-        return ["toml"];
-      case "xml":
-        return ["xml"];
+    const parserBasedOnExt =
+      FILE_EXTENSION_TO_PARSER_MAP[options.filename.split(".").pop()?.toLowerCase() ?? ""];
+    if (parserBasedOnExt) {
+      return [parserBasedOnExt];
     }
   }
 
@@ -157,7 +157,7 @@ const runParser = async (
 ): Promise<[unknown, SupportedParsers]> => {
   for (const parser of parsers) {
     try {
-      if (typeof parser === "function") return [parser(raw), parser];
+      if (typeof parser !== "string") return [parser.parser(raw), parser];
       return [await parseFormat(parser, raw), parser];
     } catch (err) {
       console.debug(`Parser ${typeof parser === "function" ? "custom" : parser} failed:`, err);
@@ -194,7 +194,7 @@ const parseFormat = async (
     }
     case "toml": {
       try {
-        const { parse } = await import("toml");
+        const { parse } = await import("smol-toml");
         return parse(raw);
       } catch {
         throw new Error("toml parser not installed. Please install as peer dependency.");

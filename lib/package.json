@@ -43,7 +43,7 @@
     "json5": "^2.2.3",
     "micromatch": "^4.0.8",
     "picomatch": "^4.0.3",
-    "toml": "^3.0.0",
+    "smol-toml": "^1.4.2",
     "tsup": "^8.5.0",
     "typescript": "^5.9.2",
     "vite-tsconfig-paths": "^5.1.4",
@@ -80,7 +80,7 @@
     "json5": "^2.2.3",
     "micromatch": "^4.0.8",
     "picomatch": "^4.0.3",
-    "toml": "^3.0.0",
+    "smol-toml": "^1.4.2",
     "yaml": "^2.8.1"
   },
   "peerDependenciesMeta": {
@@ -96,7 +96,7 @@
     "picomatch": {
       "optional": true
     },
-    "toml": {
+    "smol-toml": {
       "optional": true
     },
     "yaml": {

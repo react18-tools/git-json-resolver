@@ -78,3 +78,15 @@ export const listMatchingFiles = async (options: CollectFilesOptions): Promise<F
   await walk(root);
   return fileEntries;
 };
+
+const BACKUP_DIR = ".merge-backups";
+
+export const backupFile = async (filePath: string) => {
+  const relPath = path.relative(process.cwd(), filePath);
+  const backupPath = path.join(BACKUP_DIR, relPath);
+
+  await fs.mkdir(path.dirname(backupPath), { recursive: true });
+  await fs.copyFile(filePath, backupPath);
+
+  return backupPath;
+};
