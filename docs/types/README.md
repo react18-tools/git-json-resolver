@@ -2,7 +2,7 @@
 layout: default
 title: README
 parent: Types
-nav_order: 26
+nav_order: 27
 ---
 
 # types
@@ -15,7 +15,7 @@ nav_order: 26
 
 ### StrategyStatus
 
-Defined in: [types.ts:28](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L28)
+Defined in: [types.ts:28](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L28)
 
 #### Enumeration Members
 
@@ -23,31 +23,31 @@ Defined in: [types.ts:28](https://github.com/react18-tools/git-json-resolver/blo
 
 > **CONTINUE**: `"continue"`
 
-Defined in: [types.ts:30](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L30)
+Defined in: [types.ts:30](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L30)
 
 ##### FAIL
 
 > **FAIL**: `"fail"`
 
-Defined in: [types.ts:31](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L31)
+Defined in: [types.ts:31](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L31)
 
 ##### OK
 
 > **OK**: `"ok"`
 
-Defined in: [types.ts:29](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L29)
+Defined in: [types.ts:29](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L29)
 
 ##### SKIP
 
 > **SKIP**: `"skip"`
 
-Defined in: [types.ts:32](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L32)
+Defined in: [types.ts:32](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L32)
 
 ## Interfaces
 
 ### Config\<T, TContext\>
 
-Defined in: [types.ts:73](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L73)
+Defined in: [types.ts:73](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L73)
 
 High-level config object for conflict resolution.
 
@@ -67,7 +67,7 @@ High-level config object for conflict resolution.
 
 > `optional` **byStrategy**: [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)\<`T`, `string`[]\>\>
 
-Defined in: [types.ts:81](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L81)
+Defined in: [types.ts:81](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L81)
 
 Strategy → list of fields to apply it to
 
@@ -75,7 +75,7 @@ Strategy → list of fields to apply it to
 
 > `optional` **customStrategies**: [`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)\<[`Exclude`](https://www.typescriptlang.org/docs/handbook/utility-types.html#excludeuniontype-excludedmembers)\<[`ForbidBangEnd`](-internal-.md#forbidbangend)\<`T`\>, [`InbuiltMergeStrategies`](#inbuiltmergestrategies)\>, [`StrategyFn`](#strategyfn)\<`TContext`\>\>
 
-Defined in: [types.ts:84](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L84)
+Defined in: [types.ts:84](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L84)
 
 Custom strategies (excluding built-in names)
 
@@ -83,7 +83,7 @@ Custom strategies (excluding built-in names)
 
 > `optional` **debug**: `boolean`
 
-Defined in: [types.ts:108](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L108)
+Defined in: [types.ts:108](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L108)
 
 Debug mode - slower but more logs + traceability
 
@@ -91,7 +91,7 @@ Debug mode - slower but more logs + traceability
 
 > `optional` **defaultStrategy**: `T` \| `T`[]
 
-Defined in: [types.ts:75](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L75)
+Defined in: [types.ts:75](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L75)
 
 Fallback strategy when no rule matches
 
@@ -99,7 +99,7 @@ Fallback strategy when no rule matches
 
 > `optional` **exclude**: `string`[]
 
-Defined in: [types.ts:93](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L93)
+Defined in: [types.ts:93](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L93)
 
 File exclusion globs
 
@@ -107,7 +107,7 @@ File exclusion globs
 
 > `optional` **include**: `string`[]
 
-Defined in: [types.ts:90](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L90)
+Defined in: [types.ts:90](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L90)
 
 File inclusion globs
 
@@ -115,7 +115,7 @@ File inclusion globs
 
 > `optional` **includeNonConflicted**: `boolean`
 
-Defined in: [types.ts:103](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L103)
+Defined in: [types.ts:103](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L103)
 
 Whether to include files that do not contain conflicts.
 Useful for applying strategies, e.g., drop even when conflicts aren’t present.
@@ -125,7 +125,7 @@ Defaults to `false`.
 
 > `optional` **matcher**: [`Matcher`](../matcher.md#matcher) \| `"micromatch"` \| `"picomatch"`
 
-Defined in: [types.ts:96](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L96)
+Defined in: [types.ts:96](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L96)
 
 Glob matcher: `"micromatch"`, `"picomatch"`, or custom implementation
 
@@ -133,7 +133,7 @@ Glob matcher: `"micromatch"`, `"picomatch"`, or custom implementation
 
 > `optional` **rules**: [`RuleTree`](#ruletree)\<`T`\>
 
-Defined in: [types.ts:78](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L78)
+Defined in: [types.ts:78](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L78)
 
 Rule tree mapping globs → strategies
 
@@ -141,13 +141,13 @@ Rule tree mapping globs → strategies
 
 > `optional` **strictArrays**: `boolean`
 
-Defined in: [types.ts:113](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L113)
+Defined in: [types.ts:113](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L113)
 
 ##### writeConflictSidecar?
 
 > `optional` **writeConflictSidecar**: `boolean`
 
-Defined in: [types.ts:118](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L118)
+Defined in: [types.ts:118](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L118)
 
 ## Type Aliases
 
@@ -155,7 +155,7 @@ Defined in: [types.ts:118](https://github.com/react18-tools/git-json-resolver/bl
 
 > **InbuiltMergeStrategies** = `"merge"` \| `"ours"` \| `"theirs"` \| `"base"` \| `"skip"` \| `"drop"` \| `"non-empty"` \| `"update"`
 
-Defined in: [types.ts:18](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L18)
+Defined in: [types.ts:18](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L18)
 
 Built-in merge strategies.
 ⚠️ Reserved names — plugin authors should avoid reusing these.
@@ -177,7 +177,7 @@ Built-in merge strategies.
 
 > **RuleTree**\<`T`\> = \{\[`fieldGlob`: `string`\]: [`RuleTree`](#ruletree)\<`T`\> \| `T`[]; \}
 
-Defined in: [types.ts:66](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L66)
+Defined in: [types.ts:66](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L66)
 
 Rules tree: maps field globs → strategy names or nested rules.
 
@@ -200,7 +200,7 @@ Rules tree: maps field globs → strategy names or nested rules.
 
 > **StrategyFn**\<`TContext`\> = (`args`: \{ `base?`: `unknown`; `context?`: `TContext`; `filePath?`: `string`; `ours`: `unknown`; `path`: `string`; `theirs`: `unknown`; \}) => [`StrategyResult`](#strategyresult) \| [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`StrategyResult`](#strategyresult)\>
 
-Defined in: [types.ts:46](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L46)
+Defined in: [types.ts:46](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L46)
 
 Strategy function signature.
 Custom strategies receive both sides, optional base, file path, and context.
@@ -249,7 +249,7 @@ Custom strategies receive both sides, optional base, file path, and context.
 
 > **StrategyResult** = \{ `ok`: `true`; `value`: `unknown`; \} \| \{ `ok`: `false`; `reason?`: `string`; \}
 
-Defined in: [types.ts:40](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/types.ts#L40)
+Defined in: [types.ts:40](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/types.ts#L40)
 
 Result contract for a strategy function.
 

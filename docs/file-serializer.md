@@ -1,7 +1,7 @@
 ---
 layout: default
 title: File Serializer
-nav_order: 7
+nav_order: 8
 ---
 
 # file-serializer
@@ -12,7 +12,7 @@ nav_order: 7
 
 > **serialize**(`format`: `string`, `value`: `unknown`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`string`\>
 
-Defined in: [file-serializer.ts:1](https://github.com/react18-tools/git-json-resolver/blob/983ecea05a6699ed0124b500e82e9f563b676c3f/lib/src/file-serializer.ts#L1)
+Defined in: [file-serializer.ts:1](https://github.com/react18-tools/git-json-resolver/blob/b16e9f00b0c7f0f44241518b44b07a7c1b0a0401/lib/src/file-serializer.ts#L1)
 
 #### Parameters
 

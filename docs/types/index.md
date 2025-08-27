@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Types
-nav_order: 24
+nav_order: 25
 has_children: true
 ---
 

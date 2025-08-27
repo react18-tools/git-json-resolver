@@ -152,6 +152,7 @@ This library is licensed under the MPL-2.0 open-source license.
 ## Modules
 
 - [cli](cli.md)
+- [cli.test](cli.test.md)
 - [conflict-helper](conflict-helper.md)
 - [conflict-helper.test](conflict-helper.test.md)
 - [file-parser](file-parser.md)
