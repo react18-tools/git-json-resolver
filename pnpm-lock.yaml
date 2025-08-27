@@ -74,7 +74,7 @@ importers:
         version: 19.1.1(react@19.1.1)
       react18-loaders:
         specifier: latest
-        version: 1.1.7(@types/react@19.1.11)(next@15.5.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1)
+        version: 1.1.7(@types/react@19.1.11)(next@15.5.0(@babel/core@7.28.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1)
       webgl-generative-particles:
         specifier: ^0.0.1
         version: 0.0.1(@types/react@19.1.11)(react@19.1.1)
@@ -123,10 +123,10 @@ importers:
         version: 0.0.5(@types/react@19.1.11)(react@19.1.1)
       react18-loaders:
         specifier: latest
-        version: 1.1.7(@types/react@19.1.11)(next@15.5.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1)
+        version: 1.1.7(@types/react@19.1.11)(next@15.5.0(@babel/core@7.28.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1)
       react18-themes:
         specifier: ^3.2.0
-        version: 3.2.0(@types/react@19.1.11)(next@15.5.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1)
+        version: 3.2.0(@types/react@19.1.11)(next@15.5.0(@babel/core@7.28.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1)
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*
@@ -185,9 +185,9 @@ importers:
       picomatch:
         specifier: ^4.0.3
         version: 4.0.3
-      toml:
-        specifier: ^3.0.0
-        version: 3.0.0
+      smol-toml:
+        specifier: ^1.4.2
+        version: 1.4.2
       tsup:
         specifier: ^8.5.0
         version: 8.5.0(postcss@8.5.6)(typescript@5.9.2)(yaml@2.8.1)
@@ -252,7 +252,7 @@ importers:
         version: 1.0.0(@types/react@19.1.11)(react@19.1.1)
       '@mayank1513/fork-me':
         specifier: ^2.1.3
-        version: 2.1.3(@types/react@19.1.11)(next@15.5.0(@babel/core@7.28.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1)
+        version: 2.1.3(@types/react@19.1.11)(next@15.5.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1)
       '@repo/scripts':
         specifier: workspace:*
         version: link:../../scripts
@@ -279,7 +279,7 @@ importers:
         version: 4.1.8(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react18-loaders:
         specifier: latest
-        version: 1.1.7(@types/react@19.1.11)(next@15.5.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1)
+        version: 1.1.7(@types/react@19.1.11)(next@15.5.0(@babel/core@7.28.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1)
       rehype-raw:
         specifier: ^7.0.0
         version: 7.0.0
@@ -3655,6 +3655,10 @@ packages:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
 
+  smol-toml@1.4.2:
+    resolution: {integrity: sha512-rInDH6lCNiEyn3+hH8KVGFdbjc099j47+OSgbMrfDYX1CmXLfdKd7qi6IfcWj2wFxvSVkuI46M+wPGYfEOEj6g==}
+    engines: {node: '>= 18'}
+
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
@@ -3832,9 +3836,6 @@ packages:
   to-regex-range@5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
-
-  toml@3.0.0:
-    resolution: {integrity: sha512-y/mWCZinnvxjTKYhJ+pYxwD0mRLVvOtdS2Awbgxln6iEnt4rk0yBxeSBHkGJcPucRiG0e55mwWp+g/05rsrd6w==}
 
   tough-cookie@5.1.2:
     resolution: {integrity: sha512-FVDYdxtnj0G6Qm/DhNPSb8Ju59ULcup3tuJxkFb5K8Bv2pUXILbf0xZWU8PX8Ov19OXljbUyveOFwRMwkXzO+A==}
@@ -4979,7 +4980,7 @@ snapshots:
       globby: 11.1.0
       read-yaml-file: 1.1.0
 
-  '@mayank1513/fork-me@2.1.3(@types/react@19.1.11)(next@15.5.0(@babel/core@7.28.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1)':
+  '@mayank1513/fork-me@2.1.3(@types/react@19.1.11)(next@15.5.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1)':
     dependencies:
       '@types/react': 19.1.11
       react: 19.1.1
@@ -7805,7 +7806,7 @@ snapshots:
 
   queue-microtask@1.2.3: {}
 
-  r18gs@1.1.3(@types/react@19.1.11)(next@15.5.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1):
+  r18gs@1.1.3(@types/react@19.1.11)(next@15.5.0(@babel/core@7.28.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1):
     dependencies:
       '@types/react': 19.1.11
       react: 19.1.1
@@ -7841,7 +7842,7 @@ snapshots:
 
   react-refresh@0.17.0: {}
 
-  react18-loaders@1.1.7(@types/react@19.1.11)(next@15.5.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1):
+  react18-loaders@1.1.7(@types/react@19.1.11)(next@15.5.0(@babel/core@7.28.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1):
     dependencies:
       '@types/react': 19.1.11
       r18gs: 3.0.1(@types/react@19.1.11)(react@19.1.1)
@@ -7849,10 +7850,10 @@ snapshots:
     optionalDependencies:
       next: 15.5.0(@babel/core@7.28.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0)
 
-  react18-themes@3.2.0(@types/react@19.1.11)(next@15.5.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1):
+  react18-themes@3.2.0(@types/react@19.1.11)(next@15.5.0(@babel/core@7.28.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1):
     dependencies:
       '@types/react': 19.1.11
-      r18gs: 1.1.3(@types/react@19.1.11)(next@15.5.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1)
+      r18gs: 1.1.3(@types/react@19.1.11)(next@15.5.0(@babel/core@7.28.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0))(react@19.1.1)
       react: 19.1.1
     optionalDependencies:
       next: 15.5.0(@babel/core@7.28.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0)
@@ -8127,6 +8128,8 @@ snapshots:
 
   slash@3.0.0: {}
 
+  smol-toml@1.4.2: {}
+
   source-map-js@1.2.1: {}
 
   source-map@0.8.0-beta.0:
@@ -8318,8 +8321,6 @@ snapshots:
   to-regex-range@5.0.1:
     dependencies:
       is-number: 7.0.0
-
-  toml@3.0.0: {}
 
   tough-cookie@5.1.2:
     dependencies:

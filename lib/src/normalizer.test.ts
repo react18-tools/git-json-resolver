@@ -6,31 +6,34 @@ import type { Config } from "./types";
 describe("normalizeConfig", () => {
   it("uses default strategy = merge when not provided", async () => {
     const result = await normalizeConfig({});
-    expect(result.rules.default).toEqual([{ name: "merge", important: false }]);
+    expect(result.rules.default).toEqual([
+      { name: "merge", important: false },
+      { name: "ours", important: false },
+    ]);
   });
 
   it("accepts single default strategy", async () => {
-    const result = await normalizeConfig({ defaultStrategy: "replace" });
-    expect(result.rules.default).toEqual([{ name: "replace", important: false }]);
+    const result = await normalizeConfig({ defaultStrategy: "theirs" });
+    expect(result.rules.default).toEqual([{ name: "theirs", important: false }]);
   });
 
   it("accepts multiple default strategies", async () => {
-    const result = await normalizeConfig({ defaultStrategy: ["merge", "replace"] });
+    const result = await normalizeConfig({ defaultStrategy: ["merge", "theirs"] });
     expect(result.rules.default).toEqual([
       { name: "merge", important: false },
-      { name: "replace", important: false },
+      { name: "theirs", important: false },
     ]);
   });
 
   it("classifies rules from byStrategy into exactFields", async () => {
     const config: Config<any> = {
       byStrategy: {
-        replace: ["foo", "bar!"],
+        theirs: ["foo", "bar!"],
       },
     };
     const result = await normalizeConfig(config);
     expect(result.rules.exactFields.foo[0].strategies).toEqual([
-      { name: "replace", important: false },
+      { name: "theirs", important: false },
     ]);
     expect(result.rules.exactFields.bar[0].strategies[0].important).toBe(true);
   });
@@ -87,7 +90,7 @@ describe("normalizeConfig", () => {
     const config: Config<any> = {
       rules: {
         user: {
-          name: ["replace"],
+          name: ["theirs"],
           profile: {
             age: ["merge"],
           },
@@ -96,7 +99,7 @@ describe("normalizeConfig", () => {
     };
     const result = await normalizeConfig(config);
     expect(result.rules.exact["user.name"][0].strategies).toEqual([
-      { name: "replace", important: false },
+      { name: "theirs", important: false },
     ]);
     expect(result.rules.exact["user.profile.age"][0].strategies).toEqual([
       { name: "merge", important: false },
@@ -170,7 +173,7 @@ describe("normalizeConfig", () => {
   it("marks important from byStrategy rule with '!'", async () => {
     const config: Config<any> = {
       byStrategy: {
-        replace: ["foo!"],
+        theirs: ["foo!"],
       },
     };
     const result = await normalizeConfig(config);
@@ -181,7 +184,7 @@ describe("normalizeConfig", () => {
     const config: Config<any> = {
       rules: {
         user: {
-          "id!": ["replace"],
+          "id!": ["theirs"],
         },
       },
     };
@@ -236,13 +239,13 @@ describe("normalizeConfig", () => {
     const config: Config<any> = {
       byStrategy: {
         merge: ["dup"],
-        replace: ["dup"],
+        theirs: ["dup"],
       },
     };
     const result = await normalizeConfig(config);
     expect(result.rules.exactFields.dup.map(r => r.strategies[0])).toEqual([
       { name: "merge", important: false },
-      { name: "replace", important: false },
+      { name: "theirs", important: false },
     ]);
   });
 });

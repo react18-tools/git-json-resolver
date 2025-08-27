@@ -93,7 +93,7 @@ export const BuiltInStrategies = {
     value: base,
   }),
 
-  drop: <TContext>(): StrategyResult => ({
+  drop: <TContext>(_skipped: MergeArgs<TContext>): StrategyResult => ({
     status: StrategyStatus.OK,
     value: DROP,
   }),
