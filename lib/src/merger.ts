@@ -1,6 +1,6 @@
 import { NormalizedConfig } from "./normalizer";
 import { resolveStrategies } from "./strategy-resolver";
-import { StrategyFn } from "./types";
+import { StrategyFn, StrategyResult, StrategyStatus } from "./types";
 
 /** Sentinel used to explicitly drop a value. */
 export const DROP = Symbol("MERGE_DROP");
@@ -22,14 +22,6 @@ export interface MergeResult {
   conflicts: Conflict[];
 }
 
-/** Strategy status codes. */
-export enum StrategyStatus {
-  OK = 0,
-  CONTINUE = 1,
-  FAIL = 2,
-  SKIP = 3,
-}
-
 /** Helper: stringify status for logs. */
 export const statusToString = (s: StrategyStatus): string => {
   switch (s) {
@@ -45,13 +37,6 @@ export const statusToString = (s: StrategyStatus): string => {
       return `UNKNOWN(${s})`;
   }
 };
-
-/** Strategy result contract. */
-export type StrategyResult =
-  | { status: StrategyStatus.OK; value: unknown }
-  | { status: StrategyStatus.CONTINUE; reason?: string }
-  | { status: StrategyStatus.SKIP; reason: string }
-  | { status: StrategyStatus.FAIL; reason: string };
 
 /** Merge context (runtime state + config). */
 export interface MergeContext<TContext = unknown> {

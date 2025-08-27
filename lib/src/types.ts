@@ -25,19 +25,20 @@ export type InbuiltMergeStrategies =
   | "non-empty"
   | "update";
 
+/** Strategy status codes. */
 export enum StrategyStatus {
-  OK = "ok", // resolved successfully
-  CONTINUE = "continue", // couldn't resolve, try next strategy
-  FAIL = "fail", // unrecoverable fail, log + stop
-  SKIP = "skip", // explicitly skip -> adds conflict + return undefined
+  OK = 0,
+  CONTINUE = 1,
+  FAIL = 2,
+  SKIP = 3,
 }
 
-/**
- * Result contract for a strategy function.
- * - `ok: true` → merge produced a value
- * - `ok: false` → merge failed (with optional reason)
- */
-export type StrategyResult = { ok: true; value: unknown } | { ok: false; reason?: string };
+/** Strategy result contract. */
+export type StrategyResult =
+  | { status: StrategyStatus.OK; value: unknown }
+  | { status: StrategyStatus.CONTINUE; reason?: string }
+  | { status: StrategyStatus.SKIP; reason: string }
+  | { status: StrategyStatus.FAIL; reason: string };
 
 /**
  * Strategy function signature.

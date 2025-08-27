@@ -5,7 +5,6 @@ import {
   MergeContext,
   mergeObject,
   BuiltInStrategies,
-  StrategyStatus,
   statusToString,
 } from "./merger";
 
@@ -14,6 +13,7 @@ vi.mock("./strategy-resolver", () => ({
   resolveStrategies: vi.fn(() => ["ours", "theirs", "merge"]),
 }));
 import { resolveStrategies } from "./strategy-resolver";
+import { StrategyStatus } from "./types";
 
 const makeCtx = (): MergeContext => ({
   config: { debug: false, strictArrays: false } as any,
