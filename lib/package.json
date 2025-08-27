@@ -22,6 +22,9 @@
       "require": "./dist/index.js"
     }
   },
+  "bin": {
+    "git-json-resolver": "./dist/cli.mjs"
+  },
   "scripts": {
     "build": "tsup && tsc -p tsconfig-build.json && gzip -c dist/index.js | wc -c",
     "clean": "rm -rf dist",

@@ -37,8 +37,13 @@ export interface NormalizedConfig {
 }
 
 /** Defaults */
-const DEFAULT_INCLUDE = ["**/*"];
-const DEFAULT_EXCLUDE = ["node_modules/**", "dist/**", "build/**"];
+export const DEFAULT_CONFIG = {
+  defaultStrategy: ["merge", "ours"],
+  include: ["**/*.json", "**/*.yaml", "**/*.yml", "**/*.xml", "**/*.toml"],
+  exclude: ["node_modules/**", "dist/**"],
+  debug: false,
+  writeConflictSidecar: false,
+};
 
 /**
  * Normalize user config into fully expanded and classified form.
@@ -46,22 +51,24 @@ const DEFAULT_EXCLUDE = ["node_modules/**", "dist/**", "build/**"];
 export const normalizeConfig = async <T extends string = InbuiltMergeStrategies>(
   config: Config<T>,
 ): Promise<NormalizedConfig> => {
+  const userConfig = { ...DEFAULT_CONFIG, ...config };
+
   const rules: NormalizedRules = {
     exact: Object.create(null),
     exactFields: Object.create(null),
     patterns: Object.create(null),
-    default: normalizeDefault(config.defaultStrategy),
+    default: normalizeDefault(userConfig.defaultStrategy),
   };
 
   const matcher =
-    typeof config.matcher === "string"
-      ? await loadMatcher(config.matcher)
-      : (config.matcher ?? basicMatcher);
+    typeof userConfig.matcher === "string"
+      ? await loadMatcher(userConfig.matcher)
+      : (userConfig.matcher ?? basicMatcher);
 
   let order = 0;
 
-  if (config.byStrategy) {
-    for (const [rawStrategy, fields] of Object.entries(config.byStrategy)) {
+  if (userConfig.byStrategy) {
+    for (const [rawStrategy, fields] of Object.entries(userConfig.byStrategy)) {
       if (!fields) continue;
       const { name, important: strategyImportant } = parseStrategyName(rawStrategy);
       for (const raw of fields as string[]) {
@@ -75,8 +82,8 @@ export const normalizeConfig = async <T extends string = InbuiltMergeStrategies>
     }
   }
 
-  if (config.rules) {
-    expandRuleTree(config.rules, [], (pathKey, strategyNames) => {
+  if (userConfig.rules) {
+    expandRuleTree(userConfig.rules, [], (pathKey, strategyNames) => {
       const { key, important: keyImportant } = parseImportance(pathKey);
       const strategies = strategyNames.map(s => {
         const { name, important } = parseStrategyName(s);
@@ -90,12 +97,9 @@ export const normalizeConfig = async <T extends string = InbuiltMergeStrategies>
     });
   }
 
-  const include = config.include?.length ? config.include : DEFAULT_INCLUDE;
-  const exclude = config.exclude?.length ? config.exclude : DEFAULT_EXCLUDE;
-
   const fileFilter = (filepath: string) => {
-    if (!matcher.isMatch(filepath, include)) return false;
-    if (exclude.length && matcher.isMatch(filepath, exclude)) return false;
+    if (!matcher.isMatch(filepath, userConfig.include)) return false;
+    if (userConfig.exclude.length && matcher.isMatch(filepath, userConfig.exclude)) return false;
     return true;
   };
 
@@ -103,18 +107,18 @@ export const normalizeConfig = async <T extends string = InbuiltMergeStrategies>
     rules,
     matcher,
     fileFilter,
-    customStrategies: config.customStrategies ?? {},
-    includeNonConflicted: config.includeNonConflicted ?? false,
-    debug: config.debug ?? false,
-    strictArrays: config.strictArrays ?? false,
-    writeConflictSidecar: config.writeConflictSidecar ?? false,
+    customStrategies: userConfig.customStrategies ?? {},
+    includeNonConflicted: userConfig.includeNonConflicted ?? false,
+    debug: userConfig.debug ?? false,
+    strictArrays: userConfig.strictArrays ?? false,
+    writeConflictSidecar: userConfig.writeConflictSidecar ?? false,
   };
 };
 
 /* ---------------- helpers ---------------- */
 
-const normalizeDefault = <T extends string>(def?: T | T[]): StrategyItem[] => {
-  const arr = def ? (Array.isArray(def) ? def : [def]) : ["merge", "ours"];
+const normalizeDefault = <T extends string>(def: T | T[]): StrategyItem[] => {
+  const arr = Array.isArray(def) ? def : [def];
 
   return arr.map(name => {
     const important = name.endsWith("!");

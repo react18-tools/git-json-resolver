@@ -8,6 +8,8 @@ import { backupFile, listMatchingFiles } from "./utils";
 import fs from "node:fs/promises";
 import { reconstructConflict } from "./conflict-helper";
 
+export * from "./types";
+
 const _strategyCache = new Map<string, string[]>();
 
 export const resolveConflicts = async (config: Config) => {
