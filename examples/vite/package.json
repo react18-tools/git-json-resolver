@@ -13,19 +13,19 @@
   },
   "dependencies": {
     "@repo/shared": "workspace:*",
+    "git-json-resolver": "workspace:*",
     "nextjs-darkmode": "^1.0.10",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-mouse-trails": "^0.0.5",
-    "react18-loaders": "latest",
-    "react18-themes": "^3.2.0",
-    "git-json-resolver": "workspace:*"
+    "react18-loaders": "^1.1.7",
+    "react18-themes": "^3.2.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/react": "^19.1.11",
-    "@types/react-dom": "^19.1.7",
+    "@types/react-dom": "^19.1.8",
     "@vitejs/plugin-react": "^5.0.1",
     "typescript": "^5.9.2",
     "vite": "^7.1.3"
