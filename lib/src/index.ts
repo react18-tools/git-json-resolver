@@ -3,7 +3,7 @@ import { parseConflictContent } from "./file-parser";
 import { serialize } from "./file-serializer";
 import { Conflict, mergeObject } from "./merger";
 import { normalizeConfig, NormalizedConfig } from "./normalizer";
-import { Config } from "./types";
+import { Config, InbuiltMergeStrategies } from "./types";
 import { backupFile, listMatchingFiles } from "./utils";
 import fs from "node:fs/promises";
 import { reconstructConflict } from "./conflict-helper";
@@ -12,8 +12,10 @@ export * from "./types";
 
 const _strategyCache = new Map<string, string[]>();
 
-export const resolveConflicts = async (config: Config) => {
-  const normalizedConfig: NormalizedConfig = await normalizeConfig(config);
+export const resolveConflicts = async <T extends string = InbuiltMergeStrategies>(
+  config: Config<T>,
+) => {
+  const normalizedConfig: NormalizedConfig = await normalizeConfig<T>(config);
   const filesEntries = await listMatchingFiles(normalizedConfig);
   await Promise.all(
     filesEntries.map(async ({ filePath, content }) => {

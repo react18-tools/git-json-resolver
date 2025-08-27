@@ -12,7 +12,7 @@ const CONFIG_FILENAME = "git-json-resolver.config.js";
 /**
  * Find Git root directory
  */
-const findGitRoot = (): string => {
+export const findGitRoot = (): string => {
   try {
     return execSync("git rev-parse --show-toplevel", { encoding: "utf8" }).trim();
   } catch {
@@ -23,7 +23,7 @@ const findGitRoot = (): string => {
 /**
  * Load configuration file (js/ts) from current dir or Git root.
  */
-const loadConfigFile = async (): Promise<Partial<Config>> => {
+export const loadConfigFile = async (): Promise<Partial<Config>> => {
   const searchDirs = [process.cwd(), findGitRoot()];
   const configNames = [CONFIG_FILENAME, "git-json-resolver.config.ts"];
 
@@ -42,7 +42,7 @@ const loadConfigFile = async (): Promise<Partial<Config>> => {
 /**
  * Write a starter config file
  */
-const initConfig = (targetDir: string) => {
+export const initConfig = (targetDir: string) => {
   const targetPath = path.join(targetDir, CONFIG_FILENAME);
   if (fs.existsSync(targetPath)) {
     console.error(`[git-json-resolver] Config file already exists: ${targetPath}`);
@@ -63,7 +63,7 @@ module.exports = ${JSON.stringify(DEFAULT_CONFIG, null, 2)};
 /**
  * CLI argument parser (minimal, no external deps).
  */
-const parseArgs = (argv: string[]): { overrides: Partial<Config>; init?: boolean } => {
+export const parseArgs = (argv: string[]): { overrides: Partial<Config>; init?: boolean } => {
   const overrides: Partial<Config> = {};
   let init = false;
 
