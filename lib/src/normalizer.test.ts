@@ -129,6 +129,17 @@ describe("normalizeConfig", () => {
 
   it("fileFilter includes allowed files and excludes others", async () => {
     const result = await normalizeConfig({
+      include: ["**/package.json"],
+      exclude: ["package.json", "**/dist/**"],
+    });
+    expect(result.fileFilter("pkgs/src/package.json")).toBe(true);
+    expect(result.fileFilter("pkgs\\src\\package.json")).toBe(true);
+    expect(result.fileFilter("package.json")).toBe(false);
+    expect(result.fileFilter("other/file.ts")).toBe(false);
+  });
+
+  it("fileFilter includes allowed files and excludes others", async () => {
+    const result = await normalizeConfig({
       include: ["src/**/*.json"],
       exclude: ["src/ignore/**"],
     });

@@ -23,7 +23,10 @@
     }
   },
   "bin": {
-    "git-json-resolver": "./dist/cli.mjs"
+    "git-json-resolver": "./dist/cli.mjs",
+    "json-merge-resolver": "./dist/cli.mjs",
+    "json-conflict-resolver": "./dist/cli.mjs",
+    "git-conflict-resolver": "./dist/cli.mjs"
   },
   "scripts": {
     "build": "tsup && tsc -p tsconfig-build.json && gzip -c dist/index.js | wc -c",
