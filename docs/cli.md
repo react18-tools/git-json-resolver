@@ -12,7 +12,7 @@ nav_order: 2
 
 > **findGitRoot**(): `string`
 
-Defined in: [cli.ts:15](https://github.com/react18-tools/git-json-resolver/blob/9afc574ba0e78c5147c107dece96697303cc4a06/lib/src/cli.ts#L15)
+Defined in: [cli.ts:15](https://github.com/react18-tools/git-json-resolver/blob/9c24fa243e2d39962b91e02dad8dd8c7b30d8e95/lib/src/cli.ts#L15)
 
 Find Git root directory
 
@@ -26,7 +26,7 @@ Find Git root directory
 
 > **initConfig**(`targetDir`: `string`): `void`
 
-Defined in: [cli.ts:45](https://github.com/react18-tools/git-json-resolver/blob/9afc574ba0e78c5147c107dece96697303cc4a06/lib/src/cli.ts#L45)
+Defined in: [cli.ts:45](https://github.com/react18-tools/git-json-resolver/blob/9c24fa243e2d39962b91e02dad8dd8c7b30d8e95/lib/src/cli.ts#L45)
 
 Write a starter config file
 
@@ -46,7 +46,7 @@ Write a starter config file
 
 > **loadConfigFile**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`Config`](types/README.md#config)\<[`InbuiltMergeStrategies`](types/README.md#inbuiltmergestrategies), `unknown`\>\>\>
 
-Defined in: [cli.ts:26](https://github.com/react18-tools/git-json-resolver/blob/9afc574ba0e78c5147c107dece96697303cc4a06/lib/src/cli.ts#L26)
+Defined in: [cli.ts:26](https://github.com/react18-tools/git-json-resolver/blob/9c24fa243e2d39962b91e02dad8dd8c7b30d8e95/lib/src/cli.ts#L26)
 
 Load configuration file (js/ts) from current dir or Git root.
 
@@ -60,7 +60,7 @@ Load configuration file (js/ts) from current dir or Git root.
 
 > **parseArgs**(`argv`: `string`[]): \{ `init?`: `boolean`; `overrides`: [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`Config`](types/README.md#config)\>; \}
 
-Defined in: [cli.ts:66](https://github.com/react18-tools/git-json-resolver/blob/9afc574ba0e78c5147c107dece96697303cc4a06/lib/src/cli.ts#L66)
+Defined in: [cli.ts:66](https://github.com/react18-tools/git-json-resolver/blob/9c24fa243e2d39962b91e02dad8dd8c7b30d8e95/lib/src/cli.ts#L66)
 
 CLI argument parser (minimal, no external deps).
 
