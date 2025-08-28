@@ -1,5 +1,11 @@
 # git-json-resolver
 
+## 0.1.3
+
+### Patch Changes
+
+- 27f6a2e: Timestampt log files
+
 ## 0.1.2
 
 ### Patch Changes
