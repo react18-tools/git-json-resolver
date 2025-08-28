@@ -13,7 +13,7 @@ nav_order: 26
 
 > **ForbidBangEnd**\<`T`\> = `T` _extends_ `` `${string}!` `` ? `never` : `T`
 
-Defined in: [types.ts:60](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/types.ts#L60)
+Defined in: [types.ts:60](https://github.com/react18-tools/git-json-resolver/blob/c32c446f3456c8b10ea1a76708d6e28d4435684a/lib/src/types.ts#L60)
 
 Utility type: forbids strategy names ending with "!".
 (Reserved suffix for internal overrides.)
