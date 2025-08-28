@@ -68,6 +68,20 @@ export type RuleTree<T extends string = InbuiltMergeStrategies> = {
   [fieldGlob: string]: T[] | RuleTree<T>;
 };
 
+export type LogLevel = "info" | "warn" | "error" | "debug";
+
+export type LogMode = "memory" | "stream";
+
+export interface LoggerConfig {
+  mode?: LogMode; // default: "memory"
+  logDir?: string; // default: "logs"
+  singleFile?: boolean; // default: false (per input file logs)
+  levels?: {
+    stdout?: LogLevel[]; // default: ["warn", "error"]
+    file?: LogLevel[]; // default: ["info", "warn", "error"]
+  };
+}
+
 /**
  * High-level config object for conflict resolution.
  */
@@ -117,6 +131,11 @@ export interface Config<T extends string = InbuiltMergeStrategies, TContext = un
    *
    */
   writeConflictSidecar?: boolean; // default false
+
+  /**
+   *
+   */
+  loggerConfig?: LoggerConfig;
 }
 
 export type { Matcher };

@@ -1,19 +1,6 @@
-import fs from "fs";
+import fs, { Mode } from "fs";
 import path from "path";
-
-type LogLevel = "info" | "warn" | "error" | "debug";
-
-type Mode = "memory" | "stream";
-
-interface LoggerConfig {
-  mode?: Mode; // default: "memory"
-  logDir?: string; // default: "logs"
-  singleFile?: boolean; // default: false (per input file logs)
-  levels?: {
-    stdout?: LogLevel[]; // default: ["warn", "error"]
-    file?: LogLevel[]; // default: ["info", "warn", "error"]
-  };
-}
+import { LogLevel, LoggerConfig } from "./types";
 
 interface LogEntry {
   timestamp: string;
