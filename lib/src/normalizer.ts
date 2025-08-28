@@ -6,7 +6,7 @@
 
 import { globalLogger } from "./logger";
 import { Matcher, basicMatcher, loadMatcher } from "./matcher";
-import { InbuiltMergeStrategies, Config, RuleTree, StrategyFn } from "./types";
+import { InbuiltMergeStrategies, Config, RuleTree } from "./types";
 
 export interface StrategyItem {
   name: string;
@@ -26,15 +26,11 @@ export interface NormalizedRules {
   default: StrategyItem[];
 }
 
-export interface NormalizedConfig {
+export interface NormalizedConfig<T extends string = InbuiltMergeStrategies, TContext = unknown>
+  extends Omit<Config<T, TContext>, "byStrategy" | "rules" | "defaultStrategy"> {
   rules: NormalizedRules;
   matcher: Matcher;
   fileFilter: (filepath: string) => boolean;
-  customStrategies: Record<string, StrategyFn>;
-  includeNonConflicted: boolean;
-  debug: boolean;
-  strictArrays: boolean;
-  writeConflictSidecar: boolean;
 }
 
 /** Defaults */
@@ -53,29 +49,30 @@ export const DEFAULT_CONFIG = {
 export const normalizeConfig = async <T extends string = InbuiltMergeStrategies>(
   config: Config<T>,
 ): Promise<NormalizedConfig> => {
-  const userConfig = { ...DEFAULT_CONFIG, ...config };
+  const { rules, byStrategy, defaultStrategy, matcher, ...userConfig } = {
+    ...DEFAULT_CONFIG,
+    ...config,
+  };
 
-  const rules: NormalizedRules = {
+  const normalizedRules: NormalizedRules = {
     exact: Object.create(null),
     exactFields: Object.create(null),
     patterns: Object.create(null),
-    default: normalizeDefault(userConfig.defaultStrategy),
+    default: normalizeDefault(defaultStrategy),
   };
 
-  const matcher =
-    typeof userConfig.matcher === "string"
-      ? await loadMatcher(userConfig.matcher)
-      : (userConfig.matcher ?? basicMatcher);
+  const resolvedMatcher =
+    typeof matcher === "string" ? await loadMatcher(matcher) : (matcher ?? basicMatcher);
 
   let order = 0;
 
-  if (userConfig.byStrategy) {
-    for (const [rawStrategy, fields] of Object.entries(userConfig.byStrategy)) {
+  if (byStrategy) {
+    for (const [rawStrategy, fields] of Object.entries(byStrategy)) {
       if (!fields) continue;
       const { name, important: strategyImportant } = parseStrategyName(rawStrategy);
       for (const raw of fields as string[]) {
         const { key, important: keyImportant } = parseImportance(raw);
-        addRule(rules, key, {
+        addRule(normalizedRules, key, {
           strategies: [{ name, important: strategyImportant || keyImportant }],
           order: order++,
           source: key,
@@ -84,14 +81,14 @@ export const normalizeConfig = async <T extends string = InbuiltMergeStrategies>
     }
   }
 
-  if (userConfig.rules) {
-    expandRuleTree(userConfig.rules, [], (pathKey, strategyNames) => {
+  if (rules) {
+    expandRuleTree(rules, [], (pathKey, strategyNames) => {
       const { key, important: keyImportant } = parseImportance(pathKey);
       const strategies = strategyNames.map(s => {
         const { name, important } = parseStrategyName(s);
         return { name, important: important || keyImportant };
       });
-      addRule(rules, key, {
+      addRule(normalizedRules, key, {
         strategies,
         order: order++,
         source: key,
@@ -103,20 +100,17 @@ export const normalizeConfig = async <T extends string = InbuiltMergeStrategies>
     if (config.debug) {
       globalLogger.info("all", `[normalizer] Filtering ${filepath}`);
     }
-    if (!matcher.isMatch(filepath, userConfig.include)) return false;
-    if (matcher.isMatch(filepath, [...userConfig.exclude, "**/node_modules/**"])) return false;
+    if (!resolvedMatcher.isMatch(filepath, userConfig.include)) return false;
+    if (resolvedMatcher.isMatch(filepath, [...userConfig.exclude, "**/node_modules/**"]))
+      return false;
     return true;
   };
 
   return {
-    rules,
-    matcher,
+    ...userConfig,
+    rules: normalizedRules,
+    matcher: resolvedMatcher,
     fileFilter,
-    customStrategies: userConfig.customStrategies ?? {},
-    includeNonConflicted: userConfig.includeNonConflicted ?? false,
-    debug: userConfig.debug ?? false,
-    strictArrays: userConfig.strictArrays ?? false,
-    writeConflictSidecar: userConfig.writeConflictSidecar ?? false,
   };
 };
 
@@ -175,7 +169,7 @@ const addRule = (target: NormalizedRules, key: string, entry: StrategyList) => {
     return;
   }
 
-  const hasWildcards = /[*?\[\]]/.test(key);
+  const hasWildcards = /[*?[\]]/.test(key);
   if (hasWildcards) {
     push(target.patterns, key, entry);
     return;
