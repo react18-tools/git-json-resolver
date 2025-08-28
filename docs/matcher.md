@@ -10,7 +10,7 @@ nav_order: 10
 
 ### Matcher
 
-Defined in: [matcher.ts:13](https://github.com/react18-tools/git-json-resolver/blob/ea7c4933c584c1efc40c46f3e2b08af2e6adef36/lib/src/matcher.ts#L13)
+Defined in: [matcher.ts:13](https://github.com/react18-tools/git-json-resolver/blob/3e876ce8afe8c9047e8fa1534f0f522eac3b3dd4/lib/src/matcher.ts#L13)
 
 Matcher abstraction + adapters for micromatch/picomatch (optional).
 
@@ -29,7 +29,7 @@ Micromatch/Picomatch can be loaded at runtime as optional peers.
 
 > **isMatch**: (`str`: `string`, `patterns`: `string`[]) => `boolean`
 
-Defined in: [matcher.ts:17](https://github.com/react18-tools/git-json-resolver/blob/ea7c4933c584c1efc40c46f3e2b08af2e6adef36/lib/src/matcher.ts#L17)
+Defined in: [matcher.ts:17](https://github.com/react18-tools/git-json-resolver/blob/3e876ce8afe8c9047e8fa1534f0f522eac3b3dd4/lib/src/matcher.ts#L17)
 
 Returns true if `str` matches at least one of the provided glob `patterns`.
 
@@ -53,7 +53,7 @@ Returns true if `str` matches at least one of the provided glob `patterns`.
 
 > `const` **basicMatcher**: [`Matcher`](#matcher)
 
-Defined in: [matcher.ts:28](https://github.com/react18-tools/git-json-resolver/blob/ea7c4933c584c1efc40c46f3e2b08af2e6adef36/lib/src/matcher.ts#L28)
+Defined in: [matcher.ts:28](https://github.com/react18-tools/git-json-resolver/blob/3e876ce8afe8c9047e8fa1534f0f522eac3b3dd4/lib/src/matcher.ts#L28)
 
 Minimal homegrown matcher (default).
 Supports:
@@ -69,7 +69,7 @@ Supports:
 
 > **loadMatcher**(`name`: `"micromatch"` \| `"picomatch"`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Matcher`](#matcher)\>
 
-Defined in: [matcher.ts:41](https://github.com/react18-tools/git-json-resolver/blob/ea7c4933c584c1efc40c46f3e2b08af2e6adef36/lib/src/matcher.ts#L41)
+Defined in: [matcher.ts:41](https://github.com/react18-tools/git-json-resolver/blob/3e876ce8afe8c9047e8fa1534f0f522eac3b3dd4/lib/src/matcher.ts#L41)
 
 Attempts to load a named matcher adapter.
 

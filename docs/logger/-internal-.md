@@ -11,7 +11,7 @@ nav_order: 20
 
 ### LoggerConfig
 
-Defined in: [logger.ts:8](https://github.com/react18-tools/git-json-resolver/blob/ea7c4933c584c1efc40c46f3e2b08af2e6adef36/lib/src/logger.ts#L8)
+Defined in: [logger.ts:8](https://github.com/react18-tools/git-json-resolver/blob/3e876ce8afe8c9047e8fa1534f0f522eac3b3dd4/lib/src/logger.ts#L8)
 
 #### Properties
 
@@ -19,7 +19,7 @@ Defined in: [logger.ts:8](https://github.com/react18-tools/git-json-resolver/blo
 
 > `optional` **levels**: \{ `file?`: [`LogLevel`](#loglevel)[]; `stdout?`: [`LogLevel`](#loglevel)[]; \}
 
-Defined in: [logger.ts:12](https://github.com/react18-tools/git-json-resolver/blob/ea7c4933c584c1efc40c46f3e2b08af2e6adef36/lib/src/logger.ts#L12)
+Defined in: [logger.ts:12](https://github.com/react18-tools/git-json-resolver/blob/3e876ce8afe8c9047e8fa1534f0f522eac3b3dd4/lib/src/logger.ts#L12)
 
 ###### file?
 
@@ -33,19 +33,19 @@ Defined in: [logger.ts:12](https://github.com/react18-tools/git-json-resolver/bl
 
 > `optional` **logDir**: `string`
 
-Defined in: [logger.ts:10](https://github.com/react18-tools/git-json-resolver/blob/ea7c4933c584c1efc40c46f3e2b08af2e6adef36/lib/src/logger.ts#L10)
+Defined in: [logger.ts:10](https://github.com/react18-tools/git-json-resolver/blob/3e876ce8afe8c9047e8fa1534f0f522eac3b3dd4/lib/src/logger.ts#L10)
 
 ##### mode?
 
 > `optional` **mode**: [`Mode`](#mode-1)
 
-Defined in: [logger.ts:9](https://github.com/react18-tools/git-json-resolver/blob/ea7c4933c584c1efc40c46f3e2b08af2e6adef36/lib/src/logger.ts#L9)
+Defined in: [logger.ts:9](https://github.com/react18-tools/git-json-resolver/blob/3e876ce8afe8c9047e8fa1534f0f522eac3b3dd4/lib/src/logger.ts#L9)
 
 ##### singleFile?
 
 > `optional` **singleFile**: `boolean`
 
-Defined in: [logger.ts:11](https://github.com/react18-tools/git-json-resolver/blob/ea7c4933c584c1efc40c46f3e2b08af2e6adef36/lib/src/logger.ts#L11)
+Defined in: [logger.ts:11](https://github.com/react18-tools/git-json-resolver/blob/3e876ce8afe8c9047e8fa1534f0f522eac3b3dd4/lib/src/logger.ts#L11)
 
 ## Type Aliases
 
@@ -53,7 +53,7 @@ Defined in: [logger.ts:11](https://github.com/react18-tools/git-json-resolver/bl
 
 > **LogLevel** = `"info"` \| `"warn"` \| `"error"` \| `"debug"`
 
-Defined in: [logger.ts:4](https://github.com/react18-tools/git-json-resolver/blob/ea7c4933c584c1efc40c46f3e2b08af2e6adef36/lib/src/logger.ts#L4)
+Defined in: [logger.ts:4](https://github.com/react18-tools/git-json-resolver/blob/3e876ce8afe8c9047e8fa1534f0f522eac3b3dd4/lib/src/logger.ts#L4)
 
 ---
 
@@ -61,4 +61,4 @@ Defined in: [logger.ts:4](https://github.com/react18-tools/git-json-resolver/blo
 
 > **Mode** = `"memory"` \| `"stream"`
 
-Defined in: [logger.ts:6](https://github.com/react18-tools/git-json-resolver/blob/ea7c4933c584c1efc40c46f3e2b08af2e6adef36/lib/src/logger.ts#L6)
+Defined in: [logger.ts:6](https://github.com/react18-tools/git-json-resolver/blob/3e876ce8afe8c9047e8fa1534f0f522eac3b3dd4/lib/src/logger.ts#L6)
