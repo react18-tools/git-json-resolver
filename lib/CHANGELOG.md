@@ -1,5 +1,11 @@
 # git-json-resolver
 
+## 0.1.2
+
+### Patch Changes
+
+- 562e0ea: Enhance logging
+
 ## 0.1.1
 
 ### Patch Changes
