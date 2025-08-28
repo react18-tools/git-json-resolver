@@ -11,7 +11,7 @@ nav_order: 21
 
 ### MergeArgs\<TContext\>
 
-Defined in: [merger.ts:50](https://github.com/react18-tools/git-json-resolver/blob/9c24fa243e2d39962b91e02dad8dd8c7b30d8e95/lib/src/merger.ts#L50)
+Defined in: [merger.ts:50](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/merger.ts#L50)
 
 Internal args passed to strategies.
 
@@ -27,40 +27,40 @@ Internal args passed to strategies.
 
 > `optional` **base**: `unknown`
 
-Defined in: [merger.ts:53](https://github.com/react18-tools/git-json-resolver/blob/9c24fa243e2d39962b91e02dad8dd8c7b30d8e95/lib/src/merger.ts#L53)
+Defined in: [merger.ts:53](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/merger.ts#L53)
 
 ##### conflicts
 
 > **conflicts**: [`Conflict`](README.md#conflict)[]
 
-Defined in: [merger.ts:57](https://github.com/react18-tools/git-json-resolver/blob/9c24fa243e2d39962b91e02dad8dd8c7b30d8e95/lib/src/merger.ts#L57)
+Defined in: [merger.ts:57](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/merger.ts#L57)
 
 ##### ctx
 
 > **ctx**: [`MergeContext`](README.md#mergecontext)\<`TContext`\>
 
-Defined in: [merger.ts:56](https://github.com/react18-tools/git-json-resolver/blob/9c24fa243e2d39962b91e02dad8dd8c7b30d8e95/lib/src/merger.ts#L56)
+Defined in: [merger.ts:56](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/merger.ts#L56)
 
 ##### filePath?
 
 > `optional` **filePath**: `string`
 
-Defined in: [merger.ts:55](https://github.com/react18-tools/git-json-resolver/blob/9c24fa243e2d39962b91e02dad8dd8c7b30d8e95/lib/src/merger.ts#L55)
+Defined in: [merger.ts:55](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/merger.ts#L55)
 
 ##### ours
 
 > **ours**: `unknown`
 
-Defined in: [merger.ts:51](https://github.com/react18-tools/git-json-resolver/blob/9c24fa243e2d39962b91e02dad8dd8c7b30d8e95/lib/src/merger.ts#L51)
+Defined in: [merger.ts:51](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/merger.ts#L51)
 
 ##### path
 
 > **path**: `string`
 
-Defined in: [merger.ts:54](https://github.com/react18-tools/git-json-resolver/blob/9c24fa243e2d39962b91e02dad8dd8c7b30d8e95/lib/src/merger.ts#L54)
+Defined in: [merger.ts:54](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/merger.ts#L54)
 
 ##### theirs
 
 > **theirs**: `unknown`
 
-Defined in: [merger.ts:52](https://github.com/react18-tools/git-json-resolver/blob/9c24fa243e2d39962b91e02dad8dd8c7b30d8e95/lib/src/merger.ts#L52)
+Defined in: [merger.ts:52](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/merger.ts#L52)
