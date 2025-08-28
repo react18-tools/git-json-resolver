@@ -1,5 +1,11 @@
 # git-json-resolver
 
+## 0.1.1
+
+### Patch Changes
+
+- 2464e00: Add logs
+
 ## 0.1.0
 
 ### Minor Changes
