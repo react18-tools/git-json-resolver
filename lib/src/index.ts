@@ -7,6 +7,7 @@ import { Config, InbuiltMergeStrategies } from "./types";
 import { backupFile, listMatchingFiles } from "./utils";
 import fs from "node:fs/promises";
 import { reconstructConflict } from "./conflict-helper";
+import { globalLogger } from "./logger";
 
 export * from "./types";
 
@@ -17,6 +18,9 @@ export const resolveConflicts = async <T extends string = InbuiltMergeStrategies
 ) => {
   const normalizedConfig: NormalizedConfig = await normalizeConfig<T>(config);
   const filesEntries = await listMatchingFiles(normalizedConfig);
+  if (normalizedConfig.debug) {
+    globalLogger.info("all", JSON.stringify({ normalizedConfig, filesEntries }, null, 2));
+  }
   await Promise.all(
     filesEntries.map(async ({ filePath, content }) => {
       const { theirs, ours, format } = await parseConflictContent(content, { filename: filePath });
@@ -38,6 +42,10 @@ export const resolveConflicts = async <T extends string = InbuiltMergeStrategies
         backupFile(filePath),
       ]);
 
+      if (normalizedConfig.debug) {
+        globalLogger.debug(filePath, JSON.stringify({ merged, conflicts }, null, 2));
+      }
+
       if (conflicts.length === 0) {
         const serialized = await serialize(format, merged);
         await fs.writeFile(filePath, serialized, "utf8");
@@ -53,4 +61,5 @@ export const resolveConflicts = async <T extends string = InbuiltMergeStrategies
       }
     }),
   );
+  globalLogger.flush();
 };
