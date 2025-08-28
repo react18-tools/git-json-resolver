@@ -23,7 +23,7 @@ interface LogEntry {
 
 export const createLogger = (config: LoggerConfig = {}) => {
   const mode: Mode = config.mode ?? "memory";
-  const logDir = config.logDir ?? "logs";
+  const logDir = config.logDir ?? ".logs";
   const singleFile = config.singleFile ?? false;
   const levels = {
     stdout: config.levels?.stdout ?? ["warn", "error"],

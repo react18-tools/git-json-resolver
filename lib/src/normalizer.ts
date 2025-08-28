@@ -4,6 +4,7 @@
  * and classifies rules into exact / top-level / glob categories.
  */
 
+import { globalLogger } from "./logger";
 import { Matcher, basicMatcher, loadMatcher } from "./matcher";
 import { InbuiltMergeStrategies, Config, RuleTree, StrategyFn } from "./types";
 
@@ -99,6 +100,9 @@ export const normalizeConfig = async <T extends string = InbuiltMergeStrategies>
   }
 
   const fileFilter = (filepath: string) => {
+    if (config.debug) {
+      globalLogger.info("all", `[normalizer] Filtering ${filepath}`);
+    }
     if (!matcher.isMatch(filepath, userConfig.include)) return false;
     if (matcher.isMatch(filepath, [...userConfig.exclude, "**/node_modules/**"])) return false;
     return true;
