@@ -1,5 +1,11 @@
 # git-json-resolver
 
+## 0.1.5
+
+### Patch Changes
+
+- 10b5462: Fix logger
+
 ## 0.1.4
 
 ### Patch Changes
