@@ -17,7 +17,7 @@ nav_order: 21
 
 > `const` **globalLogger**: \{ `debug`: (`fileId`: `string`, `msg`: `string`) => `void`; `error`: (`fileId`: `string`, `msg`: `string`) => `void`; `flush`: () => `void`; `info`: (`fileId`: `string`, `msg`: `string`) => `void`; `warn`: (`fileId`: `string`, `msg`: `string`) => `void`; \}
 
-Defined in: [logger.ts:87](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/logger.ts#L87)
+Defined in: [logger.ts:87](https://github.com/react18-tools/git-json-resolver/blob/ea7c4933c584c1efc40c46f3e2b08af2e6adef36/lib/src/logger.ts#L87)
 
 #### Type Declaration
 
@@ -107,7 +107,7 @@ Defined in: [logger.ts:87](https://github.com/react18-tools/git-json-resolver/bl
 
 > **createLogger**(`config`: [`LoggerConfig`](-internal-.md#loggerconfig)): \{ `debug`: (`fileId`: `string`, `msg`: `string`) => `void`; `error`: (`fileId`: `string`, `msg`: `string`) => `void`; `flush`: () => `void`; `info`: (`fileId`: `string`, `msg`: `string`) => `void`; `warn`: (`fileId`: `string`, `msg`: `string`) => `void`; \}
 
-Defined in: [logger.ts:24](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/logger.ts#L24)
+Defined in: [logger.ts:24](https://github.com/react18-tools/git-json-resolver/blob/ea7c4933c584c1efc40c46f3e2b08af2e6adef36/lib/src/logger.ts#L24)
 
 #### Parameters
 
