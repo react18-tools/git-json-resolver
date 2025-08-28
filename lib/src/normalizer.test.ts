@@ -68,22 +68,22 @@ describe("normalizeConfig", () => {
     expect(result.rules.patterns["**.id.**"]).toHaveLength(1);
   });
 
-  it("throws on invalid bracket key", () => {
+  it("throws on invalid bracket key", async () => {
     const config: Config<any> = {
       byStrategy: {
         merge: ["[a.b]"],
       },
     };
-    expect(() => normalizeConfig(config)).rejects.toThrow(/Invalid bracket form/);
+    await expect(() => normalizeConfig(config)).rejects.toThrow(/Invalid bracket form/);
   });
 
-  it("throws on empty rule key", () => {
+  it("throws on empty rule key", async () => {
     const config: Config<any> = {
       byStrategy: {
         merge: ["!"],
       },
     };
-    expect(() => normalizeConfig(config)).rejects.toThrow(/Invalid rule key/);
+    await expect(() => normalizeConfig(config)).rejects.toThrow(/Invalid rule key/);
   });
 
   it("expands rules tree into exact entries", async () => {

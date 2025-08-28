@@ -64,7 +64,7 @@ describe("loadMatcher", () => {
     expect(pm.isMatch("fail", ["pattern"])).toBe(false);
   });
 
-  it("throws on unknown matcher", () => {
-    expect(() => loadMatcher("invalid" as any)).rejects.toThrow(/Unknown matcher/);
+  it("throws on unknown matcher", async () => {
+    await expect(() => loadMatcher("invalid" as any)).rejects.toThrow(/Unknown matcher/);
   });
 });
