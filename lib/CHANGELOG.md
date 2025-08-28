@@ -1,5 +1,11 @@
 # git-json-resolver
 
+## 0.1.7
+
+### Patch Changes
+
+- 5eb95b3: Wire loggerConfig and isolate logger per instance.
+
 ## 0.1.6
 
 ### Patch Changes
