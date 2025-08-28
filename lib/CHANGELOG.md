@@ -1,5 +1,11 @@
 # git-json-resolver
 
+## 0.1.6
+
+### Patch Changes
+
+- 4313ee4: fix file walker. Do not walk .git and cleanly process only relative path to ensure proper pattern match.
+
 ## 0.1.5
 
 ### Patch Changes
