@@ -40,7 +40,8 @@ export interface NormalizedConfig {
 export const DEFAULT_CONFIG = {
   defaultStrategy: ["merge", "ours"],
   include: ["**/*.json", "**/*.yaml", "**/*.yml", "**/*.xml", "**/*.toml"],
-  exclude: ["node_modules/**", "dist/**"],
+  // Add **/ prefix to ensure proper handling in monorepo
+  exclude: ["**/node_modules/**", "**/dist/**"],
   debug: false,
   writeConflictSidecar: false,
 };
@@ -99,7 +100,7 @@ export const normalizeConfig = async <T extends string = InbuiltMergeStrategies>
 
   const fileFilter = (filepath: string) => {
     if (!matcher.isMatch(filepath, userConfig.include)) return false;
-    if (userConfig.exclude.length && matcher.isMatch(filepath, userConfig.exclude)) return false;
+    if (matcher.isMatch(filepath, [...userConfig.exclude, "**/node_modules/**"])) return false;
     return true;
   };
 
