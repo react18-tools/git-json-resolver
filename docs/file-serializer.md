@@ -12,7 +12,7 @@ nav_order: 8
 
 > **serialize**(`format`: `string`, `value`: `unknown`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`string`\>
 
-Defined in: [file-serializer.ts:1](https://github.com/react18-tools/git-json-resolver/blob/c32c446f3456c8b10ea1a76708d6e28d4435684a/lib/src/file-serializer.ts#L1)
+Defined in: [file-serializer.ts:1](https://github.com/react18-tools/git-json-resolver/blob/9afc574ba0e78c5147c107dece96697303cc4a06/lib/src/file-serializer.ts#L1)
 
 #### Parameters
 

@@ -160,7 +160,7 @@ This library is licensed under the MPL-2.0 open-source license.
 - [file-serializer](file-serializer.md)
 - [file-serializer.test](file-serializer.test.md)
 - [index](index.md)
-- [logger](logger/README.md)
+- [logger](logger.md)
 - [matcher](matcher.md)
 - [matcher.test](matcher.test.md)
 - [merger](merger/README.md)

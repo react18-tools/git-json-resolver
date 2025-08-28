@@ -1,15 +1,10 @@
 ---
 layout: default
-title: README
-parent: Logger
-nav_order: 21
+title: Logger
+nav_order: 10
 ---
 
 # logger
-
-## Modules
-
-- [\<internal\>](-internal-.md)
 
 ## Variables
 
@@ -17,7 +12,7 @@ nav_order: 21
 
 > `const` **globalLogger**: \{ `debug`: (`fileId`: `string`, `msg`: `string`) => `void`; `error`: (`fileId`: `string`, `msg`: `string`) => `void`; `flush`: () => `void`; `info`: (`fileId`: `string`, `msg`: `string`) => `void`; `warn`: (`fileId`: `string`, `msg`: `string`) => `void`; \}
 
-Defined in: [logger.ts:91](https://github.com/react18-tools/git-json-resolver/blob/c32c446f3456c8b10ea1a76708d6e28d4435684a/lib/src/logger.ts#L91)
+Defined in: [logger.ts:78](https://github.com/react18-tools/git-json-resolver/blob/9afc574ba0e78c5147c107dece96697303cc4a06/lib/src/logger.ts#L78)
 
 #### Type Declaration
 
@@ -105,15 +100,15 @@ Defined in: [logger.ts:91](https://github.com/react18-tools/git-json-resolver/bl
 
 ### createLogger()
 
-> **createLogger**(`config`: [`LoggerConfig`](-internal-.md#loggerconfig)): \{ `debug`: (`fileId`: `string`, `msg`: `string`) => `void`; `error`: (`fileId`: `string`, `msg`: `string`) => `void`; `flush`: () => `void`; `info`: (`fileId`: `string`, `msg`: `string`) => `void`; `warn`: (`fileId`: `string`, `msg`: `string`) => `void`; \}
+> **createLogger**(`config`: [`LoggerConfig`](types/README.md#loggerconfig-1)): \{ `debug`: (`fileId`: `string`, `msg`: `string`) => `void`; `error`: (`fileId`: `string`, `msg`: `string`) => `void`; `flush`: () => `void`; `info`: (`fileId`: `string`, `msg`: `string`) => `void`; `warn`: (`fileId`: `string`, `msg`: `string`) => `void`; \}
 
-Defined in: [logger.ts:24](https://github.com/react18-tools/git-json-resolver/blob/c32c446f3456c8b10ea1a76708d6e28d4435684a/lib/src/logger.ts#L24)
+Defined in: [logger.ts:11](https://github.com/react18-tools/git-json-resolver/blob/9afc574ba0e78c5147c107dece96697303cc4a06/lib/src/logger.ts#L11)
 
 #### Parameters
 
 ##### config
 
-[`LoggerConfig`](-internal-.md#loggerconfig) = `{}`
+[`LoggerConfig`](types/README.md#loggerconfig-1) = `{}`
 
 #### Returns
 

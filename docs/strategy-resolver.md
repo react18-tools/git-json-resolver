@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Strategy Resolver
-nav_order: 15
+nav_order: 16
 ---
 
 # strategy-resolver
@@ -12,7 +12,7 @@ nav_order: 15
 
 > **resolveStrategies**(`path`: `string`, `__namedParameters`: [`NormalizedConfig`](normalizer.md#normalizedconfig)): `string`[]
 
-Defined in: [strategy-resolver.ts:3](https://github.com/react18-tools/git-json-resolver/blob/c32c446f3456c8b10ea1a76708d6e28d4435684a/lib/src/strategy-resolver.ts#L3)
+Defined in: [strategy-resolver.ts:3](https://github.com/react18-tools/git-json-resolver/blob/9afc574ba0e78c5147c107dece96697303cc4a06/lib/src/strategy-resolver.ts#L3)
 
 #### Parameters
 
