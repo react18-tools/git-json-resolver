@@ -1,5 +1,11 @@
 # git-json-resolver
 
+## 0.1.0
+
+### Minor Changes
+
+- f3ec835: Ensure node_modules is always excluded to avoid common pitfall or missing it while providing custom exclude list.
+
 ## 0.0.2
 
 ### Patch Changes
