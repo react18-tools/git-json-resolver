@@ -10,7 +10,7 @@ nav_order: 13
 
 ### NormalizedConfig
 
-Defined in: [normalizer.ts:29](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L29)
+Defined in: [normalizer.ts:29](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L29)
 
 #### Properties
 
@@ -18,19 +18,19 @@ Defined in: [normalizer.ts:29](https://github.com/react18-tools/git-json-resolve
 
 > **customStrategies**: [`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)\<`string`, [`StrategyFn`](types/README.md#strategyfn)\>
 
-Defined in: [normalizer.ts:33](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L33)
+Defined in: [normalizer.ts:33](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L33)
 
 ##### debug
 
 > **debug**: `boolean`
 
-Defined in: [normalizer.ts:35](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L35)
+Defined in: [normalizer.ts:35](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L35)
 
 ##### fileFilter()
 
 > **fileFilter**: (`filepath`: `string`) => `boolean`
 
-Defined in: [normalizer.ts:32](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L32)
+Defined in: [normalizer.ts:32](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L32)
 
 ###### Parameters
 
@@ -46,37 +46,37 @@ Defined in: [normalizer.ts:32](https://github.com/react18-tools/git-json-resolve
 
 > **includeNonConflicted**: `boolean`
 
-Defined in: [normalizer.ts:34](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L34)
+Defined in: [normalizer.ts:34](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L34)
 
 ##### matcher
 
 > **matcher**: [`Matcher`](matcher.md#matcher)
 
-Defined in: [normalizer.ts:31](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L31)
+Defined in: [normalizer.ts:31](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L31)
 
 ##### rules
 
 > **rules**: [`NormalizedRules`](#normalizedrules)
 
-Defined in: [normalizer.ts:30](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L30)
+Defined in: [normalizer.ts:30](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L30)
 
 ##### strictArrays
 
 > **strictArrays**: `boolean`
 
-Defined in: [normalizer.ts:36](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L36)
+Defined in: [normalizer.ts:36](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L36)
 
 ##### writeConflictSidecar
 
 > **writeConflictSidecar**: `boolean`
 
-Defined in: [normalizer.ts:37](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L37)
+Defined in: [normalizer.ts:37](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L37)
 
 ---
 
 ### NormalizedRules
 
-Defined in: [normalizer.ts:22](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L22)
+Defined in: [normalizer.ts:22](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L22)
 
 #### Properties
 
@@ -84,31 +84,31 @@ Defined in: [normalizer.ts:22](https://github.com/react18-tools/git-json-resolve
 
 > **default**: [`StrategyItem`](#strategyitem)[]
 
-Defined in: [normalizer.ts:26](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L26)
+Defined in: [normalizer.ts:26](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L26)
 
 ##### exact
 
 > **exact**: [`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)\<`string`, [`StrategyList`](#strategylist)[]\>
 
-Defined in: [normalizer.ts:23](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L23)
+Defined in: [normalizer.ts:23](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L23)
 
 ##### exactFields
 
 > **exactFields**: [`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)\<`string`, [`StrategyList`](#strategylist)[]\>
 
-Defined in: [normalizer.ts:24](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L24)
+Defined in: [normalizer.ts:24](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L24)
 
 ##### patterns
 
 > **patterns**: [`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)\<`string`, [`StrategyList`](#strategylist)[]\>
 
-Defined in: [normalizer.ts:25](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L25)
+Defined in: [normalizer.ts:25](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L25)
 
 ---
 
 ### StrategyItem
 
-Defined in: [normalizer.ts:11](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L11)
+Defined in: [normalizer.ts:11](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L11)
 
 #### Properties
 
@@ -116,19 +116,19 @@ Defined in: [normalizer.ts:11](https://github.com/react18-tools/git-json-resolve
 
 > **important**: `boolean`
 
-Defined in: [normalizer.ts:13](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L13)
+Defined in: [normalizer.ts:13](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L13)
 
 ##### name
 
 > **name**: `string`
 
-Defined in: [normalizer.ts:12](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L12)
+Defined in: [normalizer.ts:12](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L12)
 
 ---
 
 ### StrategyList
 
-Defined in: [normalizer.ts:16](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L16)
+Defined in: [normalizer.ts:16](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L16)
 
 #### Properties
 
@@ -136,19 +136,19 @@ Defined in: [normalizer.ts:16](https://github.com/react18-tools/git-json-resolve
 
 > **order**: `number`
 
-Defined in: [normalizer.ts:18](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L18)
+Defined in: [normalizer.ts:18](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L18)
 
 ##### source
 
 > **source**: `string`
 
-Defined in: [normalizer.ts:19](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L19)
+Defined in: [normalizer.ts:19](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L19)
 
 ##### strategies
 
 > **strategies**: [`StrategyItem`](#strategyitem)[]
 
-Defined in: [normalizer.ts:17](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L17)
+Defined in: [normalizer.ts:17](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L17)
 
 ## Variables
 
@@ -156,7 +156,7 @@ Defined in: [normalizer.ts:17](https://github.com/react18-tools/git-json-resolve
 
 > `const` **DEFAULT_CONFIG**: \{ `debug`: `boolean`; `defaultStrategy`: `string`[]; `exclude`: `string`[]; `include`: `string`[]; `writeConflictSidecar`: `boolean`; \}
 
-Defined in: [normalizer.ts:41](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L41)
+Defined in: [normalizer.ts:41](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L41)
 
 Defaults
 
@@ -190,7 +190,7 @@ Add \*\*/ prefix to ensure proper handling in monorepo
 
 > **normalizeConfig**\<`T`\>(`config`: [`Config`](types/README.md#config)\<`T`\>): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`NormalizedConfig`](#normalizedconfig)\>
 
-Defined in: [normalizer.ts:53](https://github.com/react18-tools/git-json-resolver/blob/a2478ece98639631a4ef55ad595d0d4ff30f30d2/lib/src/normalizer.ts#L53)
+Defined in: [normalizer.ts:53](https://github.com/react18-tools/git-json-resolver/blob/c1a0da129ec7d3f24591e9f70d996d635b9e341f/lib/src/normalizer.ts#L53)
 
 Normalize user config into fully expanded and classified form.
 
