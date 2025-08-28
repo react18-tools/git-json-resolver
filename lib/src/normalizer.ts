@@ -4,7 +4,7 @@
  * and classifies rules into exact / top-level / glob categories.
  */
 
-import { globalLogger } from "./logger";
+import { createLogger } from "./logger";
 import { Matcher, basicMatcher, loadMatcher } from "./matcher";
 import { InbuiltMergeStrategies, Config, RuleTree } from "./types";
 
@@ -48,6 +48,7 @@ export const DEFAULT_CONFIG = {
  */
 export const normalizeConfig = async <T extends string = InbuiltMergeStrategies>(
   config: Config<T>,
+  globalLogger = createLogger(),
 ): Promise<NormalizedConfig> => {
   const { rules, byStrategy, defaultStrategy, matcher, ...userConfig } = {
     ...DEFAULT_CONFIG,

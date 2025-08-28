@@ -7,16 +7,19 @@ import { Config, InbuiltMergeStrategies } from "./types";
 import { backupFile, listMatchingFiles } from "./utils";
 import fs from "node:fs/promises";
 import { reconstructConflict } from "./conflict-helper";
-import { globalLogger } from "./logger";
+import { createLogger } from "./logger";
 
 export * from "./types";
 
 const _strategyCache = new Map<string, string[]>();
 
+let globalLogger: ReturnType<typeof createLogger>;
+
 export const resolveConflicts = async <T extends string = InbuiltMergeStrategies>(
   config: Config<T>,
 ) => {
-  const normalizedConfig: NormalizedConfig = await normalizeConfig<T>(config);
+  globalLogger = createLogger(config.loggerConfig);
+  const normalizedConfig: NormalizedConfig = await normalizeConfig<T>(config, globalLogger);
   const filesEntries = await listMatchingFiles(normalizedConfig);
   if (normalizedConfig.debug) {
     globalLogger.info("all", JSON.stringify({ normalizedConfig, filesEntries }, null, 2));

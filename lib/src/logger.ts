@@ -74,5 +74,3 @@ export const createLogger = (config: LoggerConfig = {}) => {
     flush,
   };
 };
-
-export const globalLogger = createLogger();
