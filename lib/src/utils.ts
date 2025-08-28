@@ -58,7 +58,9 @@ export const listMatchingFiles = async (options: CollectFilesOptions): Promise<F
 
       if (entry.isDirectory()) {
         /* v8 ignore next */
-        await walk(fullPath);
+        if (!/node_modules/.test(entry.name)) {
+          await walk(fullPath);
+        }
       } else if (fileFilter(fullPath)) {
         try {
           const content = await fs.readFile(fullPath, "utf8");
