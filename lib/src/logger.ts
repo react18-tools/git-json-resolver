@@ -66,12 +66,11 @@ export const createLogger = (config: LoggerConfig = {}) => {
 
   const flush = () => {
     if (mode === "memory") {
+      const timestamp = new Date().toISOString().replace(/:/g, "-");
       for (const [fileId, entries] of buffers.entries()) {
         const filePath = path.join(
           logDir,
-          singleFile
-            ? `combined-${new Date().toISOString()}.log`
-            : `${fileId}-${new Date().toISOString()}.log`,
+          singleFile ? `combined-${timestamp}.log` : `${fileId}-${timestamp}.log`,
         );
         const lines = entries.map(e => `[${e.timestamp}] [${e.level.toUpperCase()}] ${e.message}`);
         fs.writeFileSync(filePath, lines.join("\n") + "\n", { flag: "a" });
