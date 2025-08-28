@@ -58,10 +58,10 @@ export const listMatchingFiles = async (options: CollectFilesOptions): Promise<F
 
       if (entry.isDirectory()) {
         /* v8 ignore next */
-        if (!/node_modules/.test(entry.name)) {
+        if (!/node_modules|\.git/.test(entry.name)) {
           await walk(fullPath);
         }
-      } else if (fileFilter(fullPath)) {
+      } else if (fileFilter(path.relative(fullPath, root))) {
         try {
           const content = await fs.readFile(fullPath, "utf8");
 
