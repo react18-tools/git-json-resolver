@@ -35,7 +35,7 @@ export const resolveConflicts = async <T extends string = InbuiltMergeStrategies
           path: "",
           ctx: {
             config: normalizedConfig,
-            strategies: normalizedConfig.customStrategies,
+            strategies: normalizedConfig.customStrategies ?? {},
             _strategyCache,
           },
         }),
