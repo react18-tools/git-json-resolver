@@ -1,5 +1,11 @@
 # git-json-resolver
 
+## 0.1.4
+
+### Patch Changes
+
+- 4bb154f: Do not walk through node_modules
+
 ## 0.1.3
 
 ### Patch Changes
