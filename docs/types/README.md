@@ -15,7 +15,7 @@ nav_order: 27
 
 ### StrategyStatus
 
-Defined in: [types.ts:29](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L29)
+Defined in: [types.ts:29](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L29)
 
 Strategy status codes.
 
@@ -25,31 +25,31 @@ Strategy status codes.
 
 > **CONTINUE**: `1`
 
-Defined in: [types.ts:31](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L31)
+Defined in: [types.ts:31](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L31)
 
 ##### FAIL
 
 > **FAIL**: `2`
 
-Defined in: [types.ts:32](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L32)
+Defined in: [types.ts:32](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L32)
 
 ##### OK
 
 > **OK**: `0`
 
-Defined in: [types.ts:30](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L30)
+Defined in: [types.ts:30](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L30)
 
 ##### SKIP
 
 > **SKIP**: `3`
 
-Defined in: [types.ts:33](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L33)
+Defined in: [types.ts:33](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L33)
 
 ## Interfaces
 
 ### Config\<T, TContext\>
 
-Defined in: [types.ts:74](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L74)
+Defined in: [types.ts:74](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L74)
 
 High-level config object for conflict resolution.
 
@@ -69,7 +69,7 @@ High-level config object for conflict resolution.
 
 > `optional` **byStrategy**: [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)\<`T`, `string`[]\>\>
 
-Defined in: [types.ts:82](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L82)
+Defined in: [types.ts:82](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L82)
 
 Strategy → list of fields to apply it to
 
@@ -77,7 +77,7 @@ Strategy → list of fields to apply it to
 
 > `optional` **customStrategies**: [`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)\<[`Exclude`](https://www.typescriptlang.org/docs/handbook/utility-types.html#excludeuniontype-excludedmembers)\<[`ForbidBangEnd`](-internal-.md#forbidbangend)\<`T`\>, [`InbuiltMergeStrategies`](#inbuiltmergestrategies)\>, [`StrategyFn`](#strategyfn)\<`TContext`\>\>
 
-Defined in: [types.ts:85](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L85)
+Defined in: [types.ts:85](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L85)
 
 Custom strategies (excluding built-in names)
 
@@ -85,7 +85,7 @@ Custom strategies (excluding built-in names)
 
 > `optional` **debug**: `boolean`
 
-Defined in: [types.ts:109](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L109)
+Defined in: [types.ts:109](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L109)
 
 Debug mode - slower but more logs + traceability
 
@@ -93,7 +93,7 @@ Debug mode - slower but more logs + traceability
 
 > `optional` **defaultStrategy**: `T` \| `T`[]
 
-Defined in: [types.ts:76](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L76)
+Defined in: [types.ts:76](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L76)
 
 Fallback strategy when no rule matches
 
@@ -101,7 +101,7 @@ Fallback strategy when no rule matches
 
 > `optional` **exclude**: `string`[]
 
-Defined in: [types.ts:94](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L94)
+Defined in: [types.ts:94](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L94)
 
 File exclusion globs
 
@@ -109,7 +109,7 @@ File exclusion globs
 
 > `optional` **include**: `string`[]
 
-Defined in: [types.ts:91](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L91)
+Defined in: [types.ts:91](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L91)
 
 File inclusion globs
 
@@ -117,7 +117,7 @@ File inclusion globs
 
 > `optional` **includeNonConflicted**: `boolean`
 
-Defined in: [types.ts:104](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L104)
+Defined in: [types.ts:104](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L104)
 
 Whether to include files that do not contain conflicts.
 Useful for applying strategies, e.g., drop even when conflicts aren’t present.
@@ -127,7 +127,7 @@ Defaults to `false`.
 
 > `optional` **matcher**: [`Matcher`](../matcher.md#matcher) \| `"micromatch"` \| `"picomatch"`
 
-Defined in: [types.ts:97](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L97)
+Defined in: [types.ts:97](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L97)
 
 Glob matcher: `"micromatch"`, `"picomatch"`, or custom implementation
 
@@ -135,7 +135,7 @@ Glob matcher: `"micromatch"`, `"picomatch"`, or custom implementation
 
 > `optional` **rules**: [`RuleTree`](#ruletree)\<`T`\>
 
-Defined in: [types.ts:79](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L79)
+Defined in: [types.ts:79](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L79)
 
 Rule tree mapping globs → strategies
 
@@ -143,13 +143,13 @@ Rule tree mapping globs → strategies
 
 > `optional` **strictArrays**: `boolean`
 
-Defined in: [types.ts:114](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L114)
+Defined in: [types.ts:114](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L114)
 
 ##### writeConflictSidecar?
 
 > `optional` **writeConflictSidecar**: `boolean`
 
-Defined in: [types.ts:119](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L119)
+Defined in: [types.ts:119](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L119)
 
 ## Type Aliases
 
@@ -157,7 +157,7 @@ Defined in: [types.ts:119](https://github.com/react18-tools/git-json-resolver/bl
 
 > **InbuiltMergeStrategies** = `"merge"` \| `"ours"` \| `"theirs"` \| `"base"` \| `"skip"` \| `"drop"` \| `"non-empty"` \| `"update"`
 
-Defined in: [types.ts:18](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L18)
+Defined in: [types.ts:18](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L18)
 
 Built-in merge strategies.
 ⚠️ Reserved names — plugin authors should avoid reusing these.
@@ -179,7 +179,7 @@ Built-in merge strategies.
 
 > **RuleTree**\<`T`\> = \{\[`fieldGlob`: `string`\]: [`RuleTree`](#ruletree)\<`T`\> \| `T`[]; \}
 
-Defined in: [types.ts:67](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L67)
+Defined in: [types.ts:67](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L67)
 
 Rules tree: maps field globs → strategy names or nested rules.
 
@@ -202,7 +202,7 @@ Rules tree: maps field globs → strategy names or nested rules.
 
 > **StrategyFn**\<`TContext`\> = (`args`: \{ `base?`: `unknown`; `context?`: `TContext`; `filePath?`: `string`; `ours`: `unknown`; `path`: `string`; `theirs`: `unknown`; \}) => [`StrategyResult`](#strategyresult) \| [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`StrategyResult`](#strategyresult)\>
 
-Defined in: [types.ts:47](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L47)
+Defined in: [types.ts:47](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L47)
 
 Strategy function signature.
 Custom strategies receive both sides, optional base, file path, and context.
@@ -251,7 +251,7 @@ Custom strategies receive both sides, optional base, file path, and context.
 
 > **StrategyResult** = \{ `status`: [`OK`](#ok); `value`: `unknown`; \} \| \{ `reason?`: `string`; `status`: [`CONTINUE`](#continue); \} \| \{ `reason`: `string`; `status`: [`SKIP`](#skip); \} \| \{ `reason`: `string`; `status`: [`FAIL`](#fail); \}
 
-Defined in: [types.ts:37](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/types.ts#L37)
+Defined in: [types.ts:37](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/types.ts#L37)
 
 Strategy result contract.
 

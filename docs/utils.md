@@ -10,7 +10,7 @@ nav_order: 17
 
 ### CollectFilesOptions
 
-Defined in: [utils.ts:19](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/utils.ts#L19)
+Defined in: [utils.ts:19](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/utils.ts#L19)
 
 #### Properties
 
@@ -18,7 +18,7 @@ Defined in: [utils.ts:19](https://github.com/react18-tools/git-json-resolver/blo
 
 > **fileFilter**: (`filePath`: `string`) => `boolean`
 
-Defined in: [utils.ts:24](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/utils.ts#L24)
+Defined in: [utils.ts:24](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/utils.ts#L24)
 
 Function used to decide if a file should be considered at all.
 
@@ -36,7 +36,7 @@ Function used to decide if a file should be considered at all.
 
 > `optional` **includeNonConflicted**: `boolean`
 
-Defined in: [utils.ts:30](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/utils.ts#L30)
+Defined in: [utils.ts:30](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/utils.ts#L30)
 
 Whether to include files even if they don’t contain conflicts.
 Defaults to `false`.
@@ -45,7 +45,7 @@ Defaults to `false`.
 
 > `optional` **root**: `string`
 
-Defined in: [utils.ts:21](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/utils.ts#L21)
+Defined in: [utils.ts:21](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/utils.ts#L21)
 
 Root directory to start traversal (defaults to `process.cwd()`).
 
@@ -53,7 +53,7 @@ Root directory to start traversal (defaults to `process.cwd()`).
 
 ### FileEntry
 
-Defined in: [utils.ts:4](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/utils.ts#L4)
+Defined in: [utils.ts:4](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/utils.ts#L4)
 
 #### Properties
 
@@ -61,13 +61,13 @@ Defined in: [utils.ts:4](https://github.com/react18-tools/git-json-resolver/blob
 
 > **content**: `string`
 
-Defined in: [utils.ts:6](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/utils.ts#L6)
+Defined in: [utils.ts:6](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/utils.ts#L6)
 
 ##### filePath
 
 > **filePath**: `string`
 
-Defined in: [utils.ts:5](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/utils.ts#L5)
+Defined in: [utils.ts:5](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/utils.ts#L5)
 
 ## Functions
 
@@ -75,7 +75,7 @@ Defined in: [utils.ts:5](https://github.com/react18-tools/git-json-resolver/blob
 
 > **backupFile**(`filePath`: `string`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`string`\>
 
-Defined in: [utils.ts:84](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/utils.ts#L84)
+Defined in: [utils.ts:84](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/utils.ts#L84)
 
 #### Parameters
 
@@ -93,7 +93,7 @@ Defined in: [utils.ts:84](https://github.com/react18-tools/git-json-resolver/blo
 
 > **listMatchingFiles**(`options`: [`CollectFilesOptions`](#collectfilesoptions)): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`FileEntry`](#fileentry)[]\>
 
-Defined in: [utils.ts:42](https://github.com/react18-tools/git-json-resolver/blob/9629b154d01f34b7a3d21fa5176bbe693744255c/lib/src/utils.ts#L42)
+Defined in: [utils.ts:42](https://github.com/react18-tools/git-json-resolver/blob/dc8d77b61daa61f118acc2f74e260f814fc055fe/lib/src/utils.ts#L42)
 
 Recursively collects files that match the provided `fileFilter`.
 
