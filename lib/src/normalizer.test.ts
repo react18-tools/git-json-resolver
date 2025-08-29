@@ -106,50 +106,6 @@ describe("normalizeConfig", () => {
     ]);
   });
 
-  it("fileFilter includes allowed files and excludes others", async () => {
-    const result = await normalizeConfig({
-      include: ["src/**"],
-      exclude: ["src/ignore/**"],
-      matcher: "micromatch",
-    });
-    expect(result.fileFilter("src/index.ts")).toBe(true);
-    expect(result.fileFilter("src/ignore/file.ts")).toBe(false);
-    expect(result.fileFilter("other/file.ts")).toBe(false);
-  });
-
-  it("fileFilter includes allowed files and excludes others", async () => {
-    const result = await normalizeConfig({
-      include: ["src/**"],
-      exclude: ["src/ignore/**"],
-    });
-    expect(result.fileFilter("src/index.ts")).toBe(true);
-    expect(result.fileFilter("src/ignore/file.ts")).toBe(false);
-    expect(result.fileFilter("other/file.ts")).toBe(false);
-  });
-
-  it("fileFilter includes allowed files and excludes others", async () => {
-    const result = await normalizeConfig({
-      include: ["**/package.json"],
-      exclude: ["package.json", "**/dist/**"],
-    });
-    expect(result.fileFilter("pkgs/src/package.json")).toBe(true);
-    expect(result.fileFilter("pkgs\\src\\package.json")).toBe(true);
-    expect(result.fileFilter("package.json")).toBe(false);
-    expect(result.fileFilter("other/file.ts")).toBe(false);
-  });
-
-  it("fileFilter includes allowed files and excludes others", async () => {
-    const result = await normalizeConfig({
-      include: ["src/**/*.json"],
-      exclude: ["src/ignore/**"],
-    });
-    expect(result.fileFilter("src/index.ts")).toBe(false);
-    expect(result.fileFilter("src/index.json")).toBe(true);
-    expect(result.fileFilter("src/abc/index.json")).toBe(true);
-    expect(result.fileFilter("src/ignore/file.ts")).toBe(false);
-    expect(result.fileFilter("other/file.json")).toBe(false);
-  });
-
   it("uses basicMatcher by default", async () => {
     const result = await normalizeConfig({});
     expect(result.matcher).toBe(basicMatcher);

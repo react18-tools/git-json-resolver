@@ -47,15 +47,7 @@ export const listMatchingFiles = async (options: CollectFilesOptions): Promise<F
     return matcher.isMatch(posixPath, include) && !matcher.isMatch(posixPath, exclude);
   };
 
-  const [keepDirs, dropDirs] = deriveDirExcludes(include, exclude);
-
-  const skipDirMatcher = (dirPath: string) => {
-    const posixPath = dirPath.replace(/\\/g, "/");
-    return (
-      matcher.isMatch(posixPath, dropDirs) ||
-      (keepDirs.length > 0 && !matcher.isMatch(posixPath, keepDirs))
-    );
-  };
+  const skipDirMatcher = createSkipDirectoryMatcher(include, exclude, matcher);
 
   const fileEntries: FileEntry[] = [];
 
@@ -104,10 +96,14 @@ export const listMatchingFiles = async (options: CollectFilesOptions): Promise<F
  * Derive directory pruning patterns from include/exclude rules.
  * These patterns are used to avoid walking unnecessary directories.
  */
-export const deriveDirExcludes = (include: string[], exclude: string[]): [string[], string[]] => {
+export const createSkipDirectoryMatcher = (
+  include: string[],
+  exclude: string[],
+  matcher: NormalizedConfig["matcher"],
+) => {
   // ---- Case 1: includes are only root-level files → prune all dirs
   if (include.length > 0 && include.every(p => !p.includes("/") && !p.includes("**"))) {
-    return [[], ["**"]]; // minimal: just exclude all dirs
+    return () => false; // minimal: just exclude all dirs
   }
 
   const keepDirs = new Set<string>();
@@ -133,7 +129,13 @@ export const deriveDirExcludes = (include: string[], exclude: string[]): [string
     }
   }
 
-  return [[...keepDirs], [...dropDirs]];
+  return (dirPath: string) => {
+    const posixPath = dirPath.replace(/\\/g, "/");
+    return (
+      matcher.isMatch(posixPath, [...dropDirs]) ||
+      (keepDirs.size > 0 && !matcher.isMatch(posixPath, [...keepDirs]))
+    );
+  };
 };
 
 export const backupFile = async (filePath: string, backupDir = ".merge-backups") => {

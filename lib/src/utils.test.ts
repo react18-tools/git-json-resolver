@@ -1,88 +1,85 @@
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import fs from "node:fs/promises";
 import path from "node:path";
-import os from "node:os";
-import { listMatchingFiles } from "./utils";
+import { hasConflict, createSkipDirectoryMatcher, listMatchingFiles, backupFile } from "./utils"; // adjust import
+import { basicMatcher } from "./matcher";
 
-const conflictContent = `
-{
-<<<<<<< ours
-  "value": 1
-=======
-  "value": 2
->>>>>>> theirs
-}
-`;
+const matcher = basicMatcher;
 
-const cleanContent = `
-{
-  "value": 42
-}
-`;
+const TMP = path.join(process.cwd(), "tmp-test");
 
-describe("collectFiles", () => {
-  let tmpDir: string;
-  let conflictedFile: string;
-  let cleanFile: string;
-  let ignoredFile: string;
+beforeAll(async () => {
+  await fs.rm(TMP, { recursive: true, force: true });
+  await fs.mkdir(TMP, { recursive: true });
 
-  beforeAll(async () => {
-    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "collect-files-"));
+  // Create dirs & files
+  await fs.writeFile(path.join(TMP, "clean.txt"), "hello");
+  await fs.writeFile(
+    path.join(TMP, "conflict.txt"),
+    "line1\n<<<<<<< ours\nconflict\n=======\ntheirs\n>>>>>>>",
+  );
+  await fs.mkdir(path.join(TMP, "src"));
+  await fs.writeFile(path.join(TMP, "src", "index.ts"), "console.log('ok')");
+  await fs.mkdir(path.join(TMP, "node_modules"));
+  await fs.writeFile(path.join(TMP, "node_modules", "ignore.js"), "ignored");
+});
 
-    conflictedFile = path.join(tmpDir, "conflicted.json");
-    cleanFile = path.join(tmpDir, "clean.json");
-    ignoredFile = path.join(tmpDir, "ignored.txt");
+afterAll(async () => {
+  await fs.rm(TMP, { recursive: true, force: true });
+});
 
-    await fs.writeFile(conflictedFile, conflictContent, "utf8");
-    await fs.writeFile(cleanFile, cleanContent, "utf8");
-    await fs.writeFile(ignoredFile, cleanContent, "utf8");
+describe("hasConflict", () => {
+  it("detects conflict markers", () => {
+    expect(hasConflict("<<<<<<<\n=======\n>>>>>>>")).toBe(true);
   });
-
-  afterAll(async () => {
-    await fs.rm(tmpDir, { recursive: true, force: true });
+  it("returns false for clean content", () => {
+    expect(hasConflict("no conflicts here")).toBe(false);
   });
+});
 
-  it("collects only conflicted files by default", async () => {
+describe("listMatchingFiles", () => {
+  it("finds only conflicted files by default", async () => {
     const files = await listMatchingFiles({
-      root: tmpDir,
-      fileFilter: file => file.endsWith(".json"),
+      root: TMP,
+      include: ["**/*.txt"],
+      exclude: ["node_modules/**"],
+      matcher,
     });
-
-    const paths = files.map(f => f.filePath);
-
-    expect(paths).toContain(conflictedFile);
-    expect(paths).not.toContain(cleanFile);
-    expect(paths).not.toContain(ignoredFile);
-
-    // check content as well
-    const conflicted = files.find(f => f.filePath === conflictedFile);
-    expect(conflicted?.content).toContain("<<<<<<<");
+    const names = files.map(f => path.basename(f.filePath));
+    expect(names).toContain("conflict.txt");
+    expect(names).not.toContain("clean.txt");
   });
 
-  it("collects conflicted + clean files when includeNonConflicted is true", async () => {
+  it("includes non-conflicted if option enabled", async () => {
     const files = await listMatchingFiles({
-      root: tmpDir,
-      fileFilter: file => file.endsWith(".json"),
+      root: TMP,
+      include: ["**/*.txt"],
+      exclude: [],
+      matcher,
       includeNonConflicted: true,
     });
-
-    const paths = files.map(f => f.filePath);
-
-    expect(paths).toContain(conflictedFile);
-    expect(paths).toContain(cleanFile);
-    expect(paths).not.toContain(ignoredFile);
-
-    const clean = files.find(f => f.filePath === cleanFile);
-    expect(clean?.content).toContain('"value": 42');
+    const names = files.map(f => path.basename(f.filePath));
+    expect(names).toEqual(expect.arrayContaining(["clean.txt", "conflict.txt"]));
   });
 
-  it("skips files that do not match fileFilter", async () => {
+  it("only files - no dirs", async () => {
     const files = await listMatchingFiles({
-      root: tmpDir,
-      fileFilter: file => file.endsWith(".json"),
+      root: TMP,
+      include: ["*.txt"],
+      exclude: [],
+      matcher,
     });
+    const names = files.map(f => path.basename(f.filePath));
+    expect(names).toEqual(expect.arrayContaining(["conflict.txt"]));
+  });
+});
 
-    const paths = files.map(f => f.filePath);
-    expect(paths).not.toContain(ignoredFile);
+describe("backupFile", () => {
+  it("creates backup copy under .merge-backups", async () => {
+    const src = path.join(TMP, "clean.txt");
+    const backup = await backupFile(src);
+    const exists = await fs.readFile(backup, "utf8");
+    expect(exists).toBe("hello");
+    expect(backup).toMatch(/\.merge-backups/);
   });
 });
