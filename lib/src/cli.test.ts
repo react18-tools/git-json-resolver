@@ -9,6 +9,9 @@ vi.mock("node:child_process");
 vi.mock("./index", () => ({
   resolveConflicts: vi.fn(),
 }));
+vi.mock("./utils", () => ({
+  restoreBackups: vi.fn(),
+}));
 vi.mock("./normalizer", () => ({
   DEFAULT_CONFIG: { defaultStrategy: "merge" },
 }));
@@ -68,6 +71,16 @@ describe("cli helpers", () => {
     it("sets init flag", () => {
       const result = (cli as any).parseArgs(["node", "cli", "--init"]);
       expect(result.init).toBe(true);
+    });
+
+    it("sets restore with undefined", () => {
+      const result = (cli as any).parseArgs(["node", "cli", "--restore"]);
+      expect(result.restore).toBe(undefined);
+    });
+
+    it("sets restore with custom directory", () => {
+      const result = (cli as any).parseArgs(["node", "cli", "--restore", "custom-backup"]);
+      expect(result.restore).toBe("custom-backup");
     });
 
     it("warns on unknown option", () => {

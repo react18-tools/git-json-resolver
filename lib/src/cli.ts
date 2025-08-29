@@ -6,6 +6,7 @@ import { pathToFileURL } from "node:url";
 import { resolveConflicts } from "./index";
 import type { Config } from "./types";
 import { DEFAULT_CONFIG } from "./normalizer";
+import { restoreBackups } from "./utils";
 
 const CONFIG_FILENAME = "git-json-resolver.config.js";
 
@@ -63,9 +64,12 @@ module.exports = ${JSON.stringify(DEFAULT_CONFIG, null, 2)};
 /**
  * CLI argument parser (minimal, no external deps).
  */
-export const parseArgs = (argv: string[]): { overrides: Partial<Config>; init?: boolean } => {
+export const parseArgs = (
+  argv: string[],
+): { overrides: Partial<Config>; init?: boolean; restore?: string } => {
   const overrides: Partial<Config> = {};
   let init = false;
+  let restore: string | undefined;
 
   for (let i = 2; i < argv.length; i++) {
     const arg = argv[i];
@@ -93,18 +97,22 @@ export const parseArgs = (argv: string[]): { overrides: Partial<Config>; init?: 
       case "--init":
         init = true;
         break;
+      case "--restore":
+        restore = next;
+        i++;
+        break;
       default:
         if (arg.startsWith("--")) {
           console.warn(`[git-json-resolver] Unknown option: ${arg}`);
         }
     }
   }
-  return { overrides, init };
+  return { overrides, init, restore };
 };
 
 (async () => {
   try {
-    const { overrides, init } = parseArgs(process.argv);
+    const { overrides, init, restore } = parseArgs(process.argv);
 
     if (init) {
       initConfig(process.cwd());
@@ -116,6 +124,12 @@ export const parseArgs = (argv: string[]): { overrides: Partial<Config>; init?: 
       ...fileConfig,
       ...overrides,
     };
+
+    if (restore) {
+      await restoreBackups(restore || fileConfig.backupDir || ".merge-backups");
+      console.log(`[git-json-resolver] Restored backups from ${restore}`);
+      process.exit(0);
+    }
 
     await resolveConflicts(finalConfig);
   } catch (err) {
