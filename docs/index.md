@@ -34,6 +34,7 @@ A Git-aware conflict resolver for **JSON-first structured data**.
 - 🔄 **Backup and restore** functionality
 - 📊 **Configurable logging** (memory or file-based)
 - 🔀 **Git merge driver** support for seamless Git integration
+- 🔧 **Plugin system** for custom strategies with JSON config support
 
 ## Installation
 
@@ -120,7 +121,9 @@ await resolveConflicts({
 });
 ```
 
-### Config File (`git-json-resolver.config.js`)
+### Config File
+
+**JavaScript Config (`git-json-resolver.config.js`)**
 
 ```js
 module.exports = {
@@ -156,6 +159,38 @@ module.exports = {
   },
 };
 ```
+
+**JSON Config (`git-json-resolver.config.json`) - ⚠️ Experimental**
+
+```json
+{
+  "$schema": "https://cdn.jsdelivr.net/npm/git-json-resolver@latest/schema/config.schema.json",
+  "defaultStrategy": ["merge", "ours"],
+  "plugins": ["my-plugin"],
+  "pluginConfig": {
+    "my-plugin": {
+      "option": "value"
+    }
+  },
+  "rules": {
+    "package.json": {
+      "version": ["semantic-version", "theirs"],
+      "dependencies": ["ours"]
+    }
+  },
+  "byStrategy": {
+    "ours": ["dependencies.*", "devDependencies.*"],
+    "theirs!": ["version", "name"]
+  }
+}
+```
+
+**⚠️ JSON Config Limitations:**
+
+- No TypeScript intellisense for plugin strategies
+- Limited validation for custom strategy names
+- No compile-time type checking
+- **Recommended:** Use `.js` or `.ts` config for better developer experience
 
 ## Supported Strategies
 
@@ -223,7 +258,115 @@ All non-JSON formats are converted to JSON → resolved → converted back to or
 - **Glob patterns**: `"dependencies.*"`, `"**.config.**"`
 - **Wildcards**: `"*.json"`, `"src/**/*.config.js"`
 
-### Custom Strategies
+### Plugin System
+
+**For TypeScript/JavaScript configs, you can use either approach:**
+
+#### 1. Direct Import (Recommended)
+
+```ts
+import { strategies } from "my-plugin";
+// or import { semanticVersion, timestampLatest } from "my-plugin";
+import { resolveConflicts } from "git-json-resolver";
+
+await resolveConflicts({
+  customStrategies: {
+    ...strategies,
+    // or "semantic-version": semanticVersion,
+  },
+  rules: {
+    version: ["semantic-version", "theirs"],
+  },
+});
+```
+
+#### 2. Dynamic Loading
+
+```ts
+// Also works in .js/.ts configs
+const config = {
+  plugins: ["my-plugin"],
+  pluginConfig: {
+    "my-plugin": { option: "value" },
+  },
+  rules: {
+    version: ["semantic-version", "theirs"],
+  },
+};
+```
+
+#### 3. JSON Config (Dynamic Loading Only)
+
+```json
+{
+  "plugins": ["my-plugin"],
+  "pluginConfig": {
+    "my-plugin": { "option": "value" }
+  },
+  "rules": {
+    "version": ["semantic-version", "theirs"]
+  }
+}
+```
+
+**⚠️ If plugin doesn't provide global types:**
+
+```ts
+import type { Config } from "git-json-resolver";
+
+const config: Config<AllStrategies | "semantic-version" | "timestamp-latest"> = {
+  // ... your config
+};
+```
+
+**Creating a Plugin**
+
+```ts
+import { StrategyPlugin, StrategyStatus, StrategyFn } from "git-json-resolver";
+
+// Augment types for TypeScript support
+declare module "git-json-resolver" {
+  interface PluginStrategies {
+    "semantic-version": string;
+    "timestamp-latest": string;
+  }
+}
+
+// Individual strategy functions (can be imported directly)
+export const semanticVersion: StrategyFn = ({ ours, theirs }) => {
+  if (isNewerVersion(theirs, ours)) {
+    return { status: StrategyStatus.OK, value: theirs };
+  }
+  return { status: StrategyStatus.CONTINUE };
+};
+
+export const timestampLatest: StrategyFn = ({ ours, theirs }) => {
+  const oursTime = new Date(ours as string).getTime();
+  const theirsTime = new Date(theirs as string).getTime();
+  return {
+    status: StrategyStatus.OK,
+    value: oursTime > theirsTime ? ours : theirs,
+  };
+};
+
+// Export strategies object for direct import
+export const strategies = {
+  "semantic-version": semanticVersion,
+  "timestamp-latest": timestampLatest,
+};
+
+// Plugin interface for dynamic loading
+const plugin: StrategyPlugin = {
+  strategies,
+  init: async config => {
+    console.log("Plugin initialized with:", config);
+  },
+};
+
+export default plugin;
+```
+
+### Custom Strategies (Inline)
 
 ```ts
 import { StrategyStatus } from "git-json-resolver";
@@ -250,6 +393,10 @@ const config = {
 - **Stream mode**: File-based logging for large operations
 - **Per-file logs**: Separate log files for each processed file
 - **Debug mode**: Detailed conflict information and strategy traces
+
+## Plugin Development
+
+See [PLUGIN_GUIDE.md](./PLUGIN_GUIDE.md) for detailed plugin development documentation.
 
 ## Contributing
 

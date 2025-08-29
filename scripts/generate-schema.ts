@@ -1,8 +1,8 @@
 /**
  * Generate JSON Schema from TypeScript types
  */
-import { writeFileSync } from 'fs';
-import { resolve } from 'path';
+import { writeFileSync } from "fs";
+import { resolve } from "path";
 
 const schema = {
   $schema: "http://json-schema.org/draft-07/schema#",
@@ -12,46 +12,46 @@ const schema = {
     defaultStrategy: {
       oneOf: [
         { $ref: "#/definitions/strategyName" },
-        { type: "array", items: { $ref: "#/definitions/strategyName" } }
-      ]
+        { type: "array", items: { $ref: "#/definitions/strategyName" } },
+      ],
     },
     rules: {
       type: "object",
       additionalProperties: {
         oneOf: [
           { type: "array", items: { $ref: "#/definitions/strategyName" } },
-          { $ref: "#/definitions/ruleTree" }
-        ]
-      }
+          { $ref: "#/definitions/ruleTree" },
+        ],
+      },
     },
     byStrategy: {
       type: "object",
       patternProperties: {
         "^[a-zA-Z][a-zA-Z0-9-_]*!?$": {
           type: "array",
-          items: { $ref: "#/definitions/fieldPattern" }
-        }
+          items: { $ref: "#/definitions/fieldPattern" },
+        },
       },
-      additionalProperties: false
+      additionalProperties: false,
     },
     plugins: {
       type: "array",
-      items: { type: "string" }
+      items: { type: "string" },
     },
     pluginConfig: {
       type: "object",
-      additionalProperties: { type: "object" }
+      additionalProperties: { type: "object" },
     },
     include: {
       type: "array",
-      items: { type: "string" }
+      items: { type: "string" },
     },
     exclude: {
       type: "array",
-      items: { type: "string" }
+      items: { type: "string" },
     },
     matcher: {
-      enum: ["micromatch", "picomatch"]
+      enum: ["micromatch", "picomatch"],
     },
     includeNonConflicted: { type: "boolean" },
     debug: { type: "boolean" },
@@ -61,8 +61,8 @@ const schema = {
       oneOf: [
         { enum: ["auto"] },
         { $ref: "#/definitions/parser" },
-        { type: "array", items: { $ref: "#/definitions/parser" } }
-      ]
+        { type: "array", items: { $ref: "#/definitions/parser" } },
+      ],
     },
     autoStage: { type: "boolean" },
     loggerConfig: {
@@ -75,47 +75,55 @@ const schema = {
           type: "object",
           properties: {
             stdout: { $ref: "#/definitions/logLevels" },
-            file: { $ref: "#/definitions/logLevels" }
-          }
-        }
-      }
-    }
+            file: { $ref: "#/definitions/logLevels" },
+          },
+        },
+      },
+    },
   },
   definitions: {
     builtinStrategy: {
       type: "string",
       enum: [
-        "merge", "ours", "theirs", "base", "skip", "drop",
-        "non-empty", "update", "concat", "unique"
-      ]
+        "merge",
+        "ours",
+        "theirs",
+        "base",
+        "skip",
+        "drop",
+        "non-empty",
+        "update",
+        "concat",
+        "unique",
+      ],
     },
     strategyName: {
       type: "string",
-      pattern: "^[a-zA-Z][a-zA-Z0-9-_]*!?$"
+      pattern: "^[a-zA-Z][a-zA-Z0-9-_]*!?$",
     },
     fieldPattern: {
       type: "string",
-      pattern: "^[a-zA-Z0-9.*\\[\\]_-]+!?$"
+      pattern: "^[a-zA-Z0-9.*\\[\\]_-]+!?$",
     },
     ruleTree: {
       type: "object",
       additionalProperties: {
         oneOf: [
           { type: "array", items: { $ref: "#/definitions/strategyName" } },
-          { $ref: "#/definitions/ruleTree" }
-        ]
-      }
+          { $ref: "#/definitions/ruleTree" },
+        ],
+      },
     },
     parser: {
-      enum: ["json", "json5", "yaml", "toml", "xml"]
+      enum: ["json", "json5", "yaml", "toml", "xml"],
     },
     logLevels: {
       type: "array",
-      items: { enum: ["info", "warn", "error", "debug"] }
-    }
-  }
+      items: { enum: ["info", "warn", "error", "debug"] },
+    },
+  },
 };
 
-const schemaPath = resolve(__dirname, '../lib/schema/config.schema.json');
+const schemaPath = resolve(__dirname, "../lib/schema/config.schema.json");
 writeFileSync(schemaPath, JSON.stringify(schema, null, 2));
-console.log('JSON Schema generated at:', schemaPath);
+console.log("JSON Schema generated at:", schemaPath);

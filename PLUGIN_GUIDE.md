@@ -29,9 +29,9 @@ const plugin: StrategyPlugin = {
   strategies: {
     "my-strategy": myStrategy,
   },
-  init: async (config) => {
+  init: async config => {
     // Optional initialization
-  }
+  },
 };
 
 export default plugin;
@@ -56,8 +56,8 @@ await resolveConflicts({
     "my-strategy": myStrategy,
   },
   rules: {
-    version: ["my-strategy"]
-  }
+    version: ["my-strategy"],
+  },
 });
 ```
 
@@ -86,11 +86,11 @@ import type { Config } from "git-json-resolver";
 const config: Config = {
   plugins: ["my-plugin"],
   pluginConfig: {
-    "my-plugin": { customOption: "value" }
+    "my-plugin": { customOption: "value" },
   },
   rules: {
-    version: ["my-strategy"] // TypeScript will know about this strategy
-  }
+    version: ["my-strategy"], // TypeScript will know about this strategy
+  },
 };
 
 export default config;

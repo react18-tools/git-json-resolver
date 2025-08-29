@@ -180,6 +180,7 @@ module.exports = {
 ```
 
 **⚠️ JSON Config Limitations:**
+
 - No TypeScript intellisense for plugin strategies
 - Limited validation for custom strategy names
 - No compile-time type checking
@@ -268,8 +269,8 @@ await resolveConflicts({
     // or "semantic-version": semanticVersion,
   },
   rules: {
-    version: ["semantic-version", "theirs"]
-  }
+    version: ["semantic-version", "theirs"],
+  },
 });
 ```
 
@@ -280,11 +281,11 @@ await resolveConflicts({
 const config = {
   plugins: ["my-plugin"],
   pluginConfig: {
-    "my-plugin": { option: "value" }
+    "my-plugin": { option: "value" },
   },
   rules: {
-    version: ["semantic-version", "theirs"]
-  }
+    version: ["semantic-version", "theirs"],
+  },
 };
 ```
 
@@ -338,7 +339,7 @@ export const timestampLatest: StrategyFn = ({ ours, theirs }) => {
   const theirsTime = new Date(theirs as string).getTime();
   return {
     status: StrategyStatus.OK,
-    value: oursTime > theirsTime ? ours : theirs
+    value: oursTime > theirsTime ? ours : theirs,
   };
 };
 
@@ -351,9 +352,9 @@ export const strategies = {
 // Plugin interface for dynamic loading
 const plugin: StrategyPlugin = {
   strategies,
-  init: async (config) => {
-    console.log('Plugin initialized with:', config);
-  }
+  init: async config => {
+    console.log("Plugin initialized with:", config);
+  },
 };
 
 export default plugin;

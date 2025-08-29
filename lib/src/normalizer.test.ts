@@ -239,16 +239,18 @@ describe("normalizeConfig", () => {
         "plugin-strategy": vi.fn(),
       },
     };
-    
+
     vi.doMock("test-plugin", () => ({ default: mockPlugin }));
-    
+
     const config: Config<any> = {
       plugins: ["test-plugin"],
     };
-    
+
     const result = await normalizeConfig(config);
-    expect(result.customStrategies["plugin-strategy"]).toBe(mockPlugin.strategies["plugin-strategy"]);
-    
+    expect(result.customStrategies["plugin-strategy"]).toBe(
+      mockPlugin.strategies["plugin-strategy"],
+    );
+
     vi.doUnmock("test-plugin");
   });
 
@@ -258,34 +260,35 @@ describe("normalizeConfig", () => {
       strategies: { "test-strategy": vi.fn() },
       init: mockInit,
     };
-    
+
     vi.doMock("test-plugin", () => ({ default: mockPlugin }));
-    
+
     const config: Config<any> = {
       plugins: ["test-plugin"],
       pluginConfig: {
         "test-plugin": { option: "value" },
       },
     };
-    
+
     await normalizeConfig(config);
     expect(mockInit).toHaveBeenCalledWith({ option: "value" });
-    
+
     vi.doUnmock("test-plugin");
   });
 
   it("throws error when plugin has no strategies", async () => {
-    const mockPlugin = {
-    };
-    
+    const mockPlugin = {};
+
     vi.doMock("bad-plugin", () => ({ default: mockPlugin }));
-    
+
     const config: Config<any> = {
       plugins: ["bad-plugin"],
     };
-    
-    await expect(normalizeConfig(config)).rejects.toThrow('Plugin "bad-plugin" does not export strategies');
-    
+
+    await expect(normalizeConfig(config)).rejects.toThrow(
+      'Plugin "bad-plugin" does not export strategies',
+    );
+
     vi.doUnmock("bad-plugin");
   });
 
@@ -293,7 +296,9 @@ describe("normalizeConfig", () => {
     const config: Config<any> = {
       plugins: ["non-existent-plugin"],
     };
-    
-    await expect(normalizeConfig(config)).rejects.toThrow('Failed to load plugin "non-existent-plugin"');
+
+    await expect(normalizeConfig(config)).rejects.toThrow(
+      'Failed to load plugin "non-existent-plugin"',
+    );
   });
 });

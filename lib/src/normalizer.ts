@@ -5,7 +5,14 @@
  */
 
 import { Matcher, basicMatcher, loadMatcher } from "./matcher";
-import { InbuiltMergeStrategies, AllStrategies, Config, RuleTree, StrategyPlugin, StrategyFn } from "./types";
+import {
+  InbuiltMergeStrategies,
+  AllStrategies,
+  Config,
+  RuleTree,
+  StrategyPlugin,
+  StrategyFn,
+} from "./types";
 
 export interface StrategyItem {
   name: string;
@@ -26,7 +33,10 @@ export interface NormalizedRules {
 }
 
 export interface NormalizedConfig<T extends string = AllStrategies, TContext = unknown>
-  extends Omit<Config<T, TContext>, "byStrategy" | "rules" | "defaultStrategy" | "customStrategies"> {
+  extends Omit<
+    Config<T, TContext>,
+    "byStrategy" | "rules" | "defaultStrategy" | "customStrategies"
+  > {
   rules: NormalizedRules;
   matcher: Matcher;
   include: string[];
@@ -50,7 +60,16 @@ export const DEFAULT_CONFIG = {
 export const normalizeConfig = async <T extends string = AllStrategies>(
   config: Config<T>,
 ): Promise<NormalizedConfig> => {
-  const { rules, byStrategy, defaultStrategy, matcher, plugins, pluginConfig, customStrategies, ...userConfig } = {
+  const {
+    rules,
+    byStrategy,
+    defaultStrategy,
+    matcher,
+    plugins,
+    pluginConfig,
+    customStrategies,
+    ...userConfig
+  } = {
     ...DEFAULT_CONFIG,
     ...config,
   };

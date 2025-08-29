@@ -69,10 +69,7 @@
       }
     },
     "matcher": {
-      "enum": [
-        "micromatch",
-        "picomatch"
-      ]
+      "enum": ["micromatch", "picomatch"]
     },
     "includeNonConflicted": {
       "type": "boolean"
@@ -89,9 +86,7 @@
     "parsers": {
       "oneOf": [
         {
-          "enum": [
-            "auto"
-          ]
+          "enum": ["auto"]
         },
         {
           "$ref": "#/definitions/parser"
@@ -111,10 +106,7 @@
       "type": "object",
       "properties": {
         "mode": {
-          "enum": [
-            "memory",
-            "stream"
-          ]
+          "enum": ["memory", "stream"]
         },
         "logDir": {
           "type": "string"
@@ -177,23 +169,12 @@
       }
     },
     "parser": {
-      "enum": [
-        "json",
-        "json5",
-        "yaml",
-        "toml",
-        "xml"
-      ]
+      "enum": ["json", "json5", "yaml", "toml", "xml"]
     },
     "logLevels": {
       "type": "array",
       "items": {
-        "enum": [
-          "info",
-          "warn",
-          "error",
-          "debug"
-        ]
+        "enum": ["info", "warn", "error", "debug"]
       }
     }
   }

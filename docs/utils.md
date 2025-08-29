@@ -10,7 +10,7 @@ nav_order: 22
 
 ### FileEntry
 
-Defined in: [utils.ts:5](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/utils.ts#L5)
+Defined in: [utils.ts:5](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/utils.ts#L5)
 
 #### Properties
 
@@ -18,13 +18,13 @@ Defined in: [utils.ts:5](https://github.com/react18-tools/git-json-resolver/blob
 
 > **content**: `string`
 
-Defined in: [utils.ts:7](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/utils.ts#L7)
+Defined in: [utils.ts:7](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/utils.ts#L7)
 
 ##### filePath
 
 > **filePath**: `string`
 
-Defined in: [utils.ts:6](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/utils.ts#L6)
+Defined in: [utils.ts:6](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/utils.ts#L6)
 
 ## Type Aliases
 
@@ -32,7 +32,7 @@ Defined in: [utils.ts:6](https://github.com/react18-tools/git-json-resolver/blob
 
 > **CollectFilesOptions** = [`Pick`](https://www.typescriptlang.org/docs/handbook/utility-types.html#picktype-keys)\<[`NormalizedConfig`](normalizer.md#normalizedconfig), `"include"` \| `"exclude"` \| `"matcher"` \| `"includeNonConflicted"` \| `"debug"` \| `"backupDir"`\> & \{ `root?`: `string`; \}
 
-Defined in: [utils.ts:23](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/utils.ts#L23)
+Defined in: [utils.ts:23](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/utils.ts#L23)
 
 #### Type Declaration
 
@@ -48,7 +48,7 @@ Root directory to start traversal (defaults to `process.cwd()`).
 
 > `const` **DROP**: _typeof_ [`DROP`](#drop)
 
-Defined in: [utils.ts:11](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/utils.ts#L11)
+Defined in: [utils.ts:11](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/utils.ts#L11)
 
 Sentinel used to explicitly drop a value.
 
@@ -58,7 +58,7 @@ Sentinel used to explicitly drop a value.
 
 > **backupFile**(`filePath`: `string`, `backupDir`: `string`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`string`\>
 
-Defined in: [utils.ts:154](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/utils.ts#L154)
+Defined in: [utils.ts:154](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/utils.ts#L154)
 
 #### Parameters
 
@@ -80,7 +80,7 @@ Defined in: [utils.ts:154](https://github.com/react18-tools/git-json-resolver/bl
 
 > **createSkipDirectoryMatcher**(`include`: `string`[], `exclude`: `string`[], `matcher`: [`Matcher`](matcher.md#matcher)): (`dirPath`: `string`) => `boolean`
 
-Defined in: [utils.ts:112](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/utils.ts#L112)
+Defined in: [utils.ts:112](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/utils.ts#L112)
 
 Derive directory pruning patterns from include/exclude rules.
 These patterns are used to avoid walking unnecessary directories.
@@ -119,7 +119,7 @@ These patterns are used to avoid walking unnecessary directories.
 
 > **hasConflict**(`content`: `string`): `boolean`
 
-Defined in: [utils.ts:19](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/utils.ts#L19)
+Defined in: [utils.ts:19](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/utils.ts#L19)
 
 Checks whether the given file contains Git merge conflict markers.
 
@@ -143,7 +143,7 @@ File content to check.
 
 > **listMatchingFiles**(`options`: [`CollectFilesOptions`](#collectfilesoptions)): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`FileEntry`](#fileentry)[]\>
 
-Defined in: [utils.ts:40](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/utils.ts#L40)
+Defined in: [utils.ts:40](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/utils.ts#L40)
 
 Recursively collects files that match the provided `fileFilter`.
 
@@ -170,7 +170,7 @@ A promise that resolves with an array of `{ filePath, content }`.
 
 > **restoreBackups**(`backupDir`: `string`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [utils.ts:164](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/utils.ts#L164)
+Defined in: [utils.ts:164](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/utils.ts#L164)
 
 #### Parameters
 
