@@ -20,6 +20,7 @@ export const createLogger = (config: LoggerConfig = {}) => {
   try {
     if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
   } catch (error) {
+    /* v8 ignore next 2 -- logs only */
     console.warn(`Failed to create log directory: ${error}`);
   }
 
@@ -64,9 +65,12 @@ export const createLogger = (config: LoggerConfig = {}) => {
             logDir,
             singleFile ? `combined-${timestamp}.log` : `${fileId}-${timestamp}.log`,
           );
-          const lines = entries.map(e => `[${e.timestamp}] [${e.level.toUpperCase()}] ${e.message}`);
+          const lines = entries.map(
+            e => `[${e.timestamp}] [${e.level.toUpperCase()}] ${e.message}`,
+          );
           fs.writeFileSync(filePath, lines.join("\n") + "\n", { flag: "a" });
         } catch (error) {
+          /* v8 ignore next 2 -- logs only */
           console.warn(`Failed to write log file for ${fileId}: ${error}`);
         }
       }
@@ -75,6 +79,7 @@ export const createLogger = (config: LoggerConfig = {}) => {
       try {
         s.end();
       } catch (error) {
+        /* v8 ignore next 2 -- logs only */
         console.warn(`Failed to close log stream: ${error}`);
       }
     }

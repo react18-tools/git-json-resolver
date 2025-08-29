@@ -86,7 +86,7 @@ describe("cli helpers", () => {
     it("warns on unknown option", () => {
       const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
       (cli as any).parseArgs(["node", "cli", "--unknown"]);
-      expect(warn).toHaveBeenCalledWith("[git-json-resolver] Unknown option: --unknown");
+      expect(warn).toHaveBeenCalledWith("Unknown option: --unknown");
     });
   });
 
@@ -102,9 +102,7 @@ describe("cli helpers", () => {
       (cli as any).initConfig(tmpDir);
 
       expect(writeFileSync).toHaveBeenCalled();
-      expect(log).toHaveBeenCalledWith(
-        `[git-json-resolver] Created starter config at ${configPath}`,
-      );
+      expect(log).toHaveBeenCalledWith(`Created starter config at ${configPath}`);
     });
 
     it("exits if config already exists", () => {
@@ -115,9 +113,7 @@ describe("cli helpers", () => {
       const error = vi.spyOn(console, "error").mockImplementation(() => {});
 
       expect(() => (cli as any).initConfig(tmpDir)).toThrow("exit");
-      expect(error).toHaveBeenCalledWith(
-        `[git-json-resolver] Config file already exists: ${configPath}`,
-      );
+      expect(error).toHaveBeenCalledWith(`Config file already exists: ${configPath}`);
       expect(exit).toHaveBeenCalledWith(1);
     });
   });
