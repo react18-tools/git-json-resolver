@@ -1,0 +1,32 @@
+{
+  "$schema": "https://cdn.jsdelivr.net/npm/git-json-resolver@latest/schema/config.schema.json",
+  "defaultStrategy": ["merge", "ours"],
+  "plugins": ["example-plugin"],
+  "pluginConfig": {
+    "example-plugin": {
+      "semverPreferStable": true,
+      "timestampFormat": "ISO"
+    }
+  },
+  "rules": {
+    "package.json": {
+      "version": ["semantic-version", "theirs"],
+      "dependencies": ["ours"],
+      "scripts": ["merge"]
+    },
+    "*.config.json": {
+      "lastModified": ["timestamp-latest"],
+      "features": ["array-union"]
+    }
+  },
+  "byStrategy": {
+    "ours": ["devDependencies.*", "peerDependencies.*"],
+    "theirs!": ["name", "description"]
+  },
+  "include": ["**/*.json", "**/*.yaml"],
+  "exclude": ["**/node_modules/**", "**/dist/**"],
+  "matcher": "picomatch",
+  "debug": false,
+  "writeConflictSidecar": true,
+  "backupDir": ".merge-backups"
+}

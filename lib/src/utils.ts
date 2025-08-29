@@ -178,11 +178,13 @@ export const restoreBackups = async (backupDir = ".merge-backups") => {
             await fs.mkdir(path.dirname(destPath), { recursive: true });
             await fs.copyFile(srcPath, destPath);
           } catch (error) {
+            /* v8 ignore next 2 -- Logging and warning only */
             console.warn(`Failed to restore ${srcPath.replace(/[\r\n\t]/g, "")}: ${error}`);
           }
         }
       }
     } catch (error) {
+      /* v8 ignore next 2 -- Logging and warning only */
       console.warn(`Failed to read backup directory ${dir}: ${error}`);
     }
   };

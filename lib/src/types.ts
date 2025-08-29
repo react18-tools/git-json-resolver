@@ -87,12 +87,33 @@ export type StrategyFn<TContext = unknown> = (args: {
 type ForbidBangEnd<T extends string> = T extends `${string}!` ? never : T;
 
 /**
+ * Interface for plugin-contributed strategies.
+ * Plugins should augment this interface to add their strategy names.
+ *
+ * Example plugin declaration:
+ * ```ts
+ * declare module "git-json-resolver" {
+ *   interface PluginStrategies {
+ *     "semantic-version": string;
+ *     "timestamp-latest": string;
+ *   }
+ * }
+ * ```
+ */
+export interface PluginStrategies {}
+
+/**
+ * All available strategy names (built-in + plugins).
+ */
+export type AllStrategies = InbuiltMergeStrategies | keyof PluginStrategies;
+
+/**
  * Rule tree: maps field glob patterns → strategy names or nested rule trees.
  *
  * - Keys: field glob patterns (matcher configurable)
  * - Values: one or more strategies, or further nested rules
  */
-export type RuleTree<T extends string = InbuiltMergeStrategies> = {
+export type RuleTree<T extends string = AllStrategies> = {
   [fieldGlob: string]: T[] | RuleTree<T>;
 };
 
@@ -132,12 +153,31 @@ export type Parser = { name: string; parser: (input: string) => unknown };
 export type SupportedParsers = "json" | "json5" | "yaml" | "toml" | "xml" | Parser;
 
 /**
+ * Plugin interface that strategy plugins must implement.
+ */
+export interface StrategyPlugin<TContext = unknown> {
+  /** Strategy functions provided by this plugin. */
+  strategies: Record<string, StrategyFn<TContext>>;
+
+  /** Optional plugin initialization with config. */
+  init?(config: PluginConfig): void | Promise<void>;
+}
+
+/**
+ * Plugin configuration passed to plugin.init().
+ */
+export interface PluginConfig {
+  /** Custom plugin-specific configuration. */
+  [key: string]: unknown;
+}
+
+/**
  * High-level configuration object for conflict resolution.
  *
  * @template T - Strategy string type (defaults to built-in strategies).
  * @template TContext - Context object type passed to strategies.
  */
-export interface Config<T extends string = InbuiltMergeStrategies, TContext = unknown> {
+export interface Config<T extends string = AllStrategies, TContext = unknown> {
   /** Fallback strategy when no rule matches. */
   defaultStrategy?: T | T[];
 
@@ -195,6 +235,12 @@ export interface Config<T extends string = InbuiltMergeStrategies, TContext = un
    * Default: `true`.
    */
   autoStage?: boolean;
+
+  /** NPM package names of strategy plugins to load. */
+  plugins?: string[];
+
+  /** Plugin-specific configuration passed to plugin.init(). */
+  pluginConfig?: Record<string, PluginConfig>;
 }
 
 export type { Matcher };

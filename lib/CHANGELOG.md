@@ -1,5 +1,32 @@
 # git-json-resolver
 
+## 1.2.0
+
+### Minor Changes
+
+- feat: Add comprehensive plugin system with JSON config support
+  - **Plugin Architecture**: Added `StrategyPlugin` interface for extensible custom strategies
+  - **JSON Config Support**: Removed function dependencies, enabling pure JSON configurations
+  - **Plugin Loading**: Dynamic import system for NPM package plugins with `plugins` array
+  - **Plugin Configuration**: Added `pluginConfig` for passing custom options to plugins
+  - **TypeScript Integration**: ES2015 interface augmentation for automatic strategy name extension
+  - **JSON Schema Validation**: Complete schema for config validation with plugin strategy support
+  - **Examples**: Added example plugin with semantic versioning, timestamp, and array strategies
+
+  **Usage:**
+
+  ```json
+  {
+    "plugins": ["my-plugin"],
+    "pluginConfig": {
+      "my-plugin": { "option": "value" }
+    },
+    "rules": {
+      "version": ["semantic-version"]
+    }
+  }
+  ```
+
 ## 1.1.0
 
 ### Minor Changes

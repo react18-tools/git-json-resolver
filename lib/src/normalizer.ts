@@ -5,7 +5,7 @@
  */
 
 import { Matcher, basicMatcher, loadMatcher } from "./matcher";
-import { InbuiltMergeStrategies, Config, RuleTree } from "./types";
+import { InbuiltMergeStrategies, AllStrategies, Config, RuleTree, StrategyPlugin, StrategyFn } from "./types";
 
 export interface StrategyItem {
   name: string;
@@ -25,12 +25,13 @@ export interface NormalizedRules {
   default: StrategyItem[];
 }
 
-export interface NormalizedConfig<T extends string = InbuiltMergeStrategies, TContext = unknown>
-  extends Omit<Config<T, TContext>, "byStrategy" | "rules" | "defaultStrategy"> {
+export interface NormalizedConfig<T extends string = AllStrategies, TContext = unknown>
+  extends Omit<Config<T, TContext>, "byStrategy" | "rules" | "defaultStrategy" | "customStrategies"> {
   rules: NormalizedRules;
   matcher: Matcher;
   include: string[];
   exclude: string[];
+  customStrategies: Record<string, StrategyFn<TContext>>;
 }
 
 /** Defaults */
@@ -46,13 +47,17 @@ export const DEFAULT_CONFIG = {
 /**
  * Normalize user config into fully expanded and classified form.
  */
-export const normalizeConfig = async <T extends string = InbuiltMergeStrategies>(
+export const normalizeConfig = async <T extends string = AllStrategies>(
   config: Config<T>,
 ): Promise<NormalizedConfig> => {
-  const { rules, byStrategy, defaultStrategy, matcher, ...userConfig } = {
+  const { rules, byStrategy, defaultStrategy, matcher, plugins, pluginConfig, customStrategies, ...userConfig } = {
     ...DEFAULT_CONFIG,
     ...config,
   };
+
+  // Load plugin strategies
+  const loadedStrategies = await loadPluginStrategies(plugins, pluginConfig);
+  const allCustomStrategies = { ...customStrategies, ...loadedStrategies };
 
   const normalizedRules: NormalizedRules = {
     exact: Object.create(null),
@@ -100,6 +105,7 @@ export const normalizeConfig = async <T extends string = InbuiltMergeStrategies>
     ...userConfig,
     rules: normalizedRules,
     matcher: resolvedMatcher,
+    customStrategies: allCustomStrategies,
   };
 };
 
@@ -189,4 +195,40 @@ const expandRuleTree = <T extends string>(
 const push = (bucket: Record<string, StrategyList[]>, key: string, entry: StrategyList) => {
   const arr = (bucket[key] ??= []);
   arr.push(entry);
+};
+
+/**
+ * Load strategies from plugins.
+ */
+const loadPluginStrategies = async (
+  plugins?: string[],
+  pluginConfig?: Record<string, any>,
+): Promise<Record<string, StrategyFn>> => {
+  if (!plugins?.length) return {};
+
+  const strategies: Record<string, StrategyFn> = {};
+
+  for (const pluginName of plugins) {
+    try {
+      // Dynamic import for plugin
+      const pluginModule = await import(pluginName);
+      const plugin: StrategyPlugin = pluginModule.default || pluginModule;
+
+      if (!plugin.strategies) {
+        throw new Error(`Plugin "${pluginName}" does not export strategies`);
+      }
+
+      // Initialize plugin if it has init method
+      if (plugin.init && pluginConfig?.[pluginName]) {
+        await plugin.init(pluginConfig[pluginName]);
+      }
+
+      // Add plugin strategies
+      Object.assign(strategies, plugin.strategies);
+    } catch (error) {
+      throw new Error(`Failed to load plugin "${pluginName}": ${error}`);
+    }
+  }
+
+  return strategies;
 };

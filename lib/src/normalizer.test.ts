@@ -215,4 +215,85 @@ describe("normalizeConfig", () => {
       { name: "theirs", important: false },
     ]);
   });
+
+  it("merges customStrategies with plugin strategies", async () => {
+    const mockStrategy = vi.fn();
+    const config: Config<any> = {
+      customStrategies: {
+        "custom-strategy": mockStrategy,
+      },
+    };
+    const result = await normalizeConfig(config);
+    expect(result.customStrategies["custom-strategy"]).toBe(mockStrategy);
+  });
+
+  it("returns empty strategies when no plugins provided", async () => {
+    const result = await normalizeConfig({});
+    expect(result.customStrategies).toEqual({});
+  });
+
+  it("loads plugin strategies when plugins provided", async () => {
+    // Mock dynamic import
+    const mockPlugin = {
+      strategies: {
+        "plugin-strategy": vi.fn(),
+      },
+    };
+    
+    vi.doMock("test-plugin", () => ({ default: mockPlugin }));
+    
+    const config: Config<any> = {
+      plugins: ["test-plugin"],
+    };
+    
+    const result = await normalizeConfig(config);
+    expect(result.customStrategies["plugin-strategy"]).toBe(mockPlugin.strategies["plugin-strategy"]);
+    
+    vi.doUnmock("test-plugin");
+  });
+
+  it("calls plugin init with config", async () => {
+    const mockInit = vi.fn();
+    const mockPlugin = {
+      strategies: { "test-strategy": vi.fn() },
+      init: mockInit,
+    };
+    
+    vi.doMock("test-plugin", () => ({ default: mockPlugin }));
+    
+    const config: Config<any> = {
+      plugins: ["test-plugin"],
+      pluginConfig: {
+        "test-plugin": { option: "value" },
+      },
+    };
+    
+    await normalizeConfig(config);
+    expect(mockInit).toHaveBeenCalledWith({ option: "value" });
+    
+    vi.doUnmock("test-plugin");
+  });
+
+  it("throws error when plugin has no strategies", async () => {
+    const mockPlugin = {
+    };
+    
+    vi.doMock("bad-plugin", () => ({ default: mockPlugin }));
+    
+    const config: Config<any> = {
+      plugins: ["bad-plugin"],
+    };
+    
+    await expect(normalizeConfig(config)).rejects.toThrow('Plugin "bad-plugin" does not export strategies');
+    
+    vi.doUnmock("bad-plugin");
+  });
+
+  it("throws error when plugin import fails", async () => {
+    const config: Config<any> = {
+      plugins: ["non-existent-plugin"],
+    };
+    
+    await expect(normalizeConfig(config)).rejects.toThrow('Failed to load plugin "non-existent-plugin"');
+  });
 });

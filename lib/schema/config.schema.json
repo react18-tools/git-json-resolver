@@ -1,0 +1,200 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Git JSON Resolver Configuration",
+  "type": "object",
+  "properties": {
+    "defaultStrategy": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/strategyName"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/strategyName"
+          }
+        }
+      ]
+    },
+    "rules": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/strategyName"
+            }
+          },
+          {
+            "$ref": "#/definitions/ruleTree"
+          }
+        ]
+      }
+    },
+    "byStrategy": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-zA-Z][a-zA-Z0-9-_]*!?$": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/fieldPattern"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "plugins": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "pluginConfig": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object"
+      }
+    },
+    "include": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "exclude": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "matcher": {
+      "enum": [
+        "micromatch",
+        "picomatch"
+      ]
+    },
+    "includeNonConflicted": {
+      "type": "boolean"
+    },
+    "debug": {
+      "type": "boolean"
+    },
+    "writeConflictSidecar": {
+      "type": "boolean"
+    },
+    "backupDir": {
+      "type": "string"
+    },
+    "parsers": {
+      "oneOf": [
+        {
+          "enum": [
+            "auto"
+          ]
+        },
+        {
+          "$ref": "#/definitions/parser"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/parser"
+          }
+        }
+      ]
+    },
+    "autoStage": {
+      "type": "boolean"
+    },
+    "loggerConfig": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "enum": [
+            "memory",
+            "stream"
+          ]
+        },
+        "logDir": {
+          "type": "string"
+        },
+        "singleFile": {
+          "type": "boolean"
+        },
+        "levels": {
+          "type": "object",
+          "properties": {
+            "stdout": {
+              "$ref": "#/definitions/logLevels"
+            },
+            "file": {
+              "$ref": "#/definitions/logLevels"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "builtinStrategy": {
+      "type": "string",
+      "enum": [
+        "merge",
+        "ours",
+        "theirs",
+        "base",
+        "skip",
+        "drop",
+        "non-empty",
+        "update",
+        "concat",
+        "unique"
+      ]
+    },
+    "strategyName": {
+      "type": "string",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9-_]*!?$"
+    },
+    "fieldPattern": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9.*\\[\\]_-]+!?$"
+    },
+    "ruleTree": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/strategyName"
+            }
+          },
+          {
+            "$ref": "#/definitions/ruleTree"
+          }
+        ]
+      }
+    },
+    "parser": {
+      "enum": [
+        "json",
+        "json5",
+        "yaml",
+        "toml",
+        "xml"
+      ]
+    },
+    "logLevels": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "info",
+          "warn",
+          "error",
+          "debug"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@example/plugin",
+  "version": "1.0.0",
+  "description": "A Plugin example",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^24.3.0",
+    "git-json-resolver": "workspace:*",
+    "typescript": "^5.9.2"
+  }
+}
