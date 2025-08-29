@@ -17,7 +17,11 @@ export const createLogger = (config: LoggerConfig = {}) => {
     file: config.levels?.file ?? ["info", "warn", "error"],
   };
 
-  if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
+  try {
+    if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
+  } catch (error) {
+    console.warn(`Failed to create log directory: ${error}`);
+  }
 
   const buffers = new Map<string, LogEntry[]>();
   const streams = new Map<string, fs.WriteStream>();
@@ -55,15 +59,25 @@ export const createLogger = (config: LoggerConfig = {}) => {
     if (mode === "memory") {
       const timestamp = new Date().toISOString().replace(/:/g, "-");
       for (const [fileId, entries] of buffers.entries()) {
-        const filePath = path.join(
-          logDir,
-          singleFile ? `combined-${timestamp}.log` : `${fileId}-${timestamp}.log`,
-        );
-        const lines = entries.map(e => `[${e.timestamp}] [${e.level.toUpperCase()}] ${e.message}`);
-        fs.writeFileSync(filePath, lines.join("\n") + "\n", { flag: "a" });
+        try {
+          const filePath = path.join(
+            logDir,
+            singleFile ? `combined-${timestamp}.log` : `${fileId}-${timestamp}.log`,
+          );
+          const lines = entries.map(e => `[${e.timestamp}] [${e.level.toUpperCase()}] ${e.message}`);
+          fs.writeFileSync(filePath, lines.join("\n") + "\n", { flag: "a" });
+        } catch (error) {
+          console.warn(`Failed to write log file for ${fileId}: ${error}`);
+        }
       }
     }
-    for (const s of streams.values()) s.end();
+    for (const s of streams.values()) {
+      try {
+        s.end();
+      } catch (error) {
+        console.warn(`Failed to close log stream: ${error}`);
+      }
+    }
   };
 
   return {
