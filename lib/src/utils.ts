@@ -160,21 +160,29 @@ export const backupFile = async (filePath: string, backupDir = ".merge-backups")
 
 export const restoreBackups = async (backupDir = ".merge-backups") => {
   const walk = async (dir: string, relativeDir = "") => {
-    const entries = await fs.readdir(dir, { withFileTypes: true });
-    
-    for (const entry of entries) {
-      const srcPath = path.join(dir, entry.name);
-      const relativePath = path.join(relativeDir, entry.name);
-      const destPath = path.join(process.cwd(), relativePath);
-      
-      if (entry.isDirectory()) {
-        await walk(srcPath, relativePath);
-      } else {
-        await fs.mkdir(path.dirname(destPath), { recursive: true });
-        await fs.copyFile(srcPath, destPath);
+    try {
+      const entries = await fs.readdir(dir, { withFileTypes: true });
+
+      for (const entry of entries) {
+        const srcPath = path.join(dir, entry.name);
+        const relativePath = path.join(relativeDir, entry.name);
+        const destPath = path.join(process.cwd(), relativePath);
+
+        if (entry.isDirectory()) {
+          await walk(srcPath, relativePath);
+        } else {
+          try {
+            await fs.mkdir(path.dirname(destPath), { recursive: true });
+            await fs.copyFile(srcPath, destPath);
+          } catch (error) {
+            console.warn(`Failed to restore ${srcPath.replace(/[\r\n\t]/g, "")}: ${error}`);
+          }
+        }
       }
+    } catch (error) {
+      console.warn(`Failed to read backup directory ${dir}: ${error}`);
     }
   };
-  
+
   await walk(backupDir);
 };

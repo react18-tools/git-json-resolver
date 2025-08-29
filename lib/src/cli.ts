@@ -46,7 +46,7 @@ export const loadConfigFile = async (): Promise<Partial<Config>> => {
 export const initConfig = (targetDir: string) => {
   const targetPath = path.join(targetDir, CONFIG_FILENAME);
   if (fs.existsSync(targetPath)) {
-    console.error(`[git-json-resolver] Config file already exists: ${targetPath}`);
+    console.error(`Config file already exists: ${targetPath}`);
     process.exit(1);
   }
 
@@ -58,7 +58,7 @@ module.exports = ${JSON.stringify(DEFAULT_CONFIG, null, 2)};
 `;
 
   fs.writeFileSync(targetPath, starter, "utf8");
-  console.log(`[git-json-resolver] Created starter config at ${targetPath}`);
+  console.log(`Created starter config at ${targetPath}`);
 };
 
 /**
@@ -103,7 +103,7 @@ export const parseArgs = (
         break;
       default:
         if (arg.startsWith("--")) {
-          console.warn(`[git-json-resolver] Unknown option: ${arg}`);
+          console.warn(`Unknown option: ${arg}`);
         }
     }
   }
@@ -127,13 +127,13 @@ export const parseArgs = (
 
     if (restore) {
       await restoreBackups(restore || fileConfig.backupDir || ".merge-backups");
-      console.log(`[git-json-resolver] Restored backups from ${restore}`);
+      console.log(`Restored backups from ${restore}`);
       process.exit(0);
     }
 
     await resolveConflicts(finalConfig);
   } catch (err) {
-    console.error("[git-json-resolver] Failed:", err);
+    console.error("Failed:", err);
     process.exit(1);
   }
 })();
