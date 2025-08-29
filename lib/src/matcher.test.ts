@@ -48,6 +48,31 @@ for (const matcherName of ["basicMatcher", "micromatch", "picomatch"] as const) 
       expect(matcher.isMatch("a.**", ["a.\\*\\*"])).toBe(true);
       expect(matcher.isMatch("a.c.b", ["a.***"])).toBe(false);
     });
+
+    it("negates exact match", () => {
+      expect(matcher.isMatch("src/index.ts", ["!src/index.ts"])).toBe(false);
+      expect(matcher.isMatch("src/other.ts", ["!src/index.ts"])).toBe(true);
+    });
+
+    it("negates directory glob", () => {
+      expect(matcher.isMatch("src/utils/app.ts", ["!src/**"])).toBe(false);
+      expect(matcher.isMatch("lib/app.ts", ["!src/**"])).toBe(true);
+    });
+
+    it("negates simple * wildcard (recursive)", () => {
+      expect(matcher.isMatch("test/app.test.ts", ["!**/*.test.ts"])).toBe(false);
+      expect(matcher.isMatch("test/app.ts", ["!**/*.test.ts"])).toBe(true);
+    });
+
+    // it("positive includes everything, negative excludes subset", () => {
+    //   expect(matcher.isMatch("src/index.ts", ["**", "!src/**"])).toBe(false); // excluded
+    //   expect(matcher.isMatch("lib/app.ts", ["**", "!src/**"])).toBe(true); // included
+    // });
+
+    it("root level negation", () => {
+      expect(matcher.isMatch("src", ["!src"])).toBe(false);
+      expect(matcher.isMatch("other", ["!src"])).toBe(true);
+    });
   });
 }
 

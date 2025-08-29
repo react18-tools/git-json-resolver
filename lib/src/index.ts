@@ -19,7 +19,7 @@ export const resolveConflicts = async <T extends string = InbuiltMergeStrategies
   config: Config<T>,
 ) => {
   globalLogger = createLogger(config.loggerConfig);
-  const normalizedConfig: NormalizedConfig = await normalizeConfig<T>(config, globalLogger);
+  const normalizedConfig: NormalizedConfig = await normalizeConfig<T>(config);
   const filesEntries = await listMatchingFiles(normalizedConfig);
   if (normalizedConfig.debug) {
     globalLogger.info("all", JSON.stringify({ normalizedConfig, filesEntries }, null, 2));

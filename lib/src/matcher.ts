@@ -126,13 +126,15 @@ const toInternal = (input: string): string => {
  *     "foo\*bar" → ["foo\*bar"]
  */
 const splitPattern = (pattern: string): string[] => {
+  const negated = pattern.startsWith("!");
+  const raw = negated ? pattern.slice(1) : pattern;
+
   const segments: string[] = [];
   let buf = "";
   let escaped = false;
 
-  for (const ch of pattern) {
+  for (const ch of raw) {
     if (escaped) {
-      // keep the backslash for segment matching stage
       buf += "\\" + ch;
       escaped = false;
     } else if (ch === "\\") {
@@ -144,15 +146,22 @@ const splitPattern = (pattern: string): string[] => {
       buf += ch;
     }
   }
-  if (escaped) buf += "\\"; // trailing backslash is literal
+  if (escaped) buf += "\\"; // trailing backslash literal
   segments.push(buf);
+
+  // @ts-expect-error - mark negation explicitly
+  if (negated) segments.negated = true;
+
   return segments;
 };
 
 const matchOne = (str: string, pattern: string): boolean => {
   const strSegments = str.split("/");
   const patSegments = splitPattern(pattern);
-  return matchSegments(strSegments, patSegments);
+  const isNegated = (patSegments as any).negated === true;
+
+  const matched = matchSegments(strSegments, patSegments);
+  return isNegated ? !matched : matched;
 };
 
 /**
@@ -172,7 +181,6 @@ const matchSegments = (strSegments: string[], patternSegments: string[]): boolea
           return true;
         }
       }
-      /* v8 ignore next 2 - unreachable in most cases */
       return false;
     }
 
@@ -196,7 +204,6 @@ const matchSegments = (strSegments: string[], patternSegments: string[]): boolea
  * - Backslash escapes any next char (becomes literal)
  */
 const segmentMatches = (seg: string, pat: string): boolean => {
-  // Parse `pat`, tracking a single UNESCAPED `*` position
   let escaped = false;
   let sawUnescapedStar = false;
   let pre = "";
@@ -206,28 +213,27 @@ const segmentMatches = (seg: string, pat: string): boolean => {
     const ch = pat[i];
 
     if (escaped) {
-      buf += ch; // take literally
+      buf += ch;
       escaped = false;
       continue;
     }
     if (ch === "\\") {
-      escaped = true; // next char is literal
+      escaped = true;
       continue;
     }
     if (ch === "*") {
       if (!sawUnescapedStar) {
         sawUnescapedStar = true;
-        pre = buf; // capture prefix; start collecting suffix into `buf` anew
+        pre = buf;
         buf = "";
         continue;
       }
-      // Additional unescaped '*' are treated as literal in suffix per our minimal semantics
       buf += "*";
       continue;
     }
     buf += ch;
   }
-  if (escaped) buf += "\\"; // trailing backslash literal
+  if (escaped) buf += "\\";
 
   if (!sawUnescapedStar) {
     // No wildcard: exact match after unescaping (remove backslashes)
@@ -235,7 +241,6 @@ const segmentMatches = (seg: string, pat: string): boolean => {
     return seg === literal;
   }
 
-  // Wildcard with single unescaped `*`: prefix/suffix
   const suf = buf.replace(/\\(.)/g, "$1");
   const prefix = pre.replace(/\\(.)/g, "$1");
   return seg.startsWith(prefix) && seg.endsWith(suf);
