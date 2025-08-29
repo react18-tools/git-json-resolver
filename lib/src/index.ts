@@ -52,7 +52,11 @@ export const resolveConflicts = async <T extends string = InbuiltMergeStrategies
       if (conflicts.length === 0) {
         const serialized = await serialize(format, merged);
         await fs.writeFile(filePath, serialized, "utf8");
-        execSync(`git add ${filePath}`);
+        try {
+          execSync(`git add ${filePath}`);
+        } catch (error) {
+          globalLogger.warn(filePath, `Failed to stage file: ${error}`);
+        }
       } else {
         const serialized = await reconstructConflict(merged, ours, theirs, format);
         await Promise.all([
