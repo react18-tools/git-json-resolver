@@ -42,8 +42,9 @@ export const reconstructConflict = async (
     const oursVal = getByPath(ours, path);
     const theirsVal = getByPath(theirs, path);
 
-    const oursStr = await serialize(format, oursVal);
-    const theirsStr = await serialize(format, theirsVal);
+    const [oursStr, theirsStr] = await Promise.all(
+      [oursVal, theirsVal].map(val => serialize(format, val)),
+    );
 
     const block = [
       "<<<<<<< ours",
@@ -53,10 +54,8 @@ export const reconstructConflict = async (
       ">>>>>>> theirs",
     ].join("\n");
 
-    serialized = serialized.replace(
-      JSON.stringify(`__CONFLICT_MARKER::${path}__`), // works for JSON
-      block,
-    );
+    const marker = `__CONFLICT_MARKER::${path}__`;
+    serialized = serialized.replace(/json/.test(format) ? JSON.stringify(marker) : marker, block);
   }
 
   return serialized;

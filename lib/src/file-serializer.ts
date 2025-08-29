@@ -9,7 +9,7 @@ export const serialize = async (format: string, value: unknown): Promise<string>
     }
     case "toml": {
       const { stringify } = await import("smol-toml");
-      return stringify(value as any);
+      return stringify(value);
     }
     case "xml": {
       const { XMLBuilder } = await import("fast-xml-parser");
