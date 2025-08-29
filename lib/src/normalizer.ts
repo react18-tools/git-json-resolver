@@ -4,8 +4,6 @@
  * and classifies rules into exact / top-level / glob categories.
  */
 
-import path from "node:path";
-import { createLogger } from "./logger";
 import { Matcher, basicMatcher, loadMatcher } from "./matcher";
 import { InbuiltMergeStrategies, Config, RuleTree } from "./types";
 
@@ -31,7 +29,8 @@ export interface NormalizedConfig<T extends string = InbuiltMergeStrategies, TCo
   extends Omit<Config<T, TContext>, "byStrategy" | "rules" | "defaultStrategy"> {
   rules: NormalizedRules;
   matcher: Matcher;
-  fileFilter: (filepath: string) => boolean;
+  include: string[];
+  exclude: string[];
 }
 
 /** Defaults */
@@ -49,7 +48,6 @@ export const DEFAULT_CONFIG = {
  */
 export const normalizeConfig = async <T extends string = InbuiltMergeStrategies>(
   config: Config<T>,
-  globalLogger = createLogger(),
 ): Promise<NormalizedConfig> => {
   const { rules, byStrategy, defaultStrategy, matcher, ...userConfig } = {
     ...DEFAULT_CONFIG,
@@ -98,19 +96,10 @@ export const normalizeConfig = async <T extends string = InbuiltMergeStrategies>
     });
   }
 
-  const fileFilter = (filepath: string) => {
-    const posixPath = filepath.replace(/\\/g, "/");
-    if (!resolvedMatcher.isMatch(posixPath, userConfig.include)) return false;
-    if (resolvedMatcher.isMatch(posixPath, [...userConfig.exclude, "**/node_modules/**"]))
-      return false;
-    return true;
-  };
-
   return {
     ...userConfig,
     rules: normalizedRules,
     matcher: resolvedMatcher,
-    fileFilter,
   };
 };
 
