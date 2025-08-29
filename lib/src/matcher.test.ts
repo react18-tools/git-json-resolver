@@ -64,11 +64,6 @@ for (const matcherName of ["basicMatcher", "micromatch", "picomatch"] as const) 
       expect(matcher.isMatch("test/app.ts", ["!**/*.test.ts"])).toBe(true);
     });
 
-    // it("positive includes everything, negative excludes subset", () => {
-    //   expect(matcher.isMatch("src/index.ts", ["**", "!src/**"])).toBe(false); // excluded
-    //   expect(matcher.isMatch("lib/app.ts", ["**", "!src/**"])).toBe(true); // included
-    // });
-
     it("root level negation", () => {
       expect(matcher.isMatch("src", ["!src"])).toBe(false);
       expect(matcher.isMatch("other", ["!src"])).toBe(true);
