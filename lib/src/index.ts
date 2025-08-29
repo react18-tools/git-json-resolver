@@ -13,12 +13,12 @@ export * from "./types";
 
 const _strategyCache = new Map<string, string[]>();
 
-let globalLogger: ReturnType<typeof createLogger>;
+let globalLogger: Awaited<ReturnType<typeof createLogger>>;
 
 export const resolveConflicts = async <T extends string = InbuiltMergeStrategies>(
   config: Config<T>,
 ) => {
-  globalLogger = createLogger(config.loggerConfig);
+  globalLogger = await createLogger(config.loggerConfig);
   const normalizedConfig: NormalizedConfig = await normalizeConfig<T>(config);
   const filesEntries = await listMatchingFiles(normalizedConfig);
   if (normalizedConfig.debug) {
@@ -68,5 +68,5 @@ export const resolveConflicts = async <T extends string = InbuiltMergeStrategies
       }
     }),
   );
-  globalLogger.flush();
+  await globalLogger.flush();
 };

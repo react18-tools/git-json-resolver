@@ -1,4 +1,5 @@
-import fs, { Mode } from "fs";
+import fs from "fs";
+import { promises as fsPromises, Mode } from "fs";
 import path from "path";
 import { LogLevel, LoggerConfig } from "./types";
 
@@ -8,7 +9,7 @@ interface LogEntry {
   message: string;
 }
 
-export const createLogger = (config: LoggerConfig = {}) => {
+export const createLogger = async (config: LoggerConfig = {}) => {
   const mode: Mode = config.mode ?? "memory";
   const logDir = config.logDir ?? ".logs";
   const singleFile = config.singleFile ?? false;
@@ -17,8 +18,9 @@ export const createLogger = (config: LoggerConfig = {}) => {
     file: config.levels?.file ?? ["info", "warn", "error"],
   };
 
+  // Async directory creation
   try {
-    if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
+    await fsPromises.mkdir(logDir, { recursive: true });
   } catch (error) {
     /* v8 ignore next 2 -- logs only */
     console.warn(`Failed to create log directory: ${error}`);
@@ -56,10 +58,10 @@ export const createLogger = (config: LoggerConfig = {}) => {
     }
   };
 
-  const flush = () => {
+  const flush = async () => {
     if (mode === "memory") {
       const timestamp = new Date().toISOString().replace(/:/g, "-");
-      for (const [fileId, entries] of buffers.entries()) {
+      const writePromises = Array.from(buffers.entries()).map(async ([fileId, entries]) => {
         try {
           const filePath = path.join(
             logDir,
@@ -68,12 +70,13 @@ export const createLogger = (config: LoggerConfig = {}) => {
           const lines = entries.map(
             e => `[${e.timestamp}] [${e.level.toUpperCase()}] ${e.message}`,
           );
-          fs.writeFileSync(filePath, lines.join("\n") + "\n", { flag: "a" });
+          await fsPromises.appendFile(filePath, lines.join("\n") + "\n");
         } catch (error) {
           /* v8 ignore next 2 -- logs only */
           console.warn(`Failed to write log file for ${fileId}: ${error}`);
         }
-      }
+      });
+      await Promise.all(writePromises);
     }
     for (const s of streams.values()) {
       try {
@@ -83,6 +86,9 @@ export const createLogger = (config: LoggerConfig = {}) => {
         console.warn(`Failed to close log stream: ${error}`);
       }
     }
+
+    // Wait for stream to close
+    await new Promise(resolve => setTimeout(resolve, 10));
   };
 
   return {
