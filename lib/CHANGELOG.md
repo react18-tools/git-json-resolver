@@ -1,5 +1,162 @@
 # git-json-resolver
 
+## 1.0.0
+
+### Major Changes
+
+- 7e959e6: # 🚨 Breaking Change: Array Merge Strategy
+
+  **Arrays are no longer merged element-by-element** under the default `merge` strategy.
+
+  ## What Changed
+  - Only **plain objects** are merged by default
+  - Arrays now require explicit strategies: `concat`, `unique`, or custom resolvers
+
+  ## Why This Change
+
+  Previous array merging was unpredictable when arrays had:
+  - Different lengths
+  - Different semantic meanings
+  - Mixed data types
+
+  ## Migration Guide
+
+  ```ts
+  // Before (automatic array merging)
+  rules: [{ pattern: "*", strategy: "merge" }];
+
+  // After (explicit array handling)
+  rules: [
+    { pattern: "dependencies", strategy: "concat" },
+    { pattern: "scripts", strategy: "ours" },
+    { pattern: "*", strategy: "merge" }, // objects only
+  ];
+  ```
+
+  This ensures **predictable and safe** conflict resolution.
+
+### Minor Changes
+
+- Add `concat` and `unique` array merge strategies
+  - **`concat`**: Concatenate arrays from both sides (applies only if both are arrays)
+  - **`unique`**: Merge arrays and remove duplicates (applies only if both are arrays)
+
+  These strategies provide explicit control over array merging behavior for better conflict resolution.
+
+- 50f0ee1: # 📁 Configurable Backup Path
+
+  ## New Feature
+
+  **Backup file location is now fully configurable** for enhanced flexibility.
+
+  ## Usage
+
+  ```ts
+  import { resolveConflicts } from "git-json-resolver";
+
+  resolveConflicts({
+    filePath: "package.json",
+    backupPath: "./backups/package.json.backup", // Custom backup location
+    rules: [
+      /* your rules */
+    ],
+  });
+  ```
+
+  ## Benefits
+  - **Custom backup directories** for better organization
+  - **Integration with existing backup strategies**
+  - **Compliance with project structure requirements**
+
+- e3f85e9: # 🔄 CLI Restore Command
+
+  ## New CLI Feature
+
+  **Restore backup files** with a dedicated command for quick recovery.
+
+  ## Usage
+
+  ```bash
+  # Restore specific backup
+  npx git-json-resolver restore package.json.backup
+
+  # Restore all backups in directory
+  npx git-json-resolver restore --all
+
+  # Restore with confirmation prompt
+  npx git-json-resolver restore --interactive
+  ```
+
+  ## Benefits
+  - **Quick recovery** from failed merges
+  - **Batch restore operations** for multiple files
+  - **Interactive mode** for safer restoration
+  - **Seamless CI/CD integration** for rollback scenarios
+
+- 58df9b2: # ⚡ Pattern Negation Support
+
+  ## New Matcher Feature
+
+  **Pattern negation with `!` prefix** for the default `basicMatcher`.
+
+  ## Usage
+
+  ```ts
+  import { resolveConflicts } from "git-json-resolver";
+
+  resolveConflicts({
+    filePath: "package.json",
+    rules: [
+      { pattern: "dependencies.*", strategy: "ours" },
+      { pattern: "!dependencies.react", strategy: "theirs" }, // Negation
+      { pattern: "scripts.*", strategy: "merge" },
+      { pattern: "!scripts.test", strategy: "manual" }, // Exception
+    ],
+  });
+  ```
+
+  ## Benefits
+  - **Fine-grained control** over merge strategies
+  - **Exception handling** within broader patterns
+  - **Intuitive syntax** familiar from gitignore patterns
+  - **Enhanced rule flexibility** for complex scenarios
+
+### Patch Changes
+
+- 973fc14: # 🔧 Code Refactoring
+
+  ## Normalizer Simplification
+  - **Streamlined normalizer logic** for better maintainability
+  - **Moved file handling utilities** to dedicated utils module
+  - **Improved separation of concerns** between components
+
+  ## Benefits
+  - Cleaner, more focused code structure
+  - Enhanced testability and debugging
+  - Better code reusability across modules
+
+- f9d3ea8: # 🚀 Quality & Performance Improvements
+
+  ## Enhanced Error Handling
+  - **More descriptive error messages** with context
+  - **Graceful fallbacks** for edge cases
+  - **Better error recovery** mechanisms
+
+  ## Expanded Test Coverage
+  - **Additional unit tests** for critical paths
+  - **Edge case validation** scenarios
+  - **Performance regression tests**
+
+  ## Performance Enhancements
+  - **Optimized pattern matching** algorithms
+  - **Reduced memory footprint** for large files
+  - **Faster conflict resolution** processing
+
+  ## Benefits
+  - More reliable conflict resolution
+  - Better debugging experience
+  - Improved performance for large repositories
+
 ## 0.1.8
 
 ### Patch Changes

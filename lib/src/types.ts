@@ -14,6 +14,8 @@ import { Matcher } from "./matcher";
  * | `drop`      | Remove the field entirely (always).                                         |
  * | `non-empty` | Prefer non-empty value: `ours` > `theirs` > `base`; fallback to undefined.  |
  * | `update`    | Update with "theirs" if field exists in "ours"; drop if missing in "ours".  |
+ * | `concat`    | Concatenate arrays from both sides (applies only if both are arrays).       |
+ * | `unique`    | Merge arrays and remove duplicates (applies only if both are arrays).       |
  */
 export type InbuiltMergeStrategies =
   | "merge"
@@ -23,7 +25,9 @@ export type InbuiltMergeStrategies =
   | "skip"
   | "drop"
   | "non-empty"
-  | "update";
+  | "update"
+  | "concat"
+  | "unique";
 
 /**
  * Status codes returned by strategy functions.

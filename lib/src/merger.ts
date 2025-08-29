@@ -123,6 +123,20 @@ export const BuiltInStrategies = {
 
     return { status: StrategyStatus.CONTINUE, reason: "Unmergeable type" };
   },
+
+  concat: <TContext>({ ours, theirs, path }: MergeArgs<TContext>): StrategyResult => {
+    if (Array.isArray(ours) && Array.isArray(theirs)) {
+      return { status: StrategyStatus.OK, value: [...ours, ...theirs] };
+    }
+    return { status: StrategyStatus.CONTINUE, reason: `Cannot concat at ${path}` };
+  },
+
+  unique: <TContext>({ ours, theirs, path }: MergeArgs<TContext>): StrategyResult => {
+    if (Array.isArray(ours) && Array.isArray(theirs)) {
+      return { status: StrategyStatus.OK, value: [...new Set([...ours, ...theirs])] };
+    }
+    return { status: StrategyStatus.CONTINUE, reason: `Cannot concat at ${path}` };
+  },
 } as const;
 
 /**
