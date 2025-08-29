@@ -12,7 +12,7 @@ nav_order: 2
 
 > **findGitRoot**(): `string`
 
-Defined in: [cli.ts:17](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/cli.ts#L17)
+Defined in: [cli.ts:17](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/cli.ts#L17)
 
 Find Git root directory
 
@@ -26,7 +26,7 @@ Find Git root directory
 
 > **initConfig**(`targetDir`: `string`): `void`
 
-Defined in: [cli.ts:47](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/cli.ts#L47)
+Defined in: [cli.ts:47](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/cli.ts#L47)
 
 Write a starter config file
 
@@ -46,7 +46,7 @@ Write a starter config file
 
 > **loadConfigFile**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`Config`](types/README.md#config)\<[`InbuiltMergeStrategies`](types/README.md#inbuiltmergestrategies), `unknown`\>\>\>
 
-Defined in: [cli.ts:28](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/cli.ts#L28)
+Defined in: [cli.ts:28](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/cli.ts#L28)
 
 Load configuration file (js/ts) from current dir or Git root.
 
@@ -60,7 +60,7 @@ Load configuration file (js/ts) from current dir or Git root.
 
 > **parseArgs**(`argv`: `string`[]): \{ `gitMergeFiles?`: \[`string`, `string`, `string`\]; `init?`: `boolean`; `overrides`: [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`Config`](types/README.md#config)\>; `restore?`: `string`; \}
 
-Defined in: [cli.ts:68](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/cli.ts#L68)
+Defined in: [cli.ts:68](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/cli.ts#L68)
 
 CLI argument parser (minimal, no external deps).
 

@@ -15,7 +15,7 @@ nav_order: 26
 
 ### Conflict
 
-Defined in: [merger.ts:7](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/merger.ts#L7)
+Defined in: [merger.ts:7](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/merger.ts#L7)
 
 Conflict entry (minimal by default).
 
@@ -25,13 +25,13 @@ Conflict entry (minimal by default).
 
 > `optional` **base**: `unknown`
 
-Defined in: [merger.ts:13](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/merger.ts#L13)
+Defined in: [merger.ts:13](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/merger.ts#L13)
 
 ##### ours?
 
 > `optional` **ours**: `unknown`
 
-Defined in: [merger.ts:11](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/merger.ts#L11)
+Defined in: [merger.ts:11](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/merger.ts#L11)
 
 enriched only if debug enabled
 
@@ -39,25 +39,25 @@ enriched only if debug enabled
 
 > **path**: `string`
 
-Defined in: [merger.ts:8](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/merger.ts#L8)
+Defined in: [merger.ts:8](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/merger.ts#L8)
 
 ##### reason
 
 > **reason**: `string`
 
-Defined in: [merger.ts:9](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/merger.ts#L9)
+Defined in: [merger.ts:9](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/merger.ts#L9)
 
 ##### theirs?
 
 > `optional` **theirs**: `unknown`
 
-Defined in: [merger.ts:12](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/merger.ts#L12)
+Defined in: [merger.ts:12](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/merger.ts#L12)
 
 ---
 
 ### MergeContext\<TContext\>
 
-Defined in: [merger.ts:40](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/merger.ts#L40)
+Defined in: [merger.ts:40](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/merger.ts#L40)
 
 Merge context (runtime state + config).
 
@@ -73,31 +73,31 @@ Merge context (runtime state + config).
 
 > `optional` **\_strategyCache**: [`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, `string`[]\>
 
-Defined in: [merger.ts:44](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/merger.ts#L44)
+Defined in: [merger.ts:44](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/merger.ts#L44)
 
 ##### config
 
 > **config**: [`NormalizedConfig`](../normalizer.md#normalizedconfig)
 
-Defined in: [merger.ts:41](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/merger.ts#L41)
+Defined in: [merger.ts:41](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/merger.ts#L41)
 
 ##### context?
 
 > `optional` **context**: `TContext`
 
-Defined in: [merger.ts:43](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/merger.ts#L43)
+Defined in: [merger.ts:43](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/merger.ts#L43)
 
 ##### strategies
 
 > **strategies**: [`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)\<`string`, [`StrategyFn`](../types/README.md#strategyfn)\<`TContext`\>\>
 
-Defined in: [merger.ts:42](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/merger.ts#L42)
+Defined in: [merger.ts:42](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/merger.ts#L42)
 
 ---
 
 ### MergeResult
 
-Defined in: [merger.ts:17](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/merger.ts#L17)
+Defined in: [merger.ts:17](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/merger.ts#L17)
 
 Result of merging a file.
 
@@ -107,19 +107,19 @@ Result of merging a file.
 
 > **conflicts**: [`Conflict`](#conflict)[]
 
-Defined in: [merger.ts:20](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/merger.ts#L20)
+Defined in: [merger.ts:20](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/merger.ts#L20)
 
 ##### filePath
 
 > **filePath**: `string`
 
-Defined in: [merger.ts:18](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/merger.ts#L18)
+Defined in: [merger.ts:18](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/merger.ts#L18)
 
 ##### merged
 
 > **merged**: `unknown`
 
-Defined in: [merger.ts:19](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/merger.ts#L19)
+Defined in: [merger.ts:19](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/merger.ts#L19)
 
 ## Variables
 
@@ -127,7 +127,7 @@ Defined in: [merger.ts:19](https://github.com/react18-tools/git-json-resolver/bl
 
 > `const` **BuiltInStrategies**: \{ `base`: \<`TContext`\>(`__namedParameters`: [`MergeArgs`](-internal-.md#mergeargs)\<`TContext`\>) => [`StrategyResult`](../types/README.md#strategyresult); `concat`: \<`TContext`\>(`__namedParameters`: [`MergeArgs`](-internal-.md#mergeargs)\<`TContext`\>) => [`StrategyResult`](../types/README.md#strategyresult); `drop`: \<`TContext`\>(`_skipped`: [`MergeArgs`](-internal-.md#mergeargs)\<`TContext`\>) => [`StrategyResult`](../types/README.md#strategyresult); `merge`: \<`TContext`\>(`args`: [`MergeArgs`](-internal-.md#mergeargs)\<`TContext`\>) => [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`StrategyResult`](../types/README.md#strategyresult)\>; `non-empty`: \<`TContext`\>(`__namedParameters`: [`MergeArgs`](-internal-.md#mergeargs)\<`TContext`\>) => [`StrategyResult`](../types/README.md#strategyresult); `ours`: \<`TContext`\>(`__namedParameters`: [`MergeArgs`](-internal-.md#mergeargs)\<`TContext`\>) => [`StrategyResult`](../types/README.md#strategyresult); `skip`: \<`TContext`\>(`__namedParameters`: [`MergeArgs`](-internal-.md#mergeargs)\<`TContext`\>) => [`StrategyResult`](../types/README.md#strategyresult); `theirs`: \<`TContext`\>(`__namedParameters`: [`MergeArgs`](-internal-.md#mergeargs)\<`TContext`\>) => [`StrategyResult`](../types/README.md#strategyresult); `unique`: \<`TContext`\>(`__namedParameters`: [`MergeArgs`](-internal-.md#mergeargs)\<`TContext`\>) => [`StrategyResult`](../types/README.md#strategyresult); `update`: \<`TContext`\>(`__namedParameters`: [`MergeArgs`](-internal-.md#mergeargs)\<`TContext`\>) => [`StrategyResult`](../types/README.md#strategyresult); \}
 
-Defined in: [merger.ts:63](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/merger.ts#L63)
+Defined in: [merger.ts:63](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/merger.ts#L63)
 
 Built-in strategies.
 
@@ -339,7 +339,7 @@ Built-in strategies.
 
 > **mergeObject**\<`TContext`\>(`__namedParameters`: [`MergeArgs`](-internal-.md#mergeargs)\<`TContext`\>): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
-Defined in: [merger.ts:153](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/merger.ts#L153)
+Defined in: [merger.ts:153](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/merger.ts#L153)
 
 Recursively merges two inputs using configured strategies.
 
@@ -376,7 +376,7 @@ Type of optional user context for custom strategies.
 
 > **statusToString**(`s`: [`StrategyStatus`](../types/README.md#strategystatus)): `string`
 
-Defined in: [merger.ts:24](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/merger.ts#L24)
+Defined in: [merger.ts:24](https://github.com/react18-tools/git-json-resolver/blob/f4a78307ca1912fa18ae0a9600625f9d3b3c8372/lib/src/merger.ts#L24)
 
 Helper: stringify status for logs.
 
