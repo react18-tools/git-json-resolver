@@ -19,7 +19,7 @@ export const hasConflict = (content: string): boolean => {
 
 export type CollectFilesOptions = Pick<
   NormalizedConfig,
-  "include" | "exclude" | "matcher" | "includeNonConflicted" | "debug"
+  "include" | "exclude" | "matcher" | "includeNonConflicted" | "debug" | "backupDir"
 > & {
   /** Root directory to start traversal (defaults to `process.cwd()`). */
   root?: string;
@@ -34,9 +34,15 @@ export type CollectFilesOptions = Pick<
  * @param options - Collection options, including `fileFilter` and traversal root.
  * @returns A promise that resolves with an array of `{ filePath, content }`.
  */
-export const listMatchingFiles = async (options: CollectFilesOptions): Promise<FileEntry[]> => {
-  const { root = process.cwd(), include, exclude, matcher, includeNonConflicted, debug } = options;
-
+export const listMatchingFiles = async ({
+  root = process.cwd(),
+  include,
+  exclude,
+  matcher,
+  includeNonConflicted,
+  debug,
+  backupDir,
+}: CollectFilesOptions): Promise<FileEntry[]> => {
   for (const p of [...include, ...exclude]) {
     if (p.startsWith("!")) throw new Error(`Negation not allowed in include/exclude: ${p}`);
     if (p.includes("\\")) console.warn(`Use '/' as path separator: ${p}`);
@@ -47,7 +53,11 @@ export const listMatchingFiles = async (options: CollectFilesOptions): Promise<F
     return matcher.isMatch(posixPath, include) && !matcher.isMatch(posixPath, exclude);
   };
 
-  const skipDirMatcher = createSkipDirectoryMatcher(include, exclude, matcher);
+  const skipDirMatcher = createSkipDirectoryMatcher(
+    include,
+    backupDir ? [...exclude, backupDir] : exclude,
+    matcher,
+  );
 
   const fileEntries: FileEntry[] = [];
 
@@ -146,4 +156,25 @@ export const backupFile = async (filePath: string, backupDir = ".merge-backups")
   await fs.copyFile(filePath, backupPath);
 
   return backupPath;
+};
+
+export const restoreBackups = async (backupDir = ".merge-backups") => {
+  const walk = async (dir: string, relativeDir = "") => {
+    const entries = await fs.readdir(dir, { withFileTypes: true });
+    
+    for (const entry of entries) {
+      const srcPath = path.join(dir, entry.name);
+      const relativePath = path.join(relativeDir, entry.name);
+      const destPath = path.join(process.cwd(), relativePath);
+      
+      if (entry.isDirectory()) {
+        await walk(srcPath, relativePath);
+      } else {
+        await fs.mkdir(path.dirname(destPath), { recursive: true });
+        await fs.copyFile(srcPath, destPath);
+      }
+    }
+  };
+  
+  await walk(backupDir);
 };

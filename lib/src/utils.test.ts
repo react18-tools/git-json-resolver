@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { hasConflict, createSkipDirectoryMatcher, listMatchingFiles, backupFile } from "./utils"; // adjust import
+import { hasConflict, listMatchingFiles, backupFile, restoreBackups } from "./utils"; // adjust import
 import { basicMatcher } from "./matcher";
 
 const matcher = basicMatcher;
@@ -26,6 +26,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await fs.rm(TMP, { recursive: true, force: true });
+  await fs.rm(".merge-backups", { recursive: true, force: true });
 });
 
 describe("hasConflict", () => {
@@ -81,5 +82,35 @@ describe("backupFile", () => {
     const exists = await fs.readFile(backup, "utf8");
     expect(exists).toBe("hello");
     expect(backup).toMatch(/\.merge-backups/);
+  });
+});
+
+describe("restoreBackups", () => {
+  it("restores files from backup directory", async () => {
+    process.chdir(TMP);
+    const backupDir = "test-backup";
+    const testFile = "restore-test.txt";
+
+    await fs.mkdir(backupDir, { recursive: true });
+    await fs.writeFile(path.join(backupDir, "restore-test.txt"), "restored");
+
+    await restoreBackups(backupDir);
+
+    const content = await fs.readFile(testFile, "utf8");
+    expect(content).toBe("restored");
+  });
+
+  it("restores nested directory structure", async () => {
+    const backupDir = "nested-backup";
+    const nestedDir = path.join(backupDir, "sub", "deep");
+
+    await fs.mkdir(nestedDir, { recursive: true });
+    await fs.writeFile(path.join(nestedDir, "nested.txt"), "deep file");
+
+    await restoreBackups(backupDir);
+
+    const content = await fs.readFile(path.join("sub", "deep", "nested.txt"), "utf8");
+    expect(content).toBe("deep file");
+    process.chdir("..");
   });
 });
