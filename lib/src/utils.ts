@@ -7,6 +7,9 @@ export interface FileEntry {
   content: string;
 }
 
+/** Sentinel used to explicitly drop a value. */
+export const DROP = Symbol("MERGE_DROP");
+
 /**
  * Checks whether the given file contains Git merge conflict markers.
  *

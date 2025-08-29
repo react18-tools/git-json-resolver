@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
-import { DROP } from "./merger";
 import { reconstructConflict } from "./conflict-helper";
+import { DROP } from "./utils";
 
 // Mock serializer to keep things deterministic
 vi.mock("./file-serializer", () => ({

@@ -125,6 +125,12 @@ export interface LoggerConfig {
   };
 }
 
+/** A parser function that takes a raw string and returns parsed content. */
+export type Parser = { name: string; parser: (input: string) => unknown };
+
+/** Built-in parser identifiers or a custom parser function. */
+export type SupportedParsers = "json" | "json5" | "yaml" | "toml" | "xml" | Parser;
+
 /**
  * High-level configuration object for conflict resolution.
  *
@@ -174,6 +180,15 @@ export interface Config<T extends string = InbuiltMergeStrategies, TContext = un
 
   /** Directory for backing up original files before modification. */
   backupDir?: string;
+
+  /**
+   * Parsers to attempt, in order:
+   * - A single parser (`"json"`, `"yaml"`, custom function, etc.).
+   * - An array of parsers (e.g. `["yaml", "json5"]`).
+   *
+   * Defaults to `"json"`.
+   */
+  parsers?: "auto" | SupportedParsers | SupportedParsers[];
 }
 
 export type { Matcher };

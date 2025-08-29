@@ -38,12 +38,13 @@ describe("resolveConflicts", () => {
     info: vi.fn(),
     debug: vi.fn(),
     warn: vi.fn(),
+    error: vi.fn(),
     flush: vi.fn(),
   };
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockCreateLogger.mockReturnValue(mockLogger);
+    mockCreateLogger.mockResolvedValue(mockLogger);
     mockNormalizeConfig.mockResolvedValue({
       debug: false,
       customStrategies: {},
@@ -111,7 +112,7 @@ describe("resolveConflicts", () => {
     expect(mockFs.writeFile).toHaveBeenCalledWith("test.json", reconstructedContent, "utf8");
     expect(mockFs.writeFile).toHaveBeenCalledWith(
       "test.json.conflict.json",
-      JSON.stringify(conflicts, null, 2)
+      JSON.stringify(conflicts, null, 2),
     );
     expect(mockExecSync).not.toHaveBeenCalled();
   });
@@ -127,7 +128,10 @@ describe("resolveConflicts", () => {
 
     await resolveConflicts({});
 
-    expect(mockLogger.warn).toHaveBeenCalledWith("test.json", "Failed to stage file: Error: git error");
+    expect(mockLogger.warn).toHaveBeenCalledWith(
+      "test.json",
+      "Failed to stage file: Error: git error",
+    );
   });
 
   it("enables debug logging when configured", async () => {
@@ -141,12 +145,9 @@ describe("resolveConflicts", () => {
 
     expect(mockLogger.info).toHaveBeenCalledWith(
       "all",
-      expect.stringContaining("normalizedConfig")
+      expect.stringContaining("normalizedConfig"),
     );
-    expect(mockLogger.debug).toHaveBeenCalledWith(
-      "test.json",
-      expect.stringContaining("merged")
-    );
+    expect(mockLogger.debug).toHaveBeenCalledWith("test.json", expect.stringContaining("merged"));
   });
 
   it("processes multiple files concurrently", async () => {

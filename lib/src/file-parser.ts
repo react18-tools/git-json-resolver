@@ -1,3 +1,5 @@
+import { Config, SupportedParsers } from "./types";
+
 /**
  * Represents a parsed conflict from a file with `ours` and `theirs` versions.
  *
@@ -12,25 +14,10 @@ export interface ParsedConflict<T = unknown> {
   format: string;
 }
 
-/** A parser function that takes a raw string and returns parsed content. */
-export type Parser = { name: string; parser: (input: string) => unknown };
-
-/** Built-in parser identifiers or a custom parser function. */
-export type SupportedParsers = "json" | "json5" | "yaml" | "toml" | "xml" | Parser;
-
 /**
  * Options for parsing conflicted content.
  */
-export interface ParseConflictOptions {
-  /**
-   * Parsers to attempt, in order:
-   * - A single parser (`"json"`, `"yaml"`, custom function, etc.).
-   * - An array of parsers (e.g. `["yaml", "json5"]`).
-   *
-   * Defaults to `"json"`.
-   */
-  parsers?: "auto" | SupportedParsers | SupportedParsers[];
-
+export interface ParseConflictOptions extends Pick<Config, "parsers"> {
   /**
    * Optional filename hint to prioritize parser choice.
    * Example:
@@ -130,7 +117,7 @@ const FILE_EXTENSION_TO_PARSER_MAP: Record<string, SupportedParsers> = {
 };
 
 /** Normalize parsers based on filename + options. */
-const normalizeParsers = (options: ParseConflictOptions): SupportedParsers[] => {
+export const normalizeParsers = (options: ParseConflictOptions): SupportedParsers[] => {
   if (Array.isArray(options.parsers)) return options.parsers;
 
   if (options.parsers) {
@@ -151,7 +138,7 @@ const normalizeParsers = (options: ParseConflictOptions): SupportedParsers[] => 
 };
 
 /** Internal helper to try parsers in order. */
-const runParser = async (
+export const runParser = async (
   raw: string,
   parsers: SupportedParsers[],
 ): Promise<[unknown, SupportedParsers]> => {
@@ -160,16 +147,16 @@ const runParser = async (
       if (typeof parser !== "string") return [parser.parser(raw), parser];
       return [await parseFormat(parser, raw), parser];
     } catch (err) {
-      console.debug(`Parser ${typeof parser === "function" ? "custom" : parser} failed:`, err);
+      console.debug(`Parser ${typeof parser === "string" ? parser : parser.name} failed:`, err);
     }
   }
   throw new Error(
-    `Failed to parse content. Tried parsers: ${parsers.map(p => (typeof p === "string" ? p : "custom")).join(", ")}`,
+    `Failed to parse content. Tried parsers: ${parsers.map(p => (typeof p === "string" ? p : p.name)).join(", ")}`,
   );
 };
 
 /** Internal parser dispatcher for supported formats. */
-const parseFormat = async (
+export const parseFormat = async (
   parser: "json" | "json5" | "yaml" | "toml" | "xml",
   raw: string,
 ): Promise<unknown> => {

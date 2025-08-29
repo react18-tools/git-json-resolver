@@ -1,5 +1,5 @@
 import { serialize } from "./file-serializer";
-import { DROP } from "./merger";
+import { DROP } from "./utils";
 
 /** Remove DROP, replace undefined with conflict markers */
 const preprocessForConflicts = (node: any, path: string, conflicts: string[] = []): any => {

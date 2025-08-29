@@ -7,6 +7,7 @@ import { resolveConflicts } from "./index";
 import type { Config } from "./types";
 import { DEFAULT_CONFIG } from "./normalizer";
 import { restoreBackups } from "./utils";
+import { resolveGitMergeFiles } from "./merge-processor";
 
 const CONFIG_FILENAME = "git-json-resolver.config.js";
 
@@ -66,14 +67,31 @@ module.exports = ${JSON.stringify(DEFAULT_CONFIG, null, 2)};
  */
 export const parseArgs = (
   argv: string[],
-): { overrides: Partial<Config>; init?: boolean; restore?: string } => {
+): {
+  overrides: Partial<Config>;
+  init?: boolean;
+  restore?: string;
+  gitMergeFiles?: [string, string, string];
+} => {
   const overrides: Partial<Config> = {};
   let init = false;
   let restore: string | undefined;
+  let gitMergeFiles: [string, string, string] | undefined;
+
+  // Check for Git merge driver mode (3 positional arguments)
+  const positionalArgs = argv.slice(2).filter(arg => !arg.startsWith("--"));
+  if (positionalArgs.length === 3) {
+    gitMergeFiles = [positionalArgs[0], positionalArgs[1], positionalArgs[2]];
+  }
 
   for (let i = 2; i < argv.length; i++) {
     const arg = argv[i];
     const next = argv[i + 1];
+
+    // Skip positional arguments in Git merge mode
+    if (gitMergeFiles && !arg.startsWith("--")) {
+      continue;
+    }
 
     switch (arg) {
       case "--include":
@@ -107,12 +125,12 @@ export const parseArgs = (
         }
     }
   }
-  return { overrides, init, restore };
+  return { overrides, init, restore, gitMergeFiles };
 };
 
 (async () => {
   try {
-    const { overrides, init, restore } = parseArgs(process.argv);
+    const { overrides, init, restore, gitMergeFiles } = parseArgs(process.argv);
 
     if (init) {
       initConfig(process.cwd());
@@ -131,6 +149,14 @@ export const parseArgs = (
       process.exit(0);
     }
 
+    // Git merge driver mode: handle 3-way merge
+    if (gitMergeFiles) {
+      const [oursPath, basePath, theirsPath] = gitMergeFiles;
+      await resolveGitMergeFiles(oursPath, basePath, theirsPath, finalConfig);
+      return; // resolveGitMergeFiles handles process.exit
+    }
+
+    // Standard mode: process files with conflict markers
     await resolveConflicts(finalConfig);
   } catch (err) {
     console.error("Failed:", err);

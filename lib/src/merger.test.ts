@@ -1,12 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
-import {
-  DROP,
-  Conflict,
-  MergeContext,
-  mergeObject,
-  BuiltInStrategies,
-  statusToString,
-} from "./merger";
+import { Conflict, MergeContext, mergeObject, BuiltInStrategies, statusToString } from "./merger";
+import { DROP } from "./utils";
 
 // Mock resolveStrategies so we control strategy order
 vi.mock("./strategy-resolver", () => ({

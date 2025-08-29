@@ -1,9 +1,7 @@
 import { NormalizedConfig } from "./normalizer";
 import { resolveStrategies } from "./strategy-resolver";
 import { StrategyFn, StrategyResult, StrategyStatus } from "./types";
-
-/** Sentinel used to explicitly drop a value. */
-export const DROP = Symbol("MERGE_DROP");
+import { DROP } from "./utils";
 
 /** Conflict entry (minimal by default). */
 export interface Conflict {
