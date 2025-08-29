@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Logger
-nav_order: 10
+nav_order: 11
 ---
 
 # logger
@@ -10,9 +10,9 @@ nav_order: 10
 
 ### createLogger()
 
-> **createLogger**(`config`: [`LoggerConfig`](types/README.md#loggerconfig-1)): \{ `debug`: (`fileId`: `string`, `msg`: `string`) => `void`; `error`: (`fileId`: `string`, `msg`: `string`) => `void`; `flush`: () => `void`; `info`: (`fileId`: `string`, `msg`: `string`) => `void`; `warn`: (`fileId`: `string`, `msg`: `string`) => `void`; \}
+> **createLogger**(`config`: [`LoggerConfig`](types/README.md#loggerconfig-1)): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<\{ `debug`: (`fileId`: `string`, `msg`: `string`) => `void`; `error`: (`fileId`: `string`, `msg`: `string`) => `void`; `flush`: () => [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>; `info`: (`fileId`: `string`, `msg`: `string`) => `void`; `warn`: (`fileId`: `string`, `msg`: `string`) => `void`; \}\>
 
-Defined in: [logger.ts:11](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/logger.ts#L11)
+Defined in: [logger.ts:12](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/logger.ts#L12)
 
 #### Parameters
 
@@ -22,84 +22,4 @@ Defined in: [logger.ts:11](https://github.com/react18-tools/git-json-resolver/bl
 
 #### Returns
 
-\{ `debug`: (`fileId`: `string`, `msg`: `string`) => `void`; `error`: (`fileId`: `string`, `msg`: `string`) => `void`; `flush`: () => `void`; `info`: (`fileId`: `string`, `msg`: `string`) => `void`; `warn`: (`fileId`: `string`, `msg`: `string`) => `void`; \}
-
-##### debug()
-
-> **debug**: (`fileId`: `string`, `msg`: `string`) => `void`
-
-###### Parameters
-
-###### fileId
-
-`string`
-
-###### msg
-
-`string`
-
-###### Returns
-
-`void`
-
-##### error()
-
-> **error**: (`fileId`: `string`, `msg`: `string`) => `void`
-
-###### Parameters
-
-###### fileId
-
-`string`
-
-###### msg
-
-`string`
-
-###### Returns
-
-`void`
-
-##### flush()
-
-> **flush**: () => `void`
-
-###### Returns
-
-`void`
-
-##### info()
-
-> **info**: (`fileId`: `string`, `msg`: `string`) => `void`
-
-###### Parameters
-
-###### fileId
-
-`string`
-
-###### msg
-
-`string`
-
-###### Returns
-
-`void`
-
-##### warn()
-
-> **warn**: (`fileId`: `string`, `msg`: `string`) => `void`
-
-###### Parameters
-
-###### fileId
-
-`string`
-
-###### msg
-
-`string`
-
-###### Returns
-
-`void`
+[`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<\{ `debug`: (`fileId`: `string`, `msg`: `string`) => `void`; `error`: (`fileId`: `string`, `msg`: `string`) => `void`; `flush`: () => [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>; `info`: (`fileId`: `string`, `msg`: `string`) => `void`; `warn`: (`fileId`: `string`, `msg`: `string`) => `void`; \}\>

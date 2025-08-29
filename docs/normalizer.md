@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Normalizer
-nav_order: 14
+nav_order: 18
 ---
 
 # normalizer
@@ -10,7 +10,7 @@ nav_order: 14
 
 ### NormalizedConfig\<T, TContext\>
 
-Defined in: [normalizer.ts:30](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/normalizer.ts#L30)
+Defined in: [normalizer.ts:28](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L28)
 
 #### Extends
 
@@ -28,13 +28,38 @@ Defined in: [normalizer.ts:30](https://github.com/react18-tools/git-json-resolve
 
 #### Properties
 
+##### autoStage?
+
+> `optional` **autoStage**: `boolean`
+
+Defined in: [types.ts:197](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/types.ts#L197)
+
+Whether to automatically stage resolved files.
+Default: `true`.
+
+###### Inherited from
+
+`Omit.autoStage`
+
+##### backupDir?
+
+> `optional` **backupDir**: `string`
+
+Defined in: [types.ts:182](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/types.ts#L182)
+
+Directory for backing up original files before modification.
+
+###### Inherited from
+
+`Omit.backupDir`
+
 ##### customStrategies?
 
 > `optional` **customStrategies**: [`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)\<[`Exclude`](https://www.typescriptlang.org/docs/handbook/utility-types.html#excludeuniontype-excludedmembers)\<[`ForbidBangEnd`](types/-internal-.md#forbidbangend)\<`T`\>, [`InbuiltMergeStrategies`](types/README.md#inbuiltmergestrategies)\>, [`StrategyFn`](types/README.md#strategyfn)\<`TContext`\>\>
 
-Defined in: [types.ts:99](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/types.ts#L99)
+Defined in: [types.ts:151](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/types.ts#L151)
 
-Custom strategies (excluding built-in names)
+Custom strategies (names must not clash with built-ins).
 
 ###### Inherited from
 
@@ -44,51 +69,35 @@ Custom strategies (excluding built-in names)
 
 > `optional` **debug**: `boolean`
 
-Defined in: [types.ts:123](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/types.ts#L123)
+Defined in: [types.ts:173](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/types.ts#L173)
 
-Debug mode - slower but more logs + traceability
+Enable debug mode for verbose logs and traceability (slower).
 
 ###### Inherited from
 
 `Omit.debug`
 
-##### exclude?
+##### exclude
 
-> `optional` **exclude**: `string`[]
+> **exclude**: `string`[]
 
-Defined in: [types.ts:108](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/types.ts#L108)
+Defined in: [normalizer.ts:33](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L33)
 
-File exclusion globs
+File exclusion globs.
 
-###### Inherited from
+###### Overrides
 
 `Omit.exclude`
 
-##### fileFilter()
+##### include
 
-> **fileFilter**: (`filepath`: `string`) => `boolean`
+> **include**: `string`[]
 
-Defined in: [normalizer.ts:34](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/normalizer.ts#L34)
+Defined in: [normalizer.ts:32](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L32)
 
-###### Parameters
+File inclusion globs.
 
-###### filepath
-
-`string`
-
-###### Returns
-
-`boolean`
-
-##### include?
-
-> `optional` **include**: `string`[]
-
-Defined in: [types.ts:105](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/types.ts#L105)
-
-File inclusion globs
-
-###### Inherited from
+###### Overrides
 
 `Omit.include`
 
@@ -96,11 +105,11 @@ File inclusion globs
 
 > `optional` **includeNonConflicted**: `boolean`
 
-Defined in: [types.ts:118](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/types.ts#L118)
+Defined in: [types.ts:170](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/types.ts#L170)
 
 Whether to include files that do not contain conflicts.
-Useful for applying strategies, e.g., drop even when conflicts aren’t present.
-Defaults to `false`.
+Useful if strategies (e.g., "drop") should apply even to clean files.
+Default: `false`.
 
 ###### Inherited from
 
@@ -110,7 +119,9 @@ Defaults to `false`.
 
 > `optional` **loggerConfig**: [`LoggerConfig`](types/README.md#loggerconfig-1)
 
-Defined in: [types.ts:138](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/types.ts#L138)
+Defined in: [types.ts:179](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/types.ts#L179)
+
+Logger configuration.
 
 ###### Inherited from
 
@@ -120,35 +131,44 @@ Defined in: [types.ts:138](https://github.com/react18-tools/git-json-resolver/bl
 
 > **matcher**: [`Matcher`](matcher.md#matcher)
 
-Defined in: [normalizer.ts:33](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/normalizer.ts#L33)
+Defined in: [normalizer.ts:31](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L31)
 
-Glob matcher: `"micromatch"`, `"picomatch"`, or custom implementation
+Glob matcher: `"micromatch"`, `"picomatch"`, or a custom implementation. Defaults to internal minimal matcher
 
 ###### Overrides
 
 `Omit.matcher`
 
+##### parsers?
+
+> `optional` **parsers**: [`SupportedParsers`](types/README.md#supportedparsers) \| `"auto"` \| [`SupportedParsers`](types/README.md#supportedparsers)[]
+
+Defined in: [types.ts:191](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/types.ts#L191)
+
+Parsers to attempt, in order:
+
+- A single parser (`"json"`, `"yaml"`, custom function, etc.).
+- An array of parsers (e.g. `["yaml", "json5"]`).
+
+Defaults to `"json"`.
+
+###### Inherited from
+
+`Omit.parsers`
+
 ##### rules
 
 > **rules**: [`NormalizedRules`](#normalizedrules)
 
-Defined in: [normalizer.ts:32](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/normalizer.ts#L32)
-
-##### strictArrays?
-
-> `optional` **strictArrays**: `boolean`
-
-Defined in: [types.ts:128](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/types.ts#L128)
-
-###### Inherited from
-
-`Omit.strictArrays`
+Defined in: [normalizer.ts:30](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L30)
 
 ##### writeConflictSidecar?
 
 > `optional` **writeConflictSidecar**: `boolean`
 
-Defined in: [types.ts:133](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/types.ts#L133)
+Defined in: [types.ts:176](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/types.ts#L176)
+
+Whether to write sidecar files with unresolved conflicts.
 
 ###### Inherited from
 
@@ -158,7 +178,7 @@ Defined in: [types.ts:133](https://github.com/react18-tools/git-json-resolver/bl
 
 ### NormalizedRules
 
-Defined in: [normalizer.ts:23](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/normalizer.ts#L23)
+Defined in: [normalizer.ts:21](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L21)
 
 #### Properties
 
@@ -166,31 +186,31 @@ Defined in: [normalizer.ts:23](https://github.com/react18-tools/git-json-resolve
 
 > **default**: [`StrategyItem`](#strategyitem)[]
 
-Defined in: [normalizer.ts:27](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/normalizer.ts#L27)
+Defined in: [normalizer.ts:25](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L25)
 
 ##### exact
 
 > **exact**: [`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)\<`string`, [`StrategyList`](#strategylist)[]\>
 
-Defined in: [normalizer.ts:24](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/normalizer.ts#L24)
+Defined in: [normalizer.ts:22](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L22)
 
 ##### exactFields
 
 > **exactFields**: [`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)\<`string`, [`StrategyList`](#strategylist)[]\>
 
-Defined in: [normalizer.ts:25](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/normalizer.ts#L25)
+Defined in: [normalizer.ts:23](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L23)
 
 ##### patterns
 
 > **patterns**: [`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)\<`string`, [`StrategyList`](#strategylist)[]\>
 
-Defined in: [normalizer.ts:26](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/normalizer.ts#L26)
+Defined in: [normalizer.ts:24](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L24)
 
 ---
 
 ### StrategyItem
 
-Defined in: [normalizer.ts:12](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/normalizer.ts#L12)
+Defined in: [normalizer.ts:10](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L10)
 
 #### Properties
 
@@ -198,19 +218,19 @@ Defined in: [normalizer.ts:12](https://github.com/react18-tools/git-json-resolve
 
 > **important**: `boolean`
 
-Defined in: [normalizer.ts:14](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/normalizer.ts#L14)
+Defined in: [normalizer.ts:12](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L12)
 
 ##### name
 
 > **name**: `string`
 
-Defined in: [normalizer.ts:13](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/normalizer.ts#L13)
+Defined in: [normalizer.ts:11](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L11)
 
 ---
 
 ### StrategyList
 
-Defined in: [normalizer.ts:17](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/normalizer.ts#L17)
+Defined in: [normalizer.ts:15](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L15)
 
 #### Properties
 
@@ -218,19 +238,19 @@ Defined in: [normalizer.ts:17](https://github.com/react18-tools/git-json-resolve
 
 > **order**: `number`
 
-Defined in: [normalizer.ts:19](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/normalizer.ts#L19)
+Defined in: [normalizer.ts:17](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L17)
 
 ##### source
 
 > **source**: `string`
 
-Defined in: [normalizer.ts:20](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/normalizer.ts#L20)
+Defined in: [normalizer.ts:18](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L18)
 
 ##### strategies
 
 > **strategies**: [`StrategyItem`](#strategyitem)[]
 
-Defined in: [normalizer.ts:18](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/normalizer.ts#L18)
+Defined in: [normalizer.ts:16](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L16)
 
 ## Variables
 
@@ -238,7 +258,7 @@ Defined in: [normalizer.ts:18](https://github.com/react18-tools/git-json-resolve
 
 > `const` **DEFAULT_CONFIG**: \{ `debug`: `boolean`; `defaultStrategy`: `string`[]; `exclude`: `string`[]; `include`: `string`[]; `writeConflictSidecar`: `boolean`; \}
 
-Defined in: [normalizer.ts:38](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/normalizer.ts#L38)
+Defined in: [normalizer.ts:37](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L37)
 
 Defaults
 
@@ -270,9 +290,9 @@ Add \*\*/ prefix to ensure proper handling in monorepo
 
 ### normalizeConfig()
 
-> **normalizeConfig**\<`T`\>(`config`: [`Config`](types/README.md#config)\<`T`\>, `globalLogger`: \{ `debug`: (`fileId`: `string`, `msg`: `string`) => `void`; `error`: (`fileId`: `string`, `msg`: `string`) => `void`; `flush`: () => `void`; `info`: (`fileId`: `string`, `msg`: `string`) => `void`; `warn`: (`fileId`: `string`, `msg`: `string`) => `void`; \}): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`NormalizedConfig`](#normalizedconfig)\<[`InbuiltMergeStrategies`](types/README.md#inbuiltmergestrategies), `unknown`\>\>
+> **normalizeConfig**\<`T`\>(`config`: [`Config`](types/README.md#config)\<`T`\>): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`NormalizedConfig`](#normalizedconfig)\<[`InbuiltMergeStrategies`](types/README.md#inbuiltmergestrategies), `unknown`\>\>
 
-Defined in: [normalizer.ts:50](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/normalizer.ts#L50)
+Defined in: [normalizer.ts:49](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/normalizer.ts#L49)
 
 Normalize user config into fully expanded and classified form.
 
@@ -287,28 +307,6 @@ Normalize user config into fully expanded and classified form.
 ##### config
 
 [`Config`](types/README.md#config)\<`T`\>
-
-##### globalLogger
-
-###### debug
-
-(`fileId`: `string`, `msg`: `string`) => `void` = `...`
-
-###### error
-
-(`fileId`: `string`, `msg`: `string`) => `void` = `...`
-
-###### flush
-
-() => `void`
-
-###### info
-
-(`fileId`: `string`, `msg`: `string`) => `void` = `...`
-
-###### warn
-
-(`fileId`: `string`, `msg`: `string`) => `void` = `...`
 
 #### Returns
 

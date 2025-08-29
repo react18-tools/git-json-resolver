@@ -12,7 +12,7 @@ nav_order: 4
 
 > **reconstructConflict**(`merged`: `any`, `ours`: `any`, `theirs`: `any`, `format`: `string`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`string`\>
 
-Defined in: [conflict-helper.ts:31](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/conflict-helper.ts#L31)
+Defined in: [conflict-helper.ts:31](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/conflict-helper.ts#L31)
 
 Build conflict markers into serialized string
 

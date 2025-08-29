@@ -90,7 +90,7 @@ describe("processMerge", () => {
   it("processes merge with conflicts", async () => {
     const conflicts = [{ path: "a", reason: "test conflict" }];
     const reconstructedContent = "conflict content";
-    
+
     mockMergeObject.mockImplementation(({ conflicts: conflictsArray }) => {
       conflictsArray.push(...conflicts);
       return Promise.resolve({});
@@ -156,10 +156,7 @@ describe("processMerge", () => {
       logger: mockLogger,
     });
 
-    expect(mockLogger.debug).toHaveBeenCalledWith(
-      "test.json",
-      expect.stringContaining("merged"),
-    );
+    expect(mockLogger.debug).toHaveBeenCalledWith("test.json", expect.stringContaining("merged"));
   });
 
   it("skips auto-staging when disabled", async () => {
@@ -195,7 +192,7 @@ describe("resolveGitMergeFiles", () => {
     vi.clearAllMocks();
     mockCreateLogger.mockResolvedValue(mockLogger);
     mockNormalizeConfig.mockResolvedValue({ debug: false, customStrategies: {} } as any);
-    mockFs.readFile.mockImplementation((path) => {
+    mockFs.readFile.mockImplementation(path => {
       if (path === "ours.json") return Promise.resolve('{"a":1}');
       if (path === "base.json") return Promise.resolve('{"a":0}');
       if (path === "theirs.json") return Promise.resolve('{"a":2}');
@@ -238,7 +235,7 @@ describe("resolveGitMergeFiles", () => {
   });
 
   it("handles missing base file gracefully", async () => {
-    mockFs.readFile.mockImplementation((path) => {
+    mockFs.readFile.mockImplementation(path => {
       if (path === "ours.json") return Promise.resolve('{"a":1}');
       if (path === "base.json") return Promise.reject(new Error("Not found"));
       if (path === "theirs.json") return Promise.resolve('{"a":2}');

@@ -12,7 +12,7 @@ nav_order: 2
 
 > **findGitRoot**(): `string`
 
-Defined in: [cli.ts:15](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/cli.ts#L15)
+Defined in: [cli.ts:17](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/cli.ts#L17)
 
 Find Git root directory
 
@@ -26,7 +26,7 @@ Find Git root directory
 
 > **initConfig**(`targetDir`: `string`): `void`
 
-Defined in: [cli.ts:45](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/cli.ts#L45)
+Defined in: [cli.ts:47](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/cli.ts#L47)
 
 Write a starter config file
 
@@ -46,7 +46,7 @@ Write a starter config file
 
 > **loadConfigFile**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`Config`](types/README.md#config)\<[`InbuiltMergeStrategies`](types/README.md#inbuiltmergestrategies), `unknown`\>\>\>
 
-Defined in: [cli.ts:26](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/cli.ts#L26)
+Defined in: [cli.ts:28](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/cli.ts#L28)
 
 Load configuration file (js/ts) from current dir or Git root.
 
@@ -58,9 +58,9 @@ Load configuration file (js/ts) from current dir or Git root.
 
 ### parseArgs()
 
-> **parseArgs**(`argv`: `string`[]): \{ `init?`: `boolean`; `overrides`: [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`Config`](types/README.md#config)\>; \}
+> **parseArgs**(`argv`: `string`[]): \{ `gitMergeFiles?`: \[`string`, `string`, `string`\]; `init?`: `boolean`; `overrides`: [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`Config`](types/README.md#config)\>; `restore?`: `string`; \}
 
-Defined in: [cli.ts:66](https://github.com/react18-tools/git-json-resolver/blob/b38c33aa182eca9ca6d5408ecc380f54f3e1d39d/lib/src/cli.ts#L66)
+Defined in: [cli.ts:68](https://github.com/react18-tools/git-json-resolver/blob/1c522503a4da2b0c40b914a11887e11d24ab51da/lib/src/cli.ts#L68)
 
 CLI argument parser (minimal, no external deps).
 
@@ -72,7 +72,11 @@ CLI argument parser (minimal, no external deps).
 
 #### Returns
 
-\{ `init?`: `boolean`; `overrides`: [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`Config`](types/README.md#config)\>; \}
+\{ `gitMergeFiles?`: \[`string`, `string`, `string`\]; `init?`: `boolean`; `overrides`: [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`Config`](types/README.md#config)\>; `restore?`: `string`; \}
+
+##### gitMergeFiles?
+
+> `optional` **gitMergeFiles**: \[`string`, `string`, `string`\]
 
 ##### init?
 
@@ -81,3 +85,7 @@ CLI argument parser (minimal, no external deps).
 ##### overrides
 
 > **overrides**: [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`Config`](types/README.md#config)\>
+
+##### restore?
+
+> `optional` **restore**: `string`
