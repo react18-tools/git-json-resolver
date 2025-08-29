@@ -25,15 +25,26 @@ export type InbuiltMergeStrategies =
   | "non-empty"
   | "update";
 
-/** Strategy status codes. */
+/**
+ * Status codes returned by strategy functions.
+ */
 export enum StrategyStatus {
+  /** Strategy successfully produced a value. */
   OK = 0,
+
+  /** Strategy deferred — let other strategies continue. */
   CONTINUE = 1,
+
+  /** Strategy failed — unrecoverable error, stop processing. */
   FAIL = 2,
+
+  /** Strategy explicitly skipped this field. */
   SKIP = 3,
 }
 
-/** Strategy result contract. */
+/**
+ * Union type representing the outcome of a strategy function.
+ */
 export type StrategyResult =
   | { status: StrategyStatus.OK; value: unknown }
   | { status: StrategyStatus.CONTINUE; reason?: string }
@@ -42,100 +53,123 @@ export type StrategyResult =
 
 /**
  * Strategy function signature.
- * Custom strategies receive both sides, optional base, file path, and context.
+ *
+ * @template TContext - Optional context type passed during resolution.
  */
 export type StrategyFn<TContext = unknown> = (args: {
+  /** Value from "ours". */
   ours: unknown;
+
+  /** Value from "theirs". */
   theirs: unknown;
+
+  /** Value from common ancestor (if available). */
   base?: unknown;
+
+  /** JSON path of the current field. */
   path: string;
+
+  /** Full file path of the file being merged. */
   filePath?: string;
+
+  /** Custom context object, if provided by caller. */
   context?: TContext;
 }) => StrategyResult | Promise<StrategyResult>;
 
 /**
- * Utility type: forbids strategy names ending with "!".
- * (Reserved suffix for internal overrides.)
+ * Utility type: excludes strategy names ending with "!".
+ * The "!" suffix is reserved for internal overrides.
  */
 type ForbidBangEnd<T extends string> = T extends `${string}!` ? never : T;
 
 /**
- * Rules tree: maps field globs → strategy names or nested rules.
- * - Keys: glob patterns (matcher configurable)
- * - Values: one or more strategies, or nested RuleTree
+ * Rule tree: maps field glob patterns → strategy names or nested rule trees.
+ *
+ * - Keys: field glob patterns (matcher configurable)
+ * - Values: one or more strategies, or further nested rules
  */
 export type RuleTree<T extends string = InbuiltMergeStrategies> = {
   [fieldGlob: string]: T[] | RuleTree<T>;
 };
 
+/** Logging levels available to the logger. */
 export type LogLevel = "info" | "warn" | "error" | "debug";
 
+/** Logging modes: in-memory or streaming to files. */
 export type LogMode = "memory" | "stream";
 
+/**
+ * Logger configuration.
+ */
 export interface LoggerConfig {
-  mode?: LogMode; // default: "memory"
-  logDir?: string; // default: "logs"
-  singleFile?: boolean; // default: false (per input file logs)
+  /** Logging mode (default: `"memory"`). */
+  mode?: LogMode;
+
+  /** Directory for log files (default: `"logs"`). */
+  logDir?: string;
+
+  /** Whether to log into a single file instead of per-input-file logs. */
+  singleFile?: boolean;
+
+  /** Level filters for stdout and file logging. */
   levels?: {
-    stdout?: LogLevel[]; // default: ["warn", "error"]
-    file?: LogLevel[]; // default: ["info", "warn", "error"]
+    /** Levels to print on stdout (default: `["warn", "error"]`). */
+    stdout?: LogLevel[];
+
+    /** Levels to write into files (default: `["info", "warn", "error"]`). */
+    file?: LogLevel[];
   };
 }
 
 /**
- * High-level config object for conflict resolution.
+ * High-level configuration object for conflict resolution.
+ *
+ * @template T - Strategy string type (defaults to built-in strategies).
+ * @template TContext - Context object type passed to strategies.
  */
 export interface Config<T extends string = InbuiltMergeStrategies, TContext = unknown> {
-  /** Fallback strategy when no rule matches */
+  /** Fallback strategy when no rule matches. */
   defaultStrategy?: T | T[];
 
-  /** Rule tree mapping globs → strategies */
+  /** Rule tree mapping globs → strategies. */
   rules?: RuleTree<T>;
 
-  /** Strategy → list of fields to apply it to */
+  /** Reverse mapping: strategy → list of field globs. */
   byStrategy?: Partial<Record<T, string[]>>;
 
-  /** Custom strategies (excluding built-in names) */
+  /** Custom strategies (names must not clash with built-ins). */
   customStrategies?: Record<
     Exclude<ForbidBangEnd<T>, InbuiltMergeStrategies>,
     StrategyFn<TContext>
   >;
 
-  /** File inclusion globs */
+  /** File inclusion globs. */
   include?: string[];
 
-  /** File exclusion globs */
+  /** File exclusion globs. */
   exclude?: string[];
 
-  /** Glob matcher: `"micromatch"`, `"picomatch"`, or custom implementation */
+  /** Glob matcher: `"micromatch"`, `"picomatch"`, or a custom implementation. Defaults to internal minimal matcher */
   matcher?: "micromatch" | "picomatch" | Matcher;
 
   /**
    * Whether to include files that do not contain conflicts.
-   * Useful for applying strategies, e.g., drop even when conflicts aren’t present.
-   * Defaults to `false`.
+   * Useful if strategies (e.g., "drop") should apply even to clean files.
+   * Default: `false`.
    */
   includeNonConflicted?: boolean;
 
-  /**
-   * Debug mode - slower but more logs + traceability
-   */
+  /** Enable debug mode for verbose logs and traceability (slower). */
   debug?: boolean;
 
-  /**
-   *
-   */
-  strictArrays?: boolean;
+  /** Whether to write sidecar files with unresolved conflicts. */
+  writeConflictSidecar?: boolean;
 
-  /**
-   *
-   */
-  writeConflictSidecar?: boolean; // default false
-
-  /**
-   *
-   */
+  /** Logger configuration. */
   loggerConfig?: LoggerConfig;
+
+  /** Directory for backing up original files before modification. */
+  backupDir?: string;
 }
 
 export type { Matcher };

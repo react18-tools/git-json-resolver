@@ -42,7 +42,7 @@ export const resolveConflicts = async <T extends string = InbuiltMergeStrategies
             _strategyCache,
           },
         }),
-        backupFile(filePath),
+        backupFile(filePath, config.backupDir),
       ]);
 
       if (normalizedConfig.debug) {

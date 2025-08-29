@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { Matcher } from "./types";
+import { NormalizedConfig } from "./normalizer";
 
 export interface FileEntry {
   filePath: string;
@@ -17,22 +17,13 @@ export const hasConflict = (content: string): boolean => {
   return content.includes("<<<<<<<") && content.includes("=======") && content.includes(">>>>>>>");
 };
 
-export interface CollectFilesOptions {
+export type CollectFilesOptions = Pick<
+  NormalizedConfig,
+  "include" | "exclude" | "matcher" | "includeNonConflicted" | "debug"
+> & {
   /** Root directory to start traversal (defaults to `process.cwd()`). */
   root?: string;
-
-  include: string[];
-  exclude: string[];
-
-  matcher: Matcher;
-
-  /**
-   * Whether to include files even if they don’t contain conflicts.
-   * Defaults to `false`.
-   */
-  includeNonConflicted?: boolean;
-  debug?: boolean;
-}
+};
 
 /**
  * Recursively collects files that match the provided `fileFilter`.
@@ -145,11 +136,9 @@ export const deriveDirExcludes = (include: string[], exclude: string[]): [string
   return [[...keepDirs], [...dropDirs]];
 };
 
-const BACKUP_DIR = ".merge-backups";
-
-export const backupFile = async (filePath: string) => {
+export const backupFile = async (filePath: string, backupDir = ".merge-backups") => {
   const relPath = path.relative(process.cwd(), filePath);
-  const backupPath = path.join(BACKUP_DIR, relPath);
+  const backupPath = path.join(backupDir, relPath);
 
   await fs.mkdir(path.dirname(backupPath), { recursive: true });
   await fs.copyFile(filePath, backupPath);
