@@ -16,7 +16,7 @@ import { resolveStrategies } from "./strategy-resolver";
 import { StrategyStatus } from "./types";
 
 const makeCtx = (): MergeContext => ({
-  config: { debug: false, strictArrays: false } as any,
+  config: { debug: false } as any,
   strategies: {},
   _strategyCache: new Map(),
 });
@@ -90,21 +90,6 @@ describe("BuiltInStrategies", () => {
     expect(BuiltInStrategies.update({ ...args, ours: undefined, theirs: "y" }).value).toBe(DROP);
   });
 
-  it("merge arrays concatenates element-wise", async () => {
-    const arrArgs = { ...args, ours: [1, 2], theirs: [3, 4], base: [0, 0], ctx, path: "arr" };
-    const r = await BuiltInStrategies.merge(arrArgs);
-    expect(r.status).toBe(StrategyStatus.OK);
-    // @ts-expect-error -- will fix later
-    expect(r.value).toEqual([1, 2]); // resolved via "ours" because of strategy order
-  });
-
-  it("merge arrays fails if strict and length mismatch", async () => {
-    const strictCtx = { ...ctx, config: { strictArrays: true } as any };
-    const arrArgs = { ...args, ours: [1], theirs: [2, 3], ctx: strictCtx, path: "arr" };
-    const r = await BuiltInStrategies.merge(arrArgs);
-    expect(r.status).toBe(StrategyStatus.FAIL);
-  });
-
   it("merge plain objects recurses", async () => {
     const objArgs = {
       ...args,
@@ -149,16 +134,6 @@ describe("mergeObject", () => {
     const v = await mergeObject({ ours: "a", theirs: "b", path: "p", ctx, conflicts });
     expect(v).toBeUndefined();
     expect(conflicts[0].reason).toMatch(/Skip/);
-  });
-
-  it("throws on FAIL", async () => {
-    (resolveStrategies as any).mockReturnValueOnce(["merge"]);
-    const ctx = makeCtx();
-    ctx.config.strictArrays = true;
-    const conflicts: Conflict[] = [];
-    await expect(
-      mergeObject({ ours: [1], theirs: [1, 2], path: "p", ctx, conflicts }),
-    ).rejects.toThrow(/Array length mismatch/);
   });
 
   it.skip("adds conflict if all CONTINUE", async () => {

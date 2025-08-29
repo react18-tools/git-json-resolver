@@ -41,7 +41,7 @@ describe("cli helpers", () => {
   });
 
   describe("parseArgs", () => {
-    it("parses include/exclude/matcher/debug/strict-arrays/sidecar", () => {
+    it("parses include/exclude/matcher/debug/sidecar", () => {
       const argv = [
         "node",
         "cli",
@@ -52,7 +52,6 @@ describe("cli helpers", () => {
         "--matcher",
         "micromatch",
         "--debug",
-        "--strict-arrays",
         "--sidecar",
       ];
       const result = (cli as any).parseArgs(argv);
@@ -61,7 +60,6 @@ describe("cli helpers", () => {
         exclude: ["c.json"],
         matcher: "micromatch",
         debug: true,
-        strictArrays: true,
         writeConflictSidecar: true,
       });
       expect(result.init).toBe(false);

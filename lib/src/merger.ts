@@ -103,30 +103,6 @@ export const BuiltInStrategies = {
   merge: async <TContext>(args: MergeArgs<TContext>): Promise<StrategyResult> => {
     const { ours, theirs, base, path, filePath, ctx, conflicts } = args;
 
-    // Arrays
-    if (Array.isArray(ours) && Array.isArray(theirs)) {
-      if (ours.length !== theirs.length) {
-        return ctx.config.strictArrays
-          ? { status: StrategyStatus.FAIL, reason: "Array length mismatch" }
-          : { status: StrategyStatus.CONTINUE, reason: "Array length mismatch" };
-      }
-
-      const merged = await Promise.all(
-        ours.map((val, i) =>
-          mergeObject({
-            ours: val,
-            theirs: theirs[i],
-            base: Array.isArray(base) ? base[i] : undefined,
-            path: `${path}[${i}]`,
-            filePath,
-            ctx,
-            conflicts,
-          }),
-        ),
-      );
-      return { status: StrategyStatus.OK, value: merged };
-    }
-
     // Plain objects
     if (isPlainObject(ours) && isPlainObject(theirs)) {
       const allKeys = new Set([...Object.keys(ours), ...Object.keys(theirs)]);

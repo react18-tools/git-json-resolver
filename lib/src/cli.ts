@@ -87,9 +87,6 @@ export const parseArgs = (argv: string[]): { overrides: Partial<Config>; init?: 
       case "--debug":
         overrides.debug = true;
         break;
-      case "--strict-arrays":
-        overrides.strictArrays = true;
-        break;
       case "--sidecar":
         overrides.writeConflictSidecar = true;
         break;
