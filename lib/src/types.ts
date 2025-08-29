@@ -189,6 +189,12 @@ export interface Config<T extends string = InbuiltMergeStrategies, TContext = un
    * Defaults to `"json"`.
    */
   parsers?: "auto" | SupportedParsers | SupportedParsers[];
+
+  /**
+   * Whether to automatically stage resolved files.
+   * Default: `true`.
+   */
+  autoStage?: boolean;
 }
 
 export type { Matcher };

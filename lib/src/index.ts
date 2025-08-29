@@ -31,7 +31,7 @@ export const resolveConflicts = async <T extends string = InbuiltMergeStrategies
         config,
         normalizedConfig,
         logger: globalLogger,
-        autoStage: true,
+        autoStage: normalizedConfig.autoStage ?? true,
       });
     }),
   );
