@@ -13,19 +13,17 @@ export const resolveConflicts = async <T extends string = InbuiltMergeStrategies
   const globalLogger = await createLogger(config.loggerConfig);
   const normalizedConfig: NormalizedConfig = await normalizeConfig<T>(config);
   const filesEntries = await listMatchingFiles(normalizedConfig);
-  if (normalizedConfig.debug) {
-    globalLogger.info("all", JSON.stringify({ normalizedConfig, filesEntries }, null, 2));
-  }
   await Promise.all(
     filesEntries.map(async ({ filePath, content }) => {
-      const { theirs, ours, format } = await parseConflictContent(content, {
+      const { theirs, ours, base, format } = await parseConflictContent(content, {
         filename: filePath,
         parsers: normalizedConfig.parsers,
       });
+      globalLogger.debug(filePath, JSON.stringify({ ours, theirs, base, format }));
       await processMerge({
         ours,
         theirs,
-        base: undefined,
+        base,
         format,
         filePath,
         config,

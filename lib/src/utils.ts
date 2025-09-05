@@ -152,7 +152,7 @@ export const createSkipDirectoryMatcher = (
   };
 };
 
-export const backupFile = async (filePath: string, backupDir: string) => {
+export const backupFile = async (filePath: string, backupDir = DEFAULT_BACKUP_DIR) => {
   const relPath = path.relative(process.cwd(), filePath);
   const backupPath = path.join(backupDir, relPath);
 

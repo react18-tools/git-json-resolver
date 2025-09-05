@@ -9,13 +9,14 @@ interface LogEntry {
   message: string;
 }
 
-export const createLogger = async (config: LoggerConfig = {}) => {
+export const createLogger = async (config: LoggerConfig = {}, debug?: boolean) => {
   const mode: Mode = config.mode ?? "memory";
   const logDir = config.logDir ?? ".logs";
   const singleFile = config.singleFile ?? false;
   const levels = {
-    stdout: config.levels?.stdout ?? ["warn", "error"],
-    file: config.levels?.file ?? ["info", "warn", "error"],
+    stdout:
+      config.levels?.stdout ?? (debug ? ["debug", "info", "warn", "error"] : ["warn", "error"]),
+    file: config.levels?.file ?? (debug ? ["info", "debug", "warn", "error"] : ["error"]),
   };
 
   // Async directory creation
