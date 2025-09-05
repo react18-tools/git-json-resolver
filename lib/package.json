@@ -2,7 +2,7 @@
   "name": "git-json-resolver",
   "author": "Mayank Kumar Chaudhari (https://mayank-chaudhari.vercel.app)",
   "private": false,
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "A rules-based JSON conflict resolver that parses Git conflict markers, reconstructs ours/theirs, and merges with deterministic strategies — beyond line-based merges.",
   "license": "MPL-2.0",
   "main": "./dist/index.js",
