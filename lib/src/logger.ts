@@ -70,6 +70,7 @@ export const createLogger = async (config: LoggerConfig = {}) => {
           const lines = entries.map(
             e => `[${e.timestamp}] [${e.level.toUpperCase()}] ${e.message}`,
           );
+          await fsPromises.mkdir(path.dirname(filePath), { recursive: true });
           await fsPromises.appendFile(filePath, lines.join("\n") + "\n");
         } catch (error) {
           /* v8 ignore next 2 -- logs only */

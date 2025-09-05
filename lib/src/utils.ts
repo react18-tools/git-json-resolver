@@ -9,6 +9,7 @@ export interface FileEntry {
 
 /** Sentinel used to explicitly drop a value. */
 export const DROP = Symbol("MERGE_DROP");
+export const DEFAULT_BACKUP_DIR = ".merge-backups";
 
 /**
  * Checks whether the given file contains Git merge conflict markers.
@@ -44,12 +45,14 @@ export const listMatchingFiles = async ({
   matcher,
   includeNonConflicted,
   debug,
-  backupDir,
+  backupDir = DEFAULT_BACKUP_DIR,
 }: CollectFilesOptions): Promise<FileEntry[]> => {
   for (const p of [...include, ...exclude]) {
     if (p.startsWith("!")) throw new Error(`Negation not allowed in include/exclude: ${p}`);
     if (p.includes("\\")) console.warn(`Use '/' as path separator: ${p}`);
   }
+
+  exclude.push(backupDir);
 
   const fileMatcher = (filepath: string) => {
     const posixPath = filepath.replace(/\\/g, "/");
@@ -149,7 +152,7 @@ export const createSkipDirectoryMatcher = (
   };
 };
 
-export const backupFile = async (filePath: string, backupDir = ".merge-backups") => {
+export const backupFile = async (filePath: string, backupDir: string) => {
   const relPath = path.relative(process.cwd(), filePath);
   const backupPath = path.join(backupDir, relPath);
 
