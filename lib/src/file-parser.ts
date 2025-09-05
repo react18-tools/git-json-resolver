@@ -1,4 +1,8 @@
+import { execFile } from "node:child_process";
 import { Config, SupportedParsers } from "./types";
+import { promisify } from "node:util";
+
+const execFileAsync = promisify(execFile);
 
 /**
  * Represents a parsed conflict from a file with `ours` and `theirs` versions.
@@ -10,6 +14,8 @@ export interface ParsedConflict<T = unknown> {
   ours: T;
   /** Parsed content from the "theirs" side of the conflict. */
   theirs: T;
+  /** Parsed content from the "base" side of the conflict (optional). */
+  base?: T;
   /** Format used to parse the content (`json`, `yaml`, `toml`, `xml`, or `custom`). */
   format: string;
 }
@@ -19,14 +25,14 @@ export interface ParsedConflict<T = unknown> {
  */
 export interface ParseConflictOptions extends Pick<Config, "parsers"> {
   /**
-   * Optional filename hint to prioritize parser choice.
+   * filename hint to prioritize parser choice as well as get base and ours from git.
    * Example:
    * - `config.yaml` → try `yaml` first.
    * - `data.toml` → try `toml` first.
    *
    * If extension is unknown, falls back to `parsers` or `"json"`.
    */
-  filename?: string;
+  filename: string;
 }
 
 /**
@@ -48,7 +54,7 @@ export interface ParseConflictOptions extends Pick<Config, "parsers"> {
  */
 export const parseConflictContent = async <T = unknown>(
   content: string,
-  options: ParseConflictOptions = {},
+  options: ParseConflictOptions,
 ): Promise<ParsedConflict<T>> => {
   const lines = content.split("\n");
   const oursLines: string[] = [];
@@ -87,8 +93,23 @@ export const parseConflictContent = async <T = unknown>(
     }
   }
 
-  const oursRaw = oursLines.join("\n");
+  let oursRaw = oursLines.join("\n");
   const theirsRaw = theirsLines.join("\n");
+  const baseRaw = await execFileAsync("git", ["show", `:1:${options.filename}`], {
+    maxBuffer: 1024 * 1024 * 50,
+  })
+    .then(({ stdout }) => stdout)
+    .catch(() => null);
+
+  // No conflict
+  if (oursRaw === theirsRaw) {
+    oursRaw =
+      (await execFileAsync("git", ["show", `HEAD:${options.filename}`], {
+        maxBuffer: 1024 * 1024 * 50,
+      })
+        .then(({ stdout }) => stdout)
+        .catch(() => null)) ?? oursRaw;
+  }
 
   if (!oursRaw || !theirsRaw) {
     throw new Error("Conflict parsing resulted in empty content.");
@@ -98,11 +119,14 @@ export const parseConflictContent = async <T = unknown>(
   const parsers = normalizeParsers(options);
 
   const [oursParsed, format] = await runParser(oursRaw, parsers);
-  const [theirsParsed] = await runParser(theirsRaw, [format]);
+  const [[theirsParsed], baseParsed] = await Promise.all(
+    (baseRaw ? [theirsRaw, baseRaw] : [theirsRaw]).map(raw => runParser(raw, [format])),
+  );
 
   return {
     ours: oursParsed as T,
     theirs: theirsParsed as T,
+    base: baseParsed?.[0] as T | undefined,
     format: typeof format === "string" ? format : format.name,
   };
 };

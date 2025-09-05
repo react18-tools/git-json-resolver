@@ -75,21 +75,19 @@ export const listMatchingFiles = async ({
 
     for (const entry of entries) {
       const fullPath = path.join(dir, entry.name);
+      const relativePath = path.relative(root, fullPath);
 
       if (entry.isDirectory()) {
         /* v8 ignore next */
-        if (
-          !/node_modules|\.git/.test(entry.name) &&
-          !skipDirMatcher(path.relative(root, fullPath))
-        ) {
+        if (!/node_modules|\.git/.test(entry.name) && !skipDirMatcher(relativePath)) {
           await walk(fullPath);
         }
-      } else if (fileMatcher(path.relative(root, fullPath))) {
+      } else if (fileMatcher(relativePath)) {
         try {
           const content = await fs.readFile(fullPath, "utf8");
 
           if (includeNonConflicted || hasConflict(content)) {
-            fileEntries.push({ filePath: fullPath, content });
+            fileEntries.push({ filePath: relativePath, content });
             /* v8 ignore next 6 -- Logging and warning only */
           } else if (debug) {
             console.info(`Skipped (no conflicts): ${fullPath}`);
