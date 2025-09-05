@@ -112,7 +112,7 @@ export const resolveGitMergeFiles = async <T extends string = InbuiltMergeStrate
     fs.readFile(theirsPath, "utf8"),
   ]);
 
-  const parsers = normalizeParsers(normalizedConfig);
+  const parsers = normalizeParsers({ ...normalizedConfig, filename: "" });
 
   const [ours, parser] = await runParser(oursContent, parsers);
   const [base, theirs] = await Promise.all(
