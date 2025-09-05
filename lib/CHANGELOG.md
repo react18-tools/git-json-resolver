@@ -1,5 +1,13 @@
 # git-json-resolver
 
+## 1.3.2
+
+### Patch Changes
+
+- cb112b3: Improve debug logging and cross-platform path handling
+  - Enhanced debug logging with pretty-printed JSON output for better readability
+  - Fixed Windows path separator handling in file matching utilities for consistent cross-platform behavior
+
 ## 1.3.1
 
 ### Patch Changes
