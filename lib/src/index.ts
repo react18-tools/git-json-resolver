@@ -19,7 +19,7 @@ export const resolveConflicts = async <T extends string = InbuiltMergeStrategies
         filename: filePath,
         parsers: normalizedConfig.parsers,
       });
-      globalLogger.debug(filePath, JSON.stringify({ ours, theirs, base, format }));
+      globalLogger.debug(filePath, JSON.stringify({ ours, theirs, base, format }, null, 2));
       await processMerge({
         ours,
         theirs,

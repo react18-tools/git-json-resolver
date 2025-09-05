@@ -87,7 +87,7 @@ export const listMatchingFiles = async ({
 
     for (const entry of entries) {
       const fullPath = path.join(dir, entry.name);
-      const relativePath = path.relative(root, fullPath);
+      const relativePath = path.relative(root, fullPath).replace(/\\+/g, "/");
 
       if (entry.isDirectory()) {
         /* v8 ignore next */
@@ -153,10 +153,9 @@ export const createSkipDirectoryMatcher = (
   }
 
   return (dirPath: string) => {
-    const posixPath = dirPath.replace(/\\/g, "/");
     return (
-      matcher.isMatch(posixPath, [...dropDirs]) ||
-      (keepDirs.size > 0 && !matcher.isMatch(posixPath, [...keepDirs]))
+      matcher.isMatch(dirPath, [...dropDirs]) ||
+      (keepDirs.size > 0 && !matcher.isMatch(dirPath, [...keepDirs]))
     );
   };
 };
