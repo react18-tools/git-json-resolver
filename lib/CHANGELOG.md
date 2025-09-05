@@ -1,5 +1,19 @@
 # git-json-resolver
 
+## 1.3.1
+
+### Patch Changes
+
+- df062c3: Fix logger
+- 27daef2: Enhance merge processing and debugging capabilities
+  - Improve 3-way merge support with proper base handling in merge strategies
+  - Refactor strategy types and interfaces for better type safety
+  - Add comprehensive test coverage for merge scenarios and edge cases
+  - Enhance logger configuration with debug-aware level settings
+  - Add default backup directory support to backupFile utility
+  - Improve conflict debugging with structured data when debug mode enabled
+  - Optimize merge processing with better error handling and validation
+
 ## 1.3.0
 
 ### Minor Changes
