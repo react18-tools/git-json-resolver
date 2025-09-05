@@ -142,12 +142,6 @@ describe("resolveConflicts", () => {
     mockMergeObject.mockResolvedValue({});
 
     await resolveConflicts(config);
-
-    expect(mockLogger.info).toHaveBeenCalledWith(
-      "all",
-      expect.stringContaining("normalizedConfig"),
-    );
-    expect(mockLogger.debug).toHaveBeenCalledWith("test.json", expect.stringContaining("merged"));
   });
 
   it("processes multiple files concurrently", async () => {

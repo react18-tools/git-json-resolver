@@ -7,7 +7,12 @@ vi.mock("./strategy-resolver", () => ({
   resolveStrategies: vi.fn(() => ["ours", "theirs", "merge"]),
 }));
 import { resolveStrategies } from "./strategy-resolver";
-import { StrategyStatus } from "./types";
+import {
+  StrategyStatus_OK,
+  StrategyStatus_CONTINUE,
+  StrategyStatus_FAIL,
+  StrategyStatus_SKIP,
+} from "./utils";
 
 const makeCtx = (): MergeContext => ({
   config: { debug: false } as any,
@@ -17,10 +22,10 @@ const makeCtx = (): MergeContext => ({
 
 describe("statusToString", () => {
   it("maps known statuses", () => {
-    expect(statusToString(StrategyStatus.OK)).toBe("OK");
-    expect(statusToString(StrategyStatus.CONTINUE)).toBe("CONTINUE");
-    expect(statusToString(StrategyStatus.FAIL)).toBe("FAIL");
-    expect(statusToString(StrategyStatus.SKIP)).toBe("SKIP");
+    expect(statusToString(StrategyStatus_OK)).toBe("OK");
+    expect(statusToString(StrategyStatus_CONTINUE)).toBe("CONTINUE");
+    expect(statusToString(StrategyStatus_FAIL)).toBe("FAIL");
+    expect(statusToString(StrategyStatus_SKIP)).toBe("SKIP");
     // @ts-expect-error -- testing
     expect(statusToString(999)).toMatch(/UNKNOWN/);
   });
@@ -32,17 +37,17 @@ describe("BuiltInStrategies", () => {
 
   it("ours returns ours", () => {
     const r = BuiltInStrategies.ours(args);
-    expect(r).toEqual({ status: StrategyStatus.OK, value: 1 });
+    expect(r).toEqual({ status: StrategyStatus_OK, value: 1 });
   });
 
   it("theirs returns theirs", () => {
     const r = BuiltInStrategies.theirs(args);
-    expect(r).toEqual({ status: StrategyStatus.OK, value: 2 });
+    expect(r).toEqual({ status: StrategyStatus_OK, value: 2 });
   });
 
   it("base returns base", () => {
     const r = BuiltInStrategies.base(args);
-    expect(r).toEqual({ status: StrategyStatus.OK, value: 0 });
+    expect(r).toEqual({ status: StrategyStatus_OK, value: 0 });
   });
 
   it("drop returns DROP symbol", () => {
@@ -53,7 +58,7 @@ describe("BuiltInStrategies", () => {
 
   it("skip returns SKIP", () => {
     const r = BuiltInStrategies.skip(args);
-    expect(r.status).toBe(StrategyStatus.SKIP);
+    expect(r.status).toBe(StrategyStatus_SKIP);
     // @ts-expect-error -- will fix later
     expect(r.reason).toMatch(/Skip/);
   });
@@ -70,7 +75,7 @@ describe("BuiltInStrategies", () => {
       BuiltInStrategies["non-empty"]({ ...args, ours: "", theirs: "", base: "base" }).value,
     ).toBe("base");
     expect(BuiltInStrategies["non-empty"]({ ...args, ours: "", theirs: "", base: "" }).status).toBe(
-      StrategyStatus.CONTINUE,
+      StrategyStatus_CONTINUE,
     );
   });
 
@@ -93,14 +98,14 @@ describe("BuiltInStrategies", () => {
       path: "obj",
     };
     const r = await BuiltInStrategies.merge(objArgs);
-    expect(r.status).toBe(StrategyStatus.OK);
+    expect(r.status).toBe(StrategyStatus_OK);
     // @ts-expect-error -- will fix later
     expect(r.value).toEqual({ a: 1 });
   });
 
   it("merge unmergeable types → CONTINUE", async () => {
     const r = await BuiltInStrategies.merge({ ...args, ours: 1, theirs: "str" });
-    expect(r.status).toBe(StrategyStatus.CONTINUE);
+    expect(r.status).toBe(StrategyStatus_CONTINUE);
   });
 });
 

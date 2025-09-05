@@ -1,7 +1,13 @@
 import { NormalizedConfig } from "./normalizer";
 import { resolveStrategies } from "./strategy-resolver";
 import { StrategyFn, StrategyResult, StrategyStatus } from "./types";
-import { DROP } from "./utils";
+import {
+  DROP,
+  StrategyStatus_OK,
+  StrategyStatus_CONTINUE,
+  StrategyStatus_FAIL,
+  StrategyStatus_SKIP,
+} from "./utils";
 
 /** Conflict entry (minimal by default). */
 export interface Conflict {
@@ -23,13 +29,13 @@ export interface MergeResult {
 /** Helper: stringify status for logs. */
 export const statusToString = (s: StrategyStatus): string => {
   switch (s) {
-    case StrategyStatus.OK:
+    case StrategyStatus_OK:
       return "OK";
-    case StrategyStatus.CONTINUE:
+    case StrategyStatus_CONTINUE:
       return "CONTINUE";
-    case StrategyStatus.FAIL:
+    case StrategyStatus_FAIL:
       return "FAIL";
-    case StrategyStatus.SKIP:
+    case StrategyStatus_SKIP:
       return "SKIP";
     default:
       return `UNKNOWN(${s})`;
@@ -62,40 +68,40 @@ const isPlainObject = (val: unknown): val is Record<string, unknown> =>
 /** Built-in strategies. */
 export const BuiltInStrategies = {
   ours: <TContext>({ ours }: MergeArgs<TContext>): StrategyResult => ({
-    status: StrategyStatus.OK,
+    status: StrategyStatus_OK,
     value: ours,
   }),
 
   theirs: <TContext>({ theirs }: MergeArgs<TContext>): StrategyResult => ({
-    status: StrategyStatus.OK,
+    status: StrategyStatus_OK,
     value: theirs,
   }),
 
   base: <TContext>({ base }: MergeArgs<TContext>): StrategyResult => ({
-    status: StrategyStatus.OK,
+    status: StrategyStatus_OK,
     value: base,
   }),
 
   drop: <TContext>(_skipped: MergeArgs<TContext>): StrategyResult => ({
-    status: StrategyStatus.OK,
+    status: StrategyStatus_OK,
     value: DROP,
   }),
 
   skip: <TContext>({ path }: MergeArgs<TContext>): StrategyResult => ({
-    status: StrategyStatus.SKIP,
+    status: StrategyStatus_SKIP,
     reason: `Skip strategy applied at ${path}`,
   }),
 
   "non-empty": <TContext>({ ours, theirs, base }: MergeArgs<TContext>): StrategyResult => {
-    if (ours != null && ours !== "") return { status: StrategyStatus.OK, value: ours };
-    if (theirs != null && theirs !== "") return { status: StrategyStatus.OK, value: theirs };
-    if (base != null && base !== "") return { status: StrategyStatus.OK, value: base };
-    return { status: StrategyStatus.CONTINUE };
+    if (ours != null && ours !== "") return { status: StrategyStatus_OK, value: ours };
+    if (theirs != null && theirs !== "") return { status: StrategyStatus_OK, value: theirs };
+    if (base != null && base !== "") return { status: StrategyStatus_OK, value: base };
+    return { status: StrategyStatus_CONTINUE };
   },
 
   update: <TContext>({ ours, theirs }: MergeArgs<TContext>): StrategyResult => {
-    if (ours !== undefined) return { status: StrategyStatus.OK, value: theirs };
-    return { status: StrategyStatus.OK, value: DROP };
+    if (ours !== undefined) return { status: StrategyStatus_OK, value: theirs };
+    return { status: StrategyStatus_OK, value: DROP };
   },
 
   merge: async <TContext>(args: MergeArgs<TContext>): Promise<StrategyResult> => {
@@ -116,24 +122,24 @@ export const BuiltInStrategies = {
           conflicts,
         });
       }
-      return { status: StrategyStatus.OK, value: result };
+      return { status: StrategyStatus_OK, value: result };
     }
 
-    return { status: StrategyStatus.CONTINUE, reason: "Unmergeable type" };
+    return { status: StrategyStatus_CONTINUE, reason: "Unmergeable type" };
   },
 
   concat: <TContext>({ ours, theirs, path }: MergeArgs<TContext>): StrategyResult => {
     if (Array.isArray(ours) && Array.isArray(theirs)) {
-      return { status: StrategyStatus.OK, value: [...ours, ...theirs] };
+      return { status: StrategyStatus_OK, value: [...ours, ...theirs] };
     }
-    return { status: StrategyStatus.CONTINUE, reason: `Cannot concat at ${path}` };
+    return { status: StrategyStatus_CONTINUE, reason: `Cannot concat at ${path}` };
   },
 
   unique: <TContext>({ ours, theirs, path }: MergeArgs<TContext>): StrategyResult => {
     if (Array.isArray(ours) && Array.isArray(theirs)) {
-      return { status: StrategyStatus.OK, value: [...new Set([...ours, ...theirs])] };
+      return { status: StrategyStatus_OK, value: [...new Set([...ours, ...theirs])] };
     }
-    return { status: StrategyStatus.CONTINUE, reason: `Cannot concat at ${path}` };
+    return { status: StrategyStatus_CONTINUE, reason: `Cannot concat at ${path}` };
   },
 } as const;
 
@@ -185,14 +191,14 @@ export const mergeObject = async <TContext>({
     });
 
     switch (result.status) {
-      case StrategyStatus.OK:
+      case StrategyStatus_OK:
         return result.value;
-      case StrategyStatus.CONTINUE:
+      case StrategyStatus_CONTINUE:
         continue;
-      case StrategyStatus.SKIP:
+      case StrategyStatus_SKIP:
         conflicts.push({ path, reason: result.reason });
         return undefined;
-      case StrategyStatus.FAIL:
+      case StrategyStatus_FAIL:
         conflicts.push({ path, reason: result.reason });
         throw new Error(`Merge failed at ${path}: ${result.reason}`);
     }

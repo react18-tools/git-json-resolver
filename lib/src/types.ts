@@ -1,4 +1,10 @@
 import { Matcher } from "./matcher";
+import {
+  StrategyStatus_OK,
+  StrategyStatus_CONTINUE,
+  StrategyStatus_FAIL,
+  StrategyStatus_SKIP,
+} from "./utils";
 
 /**
  * Built-in merge strategies.
@@ -29,31 +35,20 @@ export type InbuiltMergeStrategies =
   | "concat"
   | "unique";
 
-/**
- * Status codes returned by strategy functions.
- */
-export enum StrategyStatus {
-  /** Strategy successfully produced a value. */
-  OK = 0,
-
-  /** Strategy deferred — let other strategies continue. */
-  CONTINUE = 1,
-
-  /** Strategy failed — unrecoverable error, stop processing. */
-  FAIL = 2,
-
-  /** Strategy explicitly skipped this field. */
-  SKIP = 3,
-}
+export type StrategyStatus =
+  | typeof StrategyStatus_OK
+  | typeof StrategyStatus_CONTINUE
+  | typeof StrategyStatus_FAIL
+  | typeof StrategyStatus_SKIP;
 
 /**
  * Union type representing the outcome of a strategy function.
  */
 export type StrategyResult =
-  | { status: StrategyStatus.OK; value: unknown }
-  | { status: StrategyStatus.CONTINUE; reason?: string }
-  | { status: StrategyStatus.SKIP; reason: string }
-  | { status: StrategyStatus.FAIL; reason: string };
+  | { status: typeof StrategyStatus_OK; value: unknown }
+  | { status: typeof StrategyStatus_CONTINUE; reason?: string }
+  | { status: typeof StrategyStatus_SKIP; reason: string }
+  | { status: typeof StrategyStatus_FAIL; reason: string };
 
 /**
  * Strategy function signature.
@@ -108,6 +103,29 @@ export interface PluginStrategies {}
 export type AllStrategies = InbuiltMergeStrategies | keyof PluginStrategies;
 
 /**
+ * Interface for plugin-specific configuration.
+ * Plugins augment this interface with their own config types.
+ *
+ * Example plugin declaration:
+ * ```ts
+ * declare module "git-json-resolver" {
+ *   interface PluginConfigs {
+ *     "git-json-resolver-semver": {
+ *       strict?: boolean;
+ *       fallback?: "ours" | "theirs" | "continue" | "error";
+ *       preferValid?: boolean;
+ *       preferRange?: boolean;
+ *       workspacePattern?: string;
+ *     };
+ *   }
+ * }
+ * ```
+ */
+export interface PluginConfigs {
+  [pluginName: string]: Record<string, unknown>;
+}
+
+/**
  * Rule tree: maps field glob patterns → strategy names or nested rule trees.
  *
  * - Keys: field glob patterns (matcher configurable)
@@ -160,15 +178,7 @@ export interface StrategyPlugin<TContext = unknown> {
   strategies: Record<string, StrategyFn<TContext>>;
 
   /** Optional plugin initialization with config. */
-  init?(config: PluginConfig): void | Promise<void>;
-}
-
-/**
- * Plugin configuration passed to plugin.init().
- */
-export interface PluginConfig {
-  /** Custom plugin-specific configuration. */
-  [key: string]: unknown;
+  init?(config: PluginConfigs[keyof PluginConfigs]): void | Promise<void>;
 }
 
 /**
@@ -240,7 +250,7 @@ export interface Config<T extends string = AllStrategies, TContext = unknown> {
   plugins?: string[];
 
   /** Plugin-specific configuration passed to plugin.init(). */
-  pluginConfig?: Record<string, PluginConfig>;
+  pluginConfig?: Partial<PluginConfigs>;
 }
 
 export type { Matcher };

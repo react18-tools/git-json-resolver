@@ -10,7 +10,7 @@ export * from "./types";
 export const resolveConflicts = async <T extends string = InbuiltMergeStrategies>(
   config: Config<T>,
 ) => {
-  const globalLogger = await createLogger(config.loggerConfig);
+  const globalLogger = await createLogger(config.loggerConfig, config.debug);
   const normalizedConfig: NormalizedConfig = await normalizeConfig<T>(config);
   const filesEntries = await listMatchingFiles(normalizedConfig);
   await Promise.all(

@@ -96,7 +96,7 @@ export const resolveGitMergeFiles = async <T extends string = InbuiltMergeStrate
   theirsPath: string,
   config: Config<T> = {} as Config<T>,
 ) => {
-  const globalLogger = await createLogger(config.loggerConfig);
+  const globalLogger = await createLogger(config.loggerConfig, config.debug);
   const normalizedConfig: NormalizedConfig = await normalizeConfig<T>(config);
 
   if (normalizedConfig.debug) {

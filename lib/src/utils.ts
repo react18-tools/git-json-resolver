@@ -12,6 +12,15 @@ export const DROP = Symbol("MERGE_DROP");
 export const DEFAULT_BACKUP_DIR = ".merge-backups";
 
 /**
+ * Status codes returned by strategy functions.
+ * Using individual constants for optimal bundle size.
+ */
+export const StrategyStatus_OK = 0 as const;
+export const StrategyStatus_CONTINUE = 1 as const;
+export const StrategyStatus_FAIL = 2 as const;
+export const StrategyStatus_SKIP = 3 as const;
+
+/**
  * Checks whether the given file contains Git merge conflict markers.
  *
  * @param content - File content to check.

@@ -63,11 +63,14 @@ describe("createLogger", async () => {
   });
 
   it("writes to single file when singleFile is true", async () => {
-    const logger = await createLogger({
-      mode: "memory",
-      logDir: TEST_LOG_DIR,
-      singleFile: true,
-    });
+    const logger = await createLogger(
+      {
+        mode: "memory",
+        logDir: TEST_LOG_DIR,
+        singleFile: true,
+      },
+      true,
+    );
 
     logger.info("file1", "message1");
     logger.info("file2", "message2");
@@ -89,7 +92,7 @@ describe("createLogger", async () => {
       logDir: TEST_LOG_DIR,
     });
 
-    logger.info("test", "stream message");
+    logger.error("test", "stream message");
     await logger.flush();
 
     const files = fs.readdirSync(TEST_LOG_DIR);
