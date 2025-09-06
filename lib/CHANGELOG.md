@@ -1,5 +1,11 @@
 # git-json-resolver
 
+## 1.3.3
+
+### Patch Changes
+
+- 2d85037: Improve logging
+
 ## 1.3.2
 
 ### Patch Changes
