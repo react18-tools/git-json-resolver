@@ -1,5 +1,15 @@
 # git-json-resolver
 
+## 1.3.5
+
+### Patch Changes
+
+- 26cbaf0: Improve CLI functionality and plugin system
+  - Enhanced CLI test coverage with Git merge mode and edge case handling
+  - Added support for function-based plugins with configuration initialization
+  - Fixed logger type in StrategyFn interface
+  - Updated TypeDoc configuration to exclude all test files
+
 ## 1.3.4
 
 ### Patch Changes
