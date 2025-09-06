@@ -106,6 +106,26 @@ describe("BuiltInStrategies", () => {
     expect(BuiltInStrategies.update({ ...args, ours: undefined, theirs: "y" }).value).toBe(DROP);
   });
 
+  it("concat arrays", () => {
+    const r = BuiltInStrategies.concat({ ...args, ours: [1], theirs: [2] });
+    expect(r).toEqual({ status: StrategyStatus_OK, value: [1, 2] });
+  });
+
+  it("concat non-arrays → CONTINUE", () => {
+    const r = BuiltInStrategies.concat({ ...args, ours: "a", theirs: "b" });
+    expect(r.status).toBe(StrategyStatus_CONTINUE);
+  });
+
+  it("unique arrays", () => {
+    const r = BuiltInStrategies.unique({ ...args, ours: [1, 2], theirs: [2, 3] });
+    expect(r).toEqual({ status: StrategyStatus_OK, value: [1, 2, 3] });
+  });
+
+  it("unique non-arrays → CONTINUE", () => {
+    const r = BuiltInStrategies.unique({ ...args, ours: "a", theirs: "b" });
+    expect(r.status).toBe(StrategyStatus_CONTINUE);
+  });
+
   it("merge plain objects recurses", async () => {
     const objArgs = {
       ...args,
@@ -175,13 +195,13 @@ describe("mergeObject", () => {
     expect(conflicts[0].reason).toMatch(/Skip/);
   });
 
-  it.skip("adds conflict if all CONTINUE", async () => {
-    (resolveStrategies as any).mockReturnValueOnce(["non-empty"]);
+  it("adds conflict if all CONTINUE", async () => {
+    (resolveStrategies as any).mockReturnValueOnce(["concat"]);
     const ctx = makeCtx();
     const conflicts: Conflict[] = [];
     const v = await mergeObject({
-      ours: "",
-      theirs: "",
+      ours: "a",
+      theirs: "b",
       base: "",
       path: "p",
       ctx,
@@ -192,6 +212,66 @@ describe("mergeObject", () => {
     expect(conflicts[0]).toMatchObject({
       path: "p",
       reason: expect.stringContaining("All strategies failed"),
+    });
+  });
+
+  it("uses custom strategy from ctx.strategies", async () => {
+    (resolveStrategies as any).mockReturnValueOnce(["custom"]);
+    const ctx = makeCtx();
+    ctx.strategies.custom = vi.fn(() => ({ status: StrategyStatus_OK, value: "custom-result" }));
+    const conflicts: Conflict[] = [];
+    const v = await mergeObject({
+      ours: "a",
+      theirs: "b",
+      path: "p",
+      ctx,
+      conflicts,
+      logger: mockLogger,
+    });
+    expect(v).toBe("custom-result");
+    expect(ctx.strategies.custom).toHaveBeenCalled();
+  });
+
+  it("throws on FAIL status", async () => {
+    (resolveStrategies as any).mockReturnValueOnce(["fail-strategy"]);
+    const ctx = makeCtx();
+    ctx.strategies["fail-strategy"] = vi.fn(() => ({
+      status: StrategyStatus_FAIL,
+      reason: "test fail",
+    }));
+    const conflicts: Conflict[] = [];
+    await expect(
+      mergeObject({
+        ours: "a",
+        theirs: "b",
+        path: "p",
+        ctx,
+        conflicts,
+        logger: mockLogger,
+      }),
+    ).rejects.toThrow("Merge failed at p: test fail");
+    expect(conflicts[0].reason).toBe("test fail");
+  });
+
+  it("enriches conflict with debug info when debug enabled", async () => {
+    (resolveStrategies as any).mockReturnValueOnce(["concat"]);
+    const ctx = makeCtx();
+    ctx.config.debug = true;
+    const conflicts: Conflict[] = [];
+    await mergeObject({
+      ours: "a",
+      theirs: "b",
+      base: "c",
+      path: "p",
+      ctx,
+      conflicts,
+      logger: mockLogger,
+    });
+    expect(conflicts[0]).toMatchObject({
+      path: "p",
+      ours: "a",
+      theirs: "b",
+      base: "c",
     });
   });
 });
