@@ -1,5 +1,12 @@
 # @repo/shared
 
+## 0.0.19
+
+### Patch Changes
+
+- Updated dependencies [97bc259]
+  - git-json-resolver@1.3.4
+
 ## 0.0.18
 
 ### Patch Changes
