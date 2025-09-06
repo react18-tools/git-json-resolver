@@ -49,6 +49,7 @@ export const processMerge = async <T extends string = InbuiltMergeStrategies>({
         strategies: normalizedConfig.customStrategies ?? {},
         _strategyCache,
       },
+      logger,
     }),
     backupFile(filePath, config.backupDir),
   ]);
@@ -99,12 +100,10 @@ export const resolveGitMergeFiles = async <T extends string = InbuiltMergeStrate
   const globalLogger = await createLogger(config.loggerConfig, config.debug);
   const normalizedConfig: NormalizedConfig = await normalizeConfig<T>(config);
 
-  if (normalizedConfig.debug) {
-    globalLogger.info(
-      "git-merge",
-      `Merging files: ours=${oursPath}, base=${basePath}, theirs=${theirsPath}`,
-    );
-  }
+  globalLogger.debug(
+    "git-merge",
+    `Merging files: ours=${oursPath}, base=${basePath}, theirs=${theirsPath}`,
+  );
 
   const [oursContent, baseContent, theirsContent] = await Promise.all([
     fs.readFile(oursPath, "utf8"),

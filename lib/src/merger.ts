@@ -1,3 +1,4 @@
+import { createLogger } from "./logger";
 import { NormalizedConfig } from "./normalizer";
 import { resolveStrategies } from "./strategy-resolver";
 import { StrategyFn, StrategyResult, StrategyStatus } from "./types";
@@ -59,6 +60,7 @@ interface MergeArgs<TContext> {
   filePath?: string;
   ctx: MergeContext<TContext>;
   conflicts: Conflict[];
+  logger: Awaited<ReturnType<typeof createLogger>>;
 }
 
 /** Utility: plain-object check. */
@@ -105,7 +107,7 @@ export const BuiltInStrategies = {
   },
 
   merge: async <TContext>(args: MergeArgs<TContext>): Promise<StrategyResult> => {
-    const { ours, theirs, base, path, filePath, ctx, conflicts } = args;
+    const { ours, theirs, base, path, filePath, ctx, conflicts, logger } = args;
 
     // Plain objects
     if (isPlainObject(ours) && isPlainObject(theirs)) {
@@ -120,6 +122,7 @@ export const BuiltInStrategies = {
           filePath,
           ctx,
           conflicts,
+          logger,
         });
       }
       return { status: StrategyStatus_OK, value: result };
@@ -164,6 +167,7 @@ export const mergeObject = async <TContext>({
   filePath,
   ctx,
   conflicts,
+  logger,
 }: MergeArgs<TContext>): Promise<unknown> => {
   if (ours === theirs) return ours;
 
@@ -174,6 +178,8 @@ export const mergeObject = async <TContext>({
     strategies = resolveStrategies(path, ctx.config);
     ctx._strategyCache.set(path, strategies);
   }
+
+  logger.debug(filePath ?? "all", `path: ${path}, strategies: ${strategies.join(", ") || "none"}`);
 
   for (const strategy of strategies) {
     const fn = (BuiltInStrategies as any)[strategy] ?? ctx.strategies[strategy];
@@ -188,6 +194,7 @@ export const mergeObject = async <TContext>({
       filePath,
       ctx,
       conflicts,
+      logger,
     });
 
     switch (result.status) {
