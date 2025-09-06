@@ -12,7 +12,7 @@ nav_order: 8
 
 > **processMerge**\<`T`\>(`__namedParameters`: \{ `autoStage?`: `boolean`; `base?`: `unknown`; `config`: [`Config`](types/README.md#config)\<`T`\>; `filePath`: `string`; `format`: `string`; `logger`: \{ `debug`: (`fileId`: `string`, `msg`: `string`) => `void`; `error`: (`fileId`: `string`, `msg`: `string`) => `void`; `flush`: () => [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>; `info`: (`fileId`: `string`, `msg`: `string`) => `void`; `warn`: (`fileId`: `string`, `msg`: `string`) => `void`; \}; `normalizedConfig`: [`NormalizedConfig`](normalizer.md#normalizedconfig); `ours`: `unknown`; `theirs`: `unknown`; \}): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<\{ `conflicts`: [`Conflict`](merger/README.md#conflict)[]; `success`: `boolean`; \}\>
 
-Defined in: [merge-processor.ts:17](https://github.com/react18-tools/git-json-resolver/blob/bb35490ece54a122e412f67ef51d4b2dbeac2ebb/lib/src/merge-processor.ts#L17)
+Defined in: [merge-processor.ts:17](https://github.com/react18-tools/git-json-resolver/blob/d61d9369fb47648a20fc0be0040b2aaa41b03a8c/lib/src/merge-processor.ts#L17)
 
 Common merge logic for processing a single file with ours/theirs/base data
 
@@ -92,7 +92,7 @@ Common merge logic for processing a single file with ours/theirs/base data
 
 > **resolveGitMergeFiles**\<`T`\>(`oursPath`: `string`, `basePath`: `string`, `theirsPath`: `string`, `config`: [`Config`](types/README.md#config)\<`T`\>): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`never`\>
 
-Defined in: [merge-processor.ts:92](https://github.com/react18-tools/git-json-resolver/blob/bb35490ece54a122e412f67ef51d4b2dbeac2ebb/lib/src/merge-processor.ts#L92)
+Defined in: [merge-processor.ts:92](https://github.com/react18-tools/git-json-resolver/blob/d61d9369fb47648a20fc0be0040b2aaa41b03a8c/lib/src/merge-processor.ts#L92)
 
 Resolves Git merge conflicts for a single file using the three-way merge approach.
 This function is designed to work as a Git merge driver.
