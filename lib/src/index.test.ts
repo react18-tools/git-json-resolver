@@ -85,6 +85,7 @@ describe("resolveConflicts", () => {
         strategies: {},
         _strategyCache: expect.any(Map),
       }),
+      logger: mockLogger,
     });
     expect(mockBackupFile).toHaveBeenCalledWith("test.json", undefined);
     expect(mockSerialize).toHaveBeenCalledWith("json", mergedResult);

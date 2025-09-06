@@ -54,9 +54,7 @@ export const processMerge = async <T extends string = InbuiltMergeStrategies>({
     backupFile(filePath, config.backupDir),
   ]);
 
-  if (normalizedConfig.debug) {
-    logger.debug(filePath, JSON.stringify({ merged, conflicts }, null, 2));
-  }
+  logger.debug(filePath, JSON.stringify({ merged, conflicts }, null, 2));
 
   if (conflicts.length === 0) {
     const serialized = await serialize(format, merged);

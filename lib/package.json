@@ -87,6 +87,7 @@
     "diff",
     "ours",
     "theirs",
+    "base",
     "package.json",
     "config",
     "turborepo",

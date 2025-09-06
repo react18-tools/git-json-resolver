@@ -79,6 +79,7 @@ describe("processMerge", () => {
         strategies: {},
         _strategyCache: expect.any(Map),
       }),
+      logger: mockLogger,
     });
     expect(mockBackupFile).toHaveBeenCalledWith("test.json", undefined);
     expect(mockSerialize).toHaveBeenCalledWith("json", mergedResult);
@@ -253,7 +254,7 @@ describe("resolveGitMergeFiles", () => {
 
     await resolveGitMergeFiles("ours.json", "base.json", "theirs.json", { debug: true });
 
-    expect(mockLogger.info).toHaveBeenCalledWith(
+    expect(mockLogger.debug).toHaveBeenCalledWith(
       "git-merge",
       "Merging files: ours=ours.json, base=base.json, theirs=theirs.json",
     );
