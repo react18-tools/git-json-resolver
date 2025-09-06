@@ -3,7 +3,7 @@ module.exports = {
   tsconfig: "tsconfig.docs.json",
   name: "Git Json Resolver",
   entryPoints: ["./lib/src"],
-  exclude: ["**/*.test.tsx", "**/declaration.d.ts"],
+  exclude: ["**/*.test.*", "**/declaration.d.ts"],
   entryPointStrategy: "Expand",
   out: "./docs",
   commentStyle: "all",

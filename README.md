@@ -349,7 +349,7 @@ export const strategies = {
   "timestamp-latest": timestampLatest,
 };
 
-// Plugin interface for dynamic loading
+// Plugin interface for dynamic loading (object-based)
 const plugin: StrategyPlugin = {
   strategies,
   init: async config => {
@@ -358,6 +358,19 @@ const plugin: StrategyPlugin = {
 };
 
 export default plugin;
+
+// Alternative: Function-based plugin (NEW)
+export default async function createPlugin(config?: any): Promise<StrategyPlugin> {
+  // Initialize with config if needed
+  console.log("Plugin initialized with:", config);
+  
+  return {
+    strategies,
+    init: async (initConfig) => {
+      // Additional initialization if needed
+    },
+  };
+}
 ```
 
 ### Custom Strategies (Inline)

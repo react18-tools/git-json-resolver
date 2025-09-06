@@ -76,7 +76,7 @@ export type StrategyFn<TContext = unknown> = (args: {
   context?: TContext;
 
   /** logger */
-  logger: ReturnType<typeof createLogger>;
+  logger: Awaited<ReturnType<typeof createLogger>>;
 }) => StrategyResult | Promise<StrategyResult>;
 
 /**

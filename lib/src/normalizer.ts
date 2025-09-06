@@ -231,15 +231,18 @@ const loadPluginStrategies = async (
     try {
       // Dynamic import for plugin
       const pluginModule = await import(pluginName);
-      const plugin: StrategyPlugin = pluginModule.default || pluginModule;
+      const pluginOrFn: StrategyPlugin = pluginModule.default || pluginModule;
+
+      const config = pluginConfig?.[pluginName];
+      const plugin = pluginOrFn instanceof Function ? await pluginOrFn(config) : pluginOrFn;
 
       if (!plugin.strategies) {
         throw new Error(`Plugin "${pluginName}" does not export strategies`);
       }
 
       // Initialize plugin if it has init method
-      if (plugin.init && pluginConfig?.[pluginName]) {
-        await plugin.init(pluginConfig[pluginName]);
+      if (plugin.init) {
+        await plugin.init(config);
       }
 
       // Add plugin strategies
