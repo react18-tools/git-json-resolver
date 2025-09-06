@@ -56,12 +56,18 @@ export const listMatchingFiles = async ({
   debug,
   backupDir = DEFAULT_BACKUP_DIR,
 }: CollectFilesOptions): Promise<FileEntry[]> => {
+  // delete backupDir during initialization
+  try {
+    await fs.rm(backupDir, { recursive: true, force: true });
+  } catch {
+    // ignore
+  }
   for (const p of [...include, ...exclude]) {
     if (p.startsWith("!")) throw new Error(`Negation not allowed in include/exclude: ${p}`);
     if (p.includes("\\")) console.warn(`Use '/' as path separator: ${p}`);
   }
 
-  exclude.push(backupDir);
+  exclude.push(`${backupDir}/**`);
 
   const fileMatcher = (filepath: string) => {
     const posixPath = filepath.replace(/\\/g, "/");
