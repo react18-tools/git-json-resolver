@@ -11,7 +11,7 @@ nav_order: 25
 
 ### MergeArgs\<TContext\>
 
-Defined in: [merger.ts:48](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/merger.ts#L48)
+Defined in: [merger.ts:56](https://github.com/react18-tools/git-json-resolver/blob/39336b33e116055265cb78e2e7ef769cc52bdba1/lib/src/merger.ts#L56)
 
 Internal args passed to strategies.
 
@@ -27,40 +27,126 @@ Internal args passed to strategies.
 
 > `optional` **base**: `unknown`
 
-Defined in: [merger.ts:51](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/merger.ts#L51)
+Defined in: [merger.ts:59](https://github.com/react18-tools/git-json-resolver/blob/39336b33e116055265cb78e2e7ef769cc52bdba1/lib/src/merger.ts#L59)
 
 ##### conflicts
 
 > **conflicts**: [`Conflict`](README.md#conflict)[]
 
-Defined in: [merger.ts:55](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/merger.ts#L55)
+Defined in: [merger.ts:63](https://github.com/react18-tools/git-json-resolver/blob/39336b33e116055265cb78e2e7ef769cc52bdba1/lib/src/merger.ts#L63)
 
 ##### ctx
 
 > **ctx**: [`MergeContext`](README.md#mergecontext)\<`TContext`\>
 
-Defined in: [merger.ts:54](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/merger.ts#L54)
+Defined in: [merger.ts:62](https://github.com/react18-tools/git-json-resolver/blob/39336b33e116055265cb78e2e7ef769cc52bdba1/lib/src/merger.ts#L62)
 
 ##### filePath?
 
 > `optional` **filePath**: `string`
 
-Defined in: [merger.ts:53](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/merger.ts#L53)
+Defined in: [merger.ts:61](https://github.com/react18-tools/git-json-resolver/blob/39336b33e116055265cb78e2e7ef769cc52bdba1/lib/src/merger.ts#L61)
+
+##### logger
+
+> **logger**: \{ `debug`: (`fileId`: `string`, `msg`: `string`) => `void`; `error`: (`fileId`: `string`, `msg`: `string`) => `void`; `flush`: () => [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>; `info`: (`fileId`: `string`, `msg`: `string`) => `void`; `warn`: (`fileId`: `string`, `msg`: `string`) => `void`; \}
+
+Defined in: [merger.ts:64](https://github.com/react18-tools/git-json-resolver/blob/39336b33e116055265cb78e2e7ef769cc52bdba1/lib/src/merger.ts#L64)
+
+###### debug()
+
+> **debug**: (`fileId`: `string`, `msg`: `string`) => `void`
+
+###### Parameters
+
+###### fileId
+
+`string`
+
+###### msg
+
+`string`
+
+###### Returns
+
+`void`
+
+###### error()
+
+> **error**: (`fileId`: `string`, `msg`: `string`) => `void`
+
+###### Parameters
+
+###### fileId
+
+`string`
+
+###### msg
+
+`string`
+
+###### Returns
+
+`void`
+
+###### flush()
+
+> **flush**: () => [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
+
+###### Returns
+
+[`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
+
+###### info()
+
+> **info**: (`fileId`: `string`, `msg`: `string`) => `void`
+
+###### Parameters
+
+###### fileId
+
+`string`
+
+###### msg
+
+`string`
+
+###### Returns
+
+`void`
+
+###### warn()
+
+> **warn**: (`fileId`: `string`, `msg`: `string`) => `void`
+
+###### Parameters
+
+###### fileId
+
+`string`
+
+###### msg
+
+`string`
+
+###### Returns
+
+`void`
 
 ##### ours
 
 > **ours**: `unknown`
 
-Defined in: [merger.ts:49](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/merger.ts#L49)
+Defined in: [merger.ts:57](https://github.com/react18-tools/git-json-resolver/blob/39336b33e116055265cb78e2e7ef769cc52bdba1/lib/src/merger.ts#L57)
 
 ##### path
 
 > **path**: `string`
 
-Defined in: [merger.ts:52](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/merger.ts#L52)
+Defined in: [merger.ts:60](https://github.com/react18-tools/git-json-resolver/blob/39336b33e116055265cb78e2e7ef769cc52bdba1/lib/src/merger.ts#L60)
 
 ##### theirs
 
 > **theirs**: `unknown`
 
-Defined in: [merger.ts:50](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/merger.ts#L50)
+Defined in: [merger.ts:58](https://github.com/react18-tools/git-json-resolver/blob/39336b33e116055265cb78e2e7ef769cc52bdba1/lib/src/merger.ts#L58)

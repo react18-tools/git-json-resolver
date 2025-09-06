@@ -10,7 +10,7 @@ nav_order: 13
 
 ### Matcher
 
-Defined in: [matcher.ts:13](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/matcher.ts#L13)
+Defined in: [matcher.ts:17](https://github.com/react18-tools/git-json-resolver/blob/39336b33e116055265cb78e2e7ef769cc52bdba1/lib/src/matcher.ts#L17)
 
 Matcher abstraction + adapters for micromatch/picomatch (optional).
 
@@ -29,7 +29,7 @@ Micromatch/Picomatch can be loaded at runtime as optional peers.
 
 > **isMatch**: (`str`: `string`, `patterns`: `string`[]) => `boolean`
 
-Defined in: [matcher.ts:17](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/matcher.ts#L17)
+Defined in: [matcher.ts:21](https://github.com/react18-tools/git-json-resolver/blob/39336b33e116055265cb78e2e7ef769cc52bdba1/lib/src/matcher.ts#L21)
 
 Returns true if `str` matches at least one of the provided glob `patterns`.
 
@@ -53,7 +53,7 @@ Returns true if `str` matches at least one of the provided glob `patterns`.
 
 > `const` **basicMatcher**: [`Matcher`](#matcher)
 
-Defined in: [matcher.ts:28](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/matcher.ts#L28)
+Defined in: [matcher.ts:32](https://github.com/react18-tools/git-json-resolver/blob/39336b33e116055265cb78e2e7ef769cc52bdba1/lib/src/matcher.ts#L32)
 
 Minimal homegrown matcher (default).
 Supports:
@@ -63,13 +63,33 @@ Supports:
 - Literal prefix/suffix like `prefix-*`, `*-suffix`
 - Backslash escaping for `*` and `.`
 
+---
+
+### ESCAPED_DOT
+
+> `const` **ESCAPED_DOT**: "\u0000" = `"\u0000"`
+
+Defined in: [matcher.ts:2](https://github.com/react18-tools/git-json-resolver/blob/39336b33e116055265cb78e2e7ef769cc52bdba1/lib/src/matcher.ts#L2)
+
+Escape sequence for literal dots in field names
+
+---
+
+### ESCAPED_SLASH
+
+> `const` **ESCAPED_SLASH**: "\u0001" = `"\u0001"`
+
+Defined in: [matcher.ts:4](https://github.com/react18-tools/git-json-resolver/blob/39336b33e116055265cb78e2e7ef769cc52bdba1/lib/src/matcher.ts#L4)
+
+Escape sequence for literal slashes in field names
+
 ## Functions
 
 ### loadMatcher()
 
 > **loadMatcher**(`name`: `"micromatch"` \| `"picomatch"`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Matcher`](#matcher)\>
 
-Defined in: [matcher.ts:41](https://github.com/react18-tools/git-json-resolver/blob/d66fea6d97a1504766ed9007635bb4e3c057eb5c/lib/src/matcher.ts#L41)
+Defined in: [matcher.ts:45](https://github.com/react18-tools/git-json-resolver/blob/39336b33e116055265cb78e2e7ef769cc52bdba1/lib/src/matcher.ts#L45)
 
 Attempts to load a named matcher adapter.
 
