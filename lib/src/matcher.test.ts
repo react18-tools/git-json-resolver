@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { basicMatcher, loadMatcher } from "./matcher";
+import { basicMatcher, ESCAPED_DOT, loadMatcher, ESCAPED_SLASH } from "./matcher";
 
 for (const matcherName of ["basicMatcher", "micromatch", "picomatch"] as const) {
   describe(matcherName, async () => {
@@ -68,6 +68,20 @@ for (const matcherName of ["basicMatcher", "micromatch", "picomatch"] as const) 
       expect(matcher.isMatch("src", ["!src"])).toBe(false);
       expect(matcher.isMatch("other", ["!src"])).toBe(true);
     });
+
+    it("handles object fields with dots and slashes", () => {
+      // Test scoped package names like @m2d/core
+      expect(matcher.isMatch(`deps.@m2d${ESCAPED_SLASH}core`, ["deps.*"])).toBe(true);
+      expect(matcher.isMatch(`deps.@m2d${ESCAPED_SLASH}core`, ["deps.@m2d\\/core"])).toBe(true);
+
+      // Test field names with both dots and slashes
+      expect(
+        matcher.isMatch(
+          `urls.https:${ESCAPED_SLASH}${ESCAPED_SLASH}api${ESCAPED_DOT}example${ESCAPED_DOT}com${ESCAPED_SLASH}v1`,
+          ["urls.*"],
+        ),
+      ).toBe(true);
+    });
   });
 }
 
@@ -86,5 +100,26 @@ describe("loadMatcher", () => {
 
   it("throws on unknown matcher", async () => {
     await expect(() => loadMatcher("invalid" as any)).rejects.toThrow(/Unknown matcher/);
+  });
+
+  it("handles complex field names consistently across matchers", async () => {
+    const testCases = [
+      { field: `deps.@m2d${ESCAPED_SLASH}core`, pattern: "deps.*", expected: true },
+      {
+        field: `urls.https:${ESCAPED_SLASH}${ESCAPED_SLASH}api${ESCAPED_DOT}example${ESCAPED_DOT}com${ESCAPED_SLASH}v1`,
+        pattern: "urls.*",
+        expected: true,
+      },
+    ];
+
+    for (const { field, pattern, expected } of testCases) {
+      expect(basicMatcher.isMatch(field, [pattern])).toBe(expected);
+
+      const mm = await loadMatcher("micromatch");
+      expect(mm.isMatch(field, [pattern])).toBe(expected);
+
+      const pm = await loadMatcher("picomatch");
+      expect(pm.isMatch(field, [pattern])).toBe(expected);
+    }
   });
 });

@@ -1,4 +1,5 @@
 import { createLogger } from "./logger";
+import { ESCAPED_DOT, ESCAPED_SLASH } from "./matcher";
 import { NormalizedConfig } from "./normalizer";
 import { resolveStrategies } from "./strategy-resolver";
 import { StrategyFn, StrategyResult, StrategyStatus } from "./types";
@@ -114,11 +115,12 @@ export const BuiltInStrategies = {
       const allKeys = new Set([...Object.keys(ours), ...Object.keys(theirs)]);
       const result: Record<string, unknown> = {};
       for (const key of allKeys) {
+        const escapedKey = key.replace(/\./g, ESCAPED_DOT).replace(/\\/g, ESCAPED_SLASH);
         result[key] = await mergeObject({
           ours: (ours as Record<string, unknown>)[key],
           theirs: (theirs as Record<string, unknown>)[key],
           base: isPlainObject(base) ? (base as Record<string, unknown>)[key] : undefined,
-          path: path ? `${path}.${key}` : key,
+          path: path ? `${path}.${escapedKey}` : escapedKey,
           filePath,
           ctx,
           conflicts,

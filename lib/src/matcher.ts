@@ -1,3 +1,8 @@
+/** Escape sequence for literal dots in field names */
+export const ESCAPED_DOT = "\u0000";
+/** Escape sequence for literal slashes in field names */
+export const ESCAPED_SLASH = "\u0001";
+
 /**
  * Matcher abstraction + adapters for micromatch/picomatch (optional).
  *
@@ -9,7 +14,6 @@
  *
  * Micromatch/Picomatch can be loaded at runtime as optional peers.
  */
-
 export interface Matcher {
   /**
    * Returns true if `str` matches at least one of the provided glob `patterns`.
@@ -40,7 +44,7 @@ export const basicMatcher: Matcher = {
 
 export const loadMatcher = async (name: "micromatch" | "picomatch"): Promise<Matcher> => {
   if (name === "micromatch") {
-    let micromatch: any;
+    let micromatch;
     try {
       micromatch = await import("micromatch");
     } catch {
@@ -63,7 +67,7 @@ export const loadMatcher = async (name: "micromatch" | "picomatch"): Promise<Mat
   }
 
   if (name === "picomatch") {
-    let picomatch: any;
+    let picomatch;
     try {
       picomatch = (await import("picomatch")).default;
     } catch {
@@ -95,27 +99,13 @@ export const loadMatcher = async (name: "micromatch" | "picomatch"): Promise<Mat
  * Convert a pattern/field path into internal form (`/` separated).
  * - Unescaped `.` → `/`
  * - Unescaped `/` → `/`
- * - Escaped `\.` → `.`
- * - Escaped `\/` → `/`
+ * - Escaped `\.` → `ESCAPED_DOT`
+ * - Escaped `\/` → `ESCAPED_SLASH`
  */
-const toInternal = (input: string): string => {
-  let out = "";
-  let escaped = false;
-  for (const ch of input) {
-    if (escaped) {
-      out += ch; // take literally
-      escaped = false;
-    } else if (ch === "\\") {
-      escaped = true;
-      out += "\\"; // preserve backslash for downstream escape handling
-    } else if (ch === ".") {
-      out += "/"; // dot becomes slash
-    } else {
-      out += ch;
-    }
-  }
-  return out;
-};
+const toInternal = (input: string): string =>
+  input.replace(/\\[./]|\./g, match =>
+    match === "\\." ? ESCAPED_DOT : match === "\\/" ? ESCAPED_SLASH : "/",
+  );
 
 /**
  * Splits a glob pattern into dot-separated segments, honoring backslash escaping.
