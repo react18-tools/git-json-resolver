@@ -2,6 +2,15 @@ import { describe, it, expect, vi } from "vitest";
 import { Conflict, MergeContext, mergeObject, BuiltInStrategies, statusToString } from "./merger";
 import { DROP } from "./utils";
 
+// Mock logger
+const mockLogger = {
+  debug: vi.fn(),
+  info: vi.fn(),
+  warn: vi.fn(),
+  error: vi.fn(),
+  flush: vi.fn(),
+};
+
 // Mock resolveStrategies so we control strategy order
 vi.mock("./strategy-resolver", () => ({
   resolveStrategies: vi.fn(() => ["ours", "theirs", "merge"]),
@@ -33,7 +42,15 @@ describe("statusToString", () => {
 
 describe("BuiltInStrategies", () => {
   const ctx = makeCtx();
-  const args = { ours: 1, theirs: 2, base: 0, path: "x", ctx, conflicts: [] as Conflict[] };
+  const args = {
+    ours: 1,
+    theirs: 2,
+    base: 0,
+    path: "x",
+    ctx,
+    conflicts: [] as Conflict[],
+    logger: mockLogger,
+  };
 
   it("ours returns ours", () => {
     const r = BuiltInStrategies.ours(args);
@@ -96,6 +113,7 @@ describe("BuiltInStrategies", () => {
       theirs: { a: 2 },
       base: { a: 0 },
       path: "obj",
+      logger: mockLogger,
     };
     const r = await BuiltInStrategies.merge(objArgs);
     expect(r.status).toBe(StrategyStatus_OK);
@@ -113,7 +131,15 @@ describe("mergeObject", () => {
   it("returns ours if equal", async () => {
     const ctx = makeCtx();
     const conflicts: Conflict[] = [];
-    const v = await mergeObject({ ours: 1, theirs: 1, base: 0, path: "x", ctx, conflicts });
+    const v = await mergeObject({
+      ours: 1,
+      theirs: 1,
+      base: 0,
+      path: "x",
+      ctx,
+      conflicts,
+      logger: mockLogger,
+    });
     expect(v).toBe(1);
     expect(conflicts).toHaveLength(0);
   });
@@ -122,7 +148,14 @@ describe("mergeObject", () => {
     (resolveStrategies as any).mockReturnValueOnce(["theirs"]);
     const ctx = makeCtx();
     const conflicts: Conflict[] = [];
-    const v = await mergeObject({ ours: 1, theirs: 2, path: "p", ctx, conflicts });
+    const v = await mergeObject({
+      ours: 1,
+      theirs: 2,
+      path: "p",
+      ctx,
+      conflicts,
+      logger: mockLogger,
+    });
     expect(v).toBe(2);
   });
 
@@ -130,7 +163,14 @@ describe("mergeObject", () => {
     (resolveStrategies as any).mockReturnValueOnce(["skip"]);
     const ctx = makeCtx();
     const conflicts: Conflict[] = [];
-    const v = await mergeObject({ ours: "a", theirs: "b", path: "p", ctx, conflicts });
+    const v = await mergeObject({
+      ours: "a",
+      theirs: "b",
+      path: "p",
+      ctx,
+      conflicts,
+      logger: mockLogger,
+    });
     expect(v).toBeUndefined();
     expect(conflicts[0].reason).toMatch(/Skip/);
   });
@@ -139,7 +179,15 @@ describe("mergeObject", () => {
     (resolveStrategies as any).mockReturnValueOnce(["non-empty"]);
     const ctx = makeCtx();
     const conflicts: Conflict[] = [];
-    const v = await mergeObject({ ours: "", theirs: "", base: "", path: "p", ctx, conflicts });
+    const v = await mergeObject({
+      ours: "",
+      theirs: "",
+      base: "",
+      path: "p",
+      ctx,
+      conflicts,
+      logger: mockLogger,
+    });
     expect(v).toBeUndefined();
     expect(conflicts[0]).toMatchObject({
       path: "p",
