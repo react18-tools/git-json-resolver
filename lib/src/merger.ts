@@ -182,6 +182,7 @@ export const mergeObject = async <TContext>({
   logger.debug(filePath ?? "all", `path: ${path}, strategies: ${strategies.join(", ") || "none"}`);
 
   for (const strategy of strategies) {
+    logger.debug(filePath ?? "all", `Applying strategy '${strategy}' at ${path}`);
     const fn = (BuiltInStrategies as any)[strategy] ?? ctx.strategies[strategy];
 
     if (!fn) continue;

@@ -1,3 +1,4 @@
+import { createLogger } from "./logger";
 import { Matcher } from "./matcher";
 import {
   StrategyStatus_OK,
@@ -73,6 +74,9 @@ export type StrategyFn<TContext = unknown> = (args: {
 
   /** Custom context object, if provided by caller. */
   context?: TContext;
+
+  /** logger */
+  logger: ReturnType<typeof createLogger>;
 }) => StrategyResult | Promise<StrategyResult>;
 
 /**
