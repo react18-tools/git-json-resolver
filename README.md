@@ -363,10 +363,10 @@ export default plugin;
 export default async function createPlugin(config?: any): Promise<StrategyPlugin> {
   // Initialize with config if needed
   console.log("Plugin initialized with:", config);
-  
+
   return {
     strategies,
-    init: async (initConfig) => {
+    init: async initConfig => {
       // Additional initialization if needed
     },
   };

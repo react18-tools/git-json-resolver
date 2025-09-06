@@ -2,7 +2,7 @@
 layout: default
 title: Internal
 parent: Types
-nav_order: 28
+nav_order: 16
 ---
 
 # \<internal\>
@@ -13,7 +13,7 @@ nav_order: 28
 
 > **ForbidBangEnd**\<`T`\> = `T` _extends_ `` `${string}!` `` ? `never` : `T`
 
-Defined in: [types.ts:86](https://github.com/react18-tools/git-json-resolver/blob/6e75e49557f9b5e6210062de3c8a81741a79c347/lib/src/types.ts#L86)
+Defined in: [types.ts:86](https://github.com/react18-tools/git-json-resolver/blob/bb35490ece54a122e412f67ef51d4b2dbeac2ebb/lib/src/types.ts#L86)
 
 Utility type: excludes strategy names ending with "!".
 The "!" suffix is reserved for internal overrides.
