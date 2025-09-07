@@ -10,7 +10,7 @@ nav_order: 4
 
 ### ParseConflictOptions
 
-Defined in: [file-parser.ts:26](https://github.com/react18-tools/git-json-resolver/blob/d61d9369fb47648a20fc0be0040b2aaa41b03a8c/lib/src/file-parser.ts#L26)
+Defined in: [file-parser.ts:26](https://github.com/react18-tools/git-json-resolver/blob/9b3eafde93c5cdd7078466539ccff7dff2a4fc0c/lib/src/file-parser.ts#L26)
 
 Options for parsing conflicted content.
 
@@ -24,7 +24,7 @@ Options for parsing conflicted content.
 
 > **filename**: `string`
 
-Defined in: [file-parser.ts:35](https://github.com/react18-tools/git-json-resolver/blob/d61d9369fb47648a20fc0be0040b2aaa41b03a8c/lib/src/file-parser.ts#L35)
+Defined in: [file-parser.ts:35](https://github.com/react18-tools/git-json-resolver/blob/9b3eafde93c5cdd7078466539ccff7dff2a4fc0c/lib/src/file-parser.ts#L35)
 
 filename hint to prioritize parser choice as well as get base and ours from git.
 Example:
@@ -38,7 +38,7 @@ If extension is unknown, falls back to `parsers` or `"json"`.
 
 > `optional` **parsers**: `"auto"` \| [`SupportedParsers`](types/README.md#supportedparsers) \| [`SupportedParsers`](types/README.md#supportedparsers)[]
 
-Defined in: [types.ts:245](https://github.com/react18-tools/git-json-resolver/blob/d61d9369fb47648a20fc0be0040b2aaa41b03a8c/lib/src/types.ts#L245)
+Defined in: [types.ts:245](https://github.com/react18-tools/git-json-resolver/blob/9b3eafde93c5cdd7078466539ccff7dff2a4fc0c/lib/src/types.ts#L245)
 
 Parsers to attempt, in order:
 
@@ -55,7 +55,7 @@ Defaults to `"json"`.
 
 ### ParsedConflict\<T\>
 
-Defined in: [file-parser.ts:12](https://github.com/react18-tools/git-json-resolver/blob/d61d9369fb47648a20fc0be0040b2aaa41b03a8c/lib/src/file-parser.ts#L12)
+Defined in: [file-parser.ts:12](https://github.com/react18-tools/git-json-resolver/blob/9b3eafde93c5cdd7078466539ccff7dff2a4fc0c/lib/src/file-parser.ts#L12)
 
 Represents a parsed conflict from a file with `ours` and `theirs` versions.
 
@@ -73,7 +73,7 @@ The type of the parsed content.
 
 > `optional` **base**: `T`
 
-Defined in: [file-parser.ts:18](https://github.com/react18-tools/git-json-resolver/blob/d61d9369fb47648a20fc0be0040b2aaa41b03a8c/lib/src/file-parser.ts#L18)
+Defined in: [file-parser.ts:18](https://github.com/react18-tools/git-json-resolver/blob/9b3eafde93c5cdd7078466539ccff7dff2a4fc0c/lib/src/file-parser.ts#L18)
 
 Parsed content from the "base" side of the conflict (optional).
 
@@ -81,7 +81,7 @@ Parsed content from the "base" side of the conflict (optional).
 
 > **format**: `string`
 
-Defined in: [file-parser.ts:20](https://github.com/react18-tools/git-json-resolver/blob/d61d9369fb47648a20fc0be0040b2aaa41b03a8c/lib/src/file-parser.ts#L20)
+Defined in: [file-parser.ts:20](https://github.com/react18-tools/git-json-resolver/blob/9b3eafde93c5cdd7078466539ccff7dff2a4fc0c/lib/src/file-parser.ts#L20)
 
 Format used to parse the content (`json`, `yaml`, `toml`, `xml`, or `custom`).
 
@@ -89,7 +89,7 @@ Format used to parse the content (`json`, `yaml`, `toml`, `xml`, or `custom`).
 
 > **ours**: `T`
 
-Defined in: [file-parser.ts:14](https://github.com/react18-tools/git-json-resolver/blob/d61d9369fb47648a20fc0be0040b2aaa41b03a8c/lib/src/file-parser.ts#L14)
+Defined in: [file-parser.ts:14](https://github.com/react18-tools/git-json-resolver/blob/9b3eafde93c5cdd7078466539ccff7dff2a4fc0c/lib/src/file-parser.ts#L14)
 
 Parsed content from the "ours" side of the conflict.
 
@@ -97,7 +97,7 @@ Parsed content from the "ours" side of the conflict.
 
 > **theirs**: `T`
 
-Defined in: [file-parser.ts:16](https://github.com/react18-tools/git-json-resolver/blob/d61d9369fb47648a20fc0be0040b2aaa41b03a8c/lib/src/file-parser.ts#L16)
+Defined in: [file-parser.ts:16](https://github.com/react18-tools/git-json-resolver/blob/9b3eafde93c5cdd7078466539ccff7dff2a4fc0c/lib/src/file-parser.ts#L16)
 
 Parsed content from the "theirs" side of the conflict.
 
@@ -107,7 +107,7 @@ Parsed content from the "theirs" side of the conflict.
 
 > **normalizeParsers**(`options`: [`ParseConflictOptions`](#parseconflictoptions)): [`SupportedParsers`](types/README.md#supportedparsers)[]
 
-Defined in: [file-parser.ts:144](https://github.com/react18-tools/git-json-resolver/blob/d61d9369fb47648a20fc0be0040b2aaa41b03a8c/lib/src/file-parser.ts#L144)
+Defined in: [file-parser.ts:144](https://github.com/react18-tools/git-json-resolver/blob/9b3eafde93c5cdd7078466539ccff7dff2a4fc0c/lib/src/file-parser.ts#L144)
 
 Normalize parsers based on filename + options.
 
@@ -127,7 +127,7 @@ Normalize parsers based on filename + options.
 
 > **parseConflictContent**\<`T`\>(`content`: `string`, `options`: [`ParseConflictOptions`](#parseconflictoptions)): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`ParsedConflict`](#parsedconflict)\<`T`\>\>
 
-Defined in: [file-parser.ts:55](https://github.com/react18-tools/git-json-resolver/blob/d61d9369fb47648a20fc0be0040b2aaa41b03a8c/lib/src/file-parser.ts#L55)
+Defined in: [file-parser.ts:55](https://github.com/react18-tools/git-json-resolver/blob/9b3eafde93c5cdd7078466539ccff7dff2a4fc0c/lib/src/file-parser.ts#L55)
 
 Parses a conflicted file's content into separate `ours` and `theirs` objects.
 
@@ -177,7 +177,7 @@ If parsing fails or conflict markers are invalid.
 
 > **parseFormat**(`parser`: `"json"` \| `"json5"` \| `"yaml"` \| `"toml"` \| `"xml"`, `raw`: `string`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
-Defined in: [file-parser.ts:183](https://github.com/react18-tools/git-json-resolver/blob/d61d9369fb47648a20fc0be0040b2aaa41b03a8c/lib/src/file-parser.ts#L183)
+Defined in: [file-parser.ts:183](https://github.com/react18-tools/git-json-resolver/blob/9b3eafde93c5cdd7078466539ccff7dff2a4fc0c/lib/src/file-parser.ts#L183)
 
 Internal parser dispatcher for supported formats.
 
@@ -201,7 +201,7 @@ Internal parser dispatcher for supported formats.
 
 > **runParser**(`raw`: `string`, `parsers`: [`SupportedParsers`](types/README.md#supportedparsers)[]): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<\[`unknown`, [`SupportedParsers`](types/README.md#supportedparsers)\]\>
 
-Defined in: [file-parser.ts:165](https://github.com/react18-tools/git-json-resolver/blob/d61d9369fb47648a20fc0be0040b2aaa41b03a8c/lib/src/file-parser.ts#L165)
+Defined in: [file-parser.ts:165](https://github.com/react18-tools/git-json-resolver/blob/9b3eafde93c5cdd7078466539ccff7dff2a4fc0c/lib/src/file-parser.ts#L165)
 
 Internal helper to try parsers in order.
 
