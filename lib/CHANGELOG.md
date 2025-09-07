@@ -1,5 +1,11 @@
 # git-json-resolver
 
+## 1.3.6
+
+### Patch Changes
+
+- 175d0d9: Improve backup directory handling by cleaning up existing backups during initialization and using proper glob patterns for exclusion
+
 ## 1.3.5
 
 ### Patch Changes
