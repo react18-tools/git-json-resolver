@@ -1,5 +1,7 @@
 # Git Json Resolver <img src="https://raw.githubusercontent.com/mayank1513/mayank1513/main/popper.png" style="height: 40px"/>
 
+![Git JSON Resolver Banner](./banner.jpg)
+
 [![test](https://github.com/react18-tools/git-json-resolver/actions/workflows/test.yml/badge.svg)](https://github.com/react18-tools/git-json-resolver/actions/workflows/test.yml)
 [![Maintainability](https://qlty.sh/gh/react18-tools/projects/git-json-resolver/maintainability.svg)](https://qlty.sh/gh/react18-tools/projects/git-json-resolver)
 [![codecov](https://codecov.io/gh/react18-tools/git-json-resolver/graph/badge.svg)](https://codecov.io/gh/react18-tools/git-json-resolver)
@@ -349,7 +351,7 @@ export const strategies = {
   "timestamp-latest": timestampLatest,
 };
 
-// Plugin interface for dynamic loading
+// Plugin interface for dynamic loading (object-based)
 const plugin: StrategyPlugin = {
   strategies,
   init: async config => {
@@ -358,6 +360,19 @@ const plugin: StrategyPlugin = {
 };
 
 export default plugin;
+
+// Alternative: Function-based plugin (NEW)
+export default async function createPlugin(config?: any): Promise<StrategyPlugin> {
+  // Initialize with config if needed
+  console.log("Plugin initialized with:", config);
+
+  return {
+    strategies,
+    init: async initConfig => {
+      // Additional initialization if needed
+    },
+  };
+}
 ```
 
 ### Custom Strategies (Inline)
