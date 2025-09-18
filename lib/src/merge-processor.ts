@@ -70,9 +70,9 @@ export const processMerge = async <T extends string = InbuiltMergeStrategies>({
   } else {
     const serialized = await reconstructConflict(merged, ours, theirs, format);
     await Promise.all([
-      fs.writeFile(filePath, serialized, "utf8"),
+      fs.writeFile(filePath, `${serialized}\n`, "utf8"),
       config.writeConflictSidecar
-        ? fs.writeFile(`${filePath}.conflict.json`, JSON.stringify(conflicts, null, 2))
+        ? fs.writeFile(`${filePath}.conflict.json`, `${JSON.stringify(conflicts, null, 2)}\n`)
         : null,
     ]);
     return { success: false, conflicts };

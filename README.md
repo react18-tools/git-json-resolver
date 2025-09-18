@@ -3,7 +3,6 @@
 ![Git JSON Resolver Banner](./banner.jpg)
 
 [![test](https://github.com/react18-tools/git-json-resolver/actions/workflows/test.yml/badge.svg)](https://github.com/react18-tools/git-json-resolver/actions/workflows/test.yml)
-[![Maintainability](https://qlty.sh/gh/react18-tools/projects/git-json-resolver/maintainability.svg)](https://qlty.sh/gh/react18-tools/projects/git-json-resolver)
 [![codecov](https://codecov.io/gh/react18-tools/git-json-resolver/graph/badge.svg)](https://codecov.io/gh/react18-tools/git-json-resolver)
 [![Version](https://img.shields.io/npm/v/git-json-resolver.svg?colorB=green)](https://www.npmjs.com/package/git-json-resolver)
 [![Downloads](https://img.jsdelivr.com/img.shields.io/npm/d18m/git-json-resolver.svg)](https://www.npmjs.com/package/git-json-resolver)
