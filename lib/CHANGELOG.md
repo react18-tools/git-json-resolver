@@ -1,5 +1,11 @@
 # git-json-resolver
 
+## 1.3.7
+
+### Patch Changes
+
+- 5bfe810: Add \n at end to keep the formatters and linters happy!
+
 ## 1.3.6
 
 ### Patch Changes
