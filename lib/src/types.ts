@@ -1,9 +1,9 @@
-import { createLogger } from "./logger";
-import { Matcher } from "./matcher";
-import {
-  StrategyStatus_OK,
+import type { createLogger } from "./logger";
+import type { Matcher } from "./matcher";
+import type {
   StrategyStatus_CONTINUE,
   StrategyStatus_FAIL,
+  StrategyStatus_OK,
   StrategyStatus_SKIP,
 } from "./utils";
 
@@ -93,13 +93,14 @@ type ForbidBangEnd<T extends string> = T extends `${string}!` ? never : T;
  * ```ts
  * declare module "git-json-resolver" {
  *   interface PluginStrategies {
- *     "semantic-version": string;
- *     "timestamp-latest": string;
+ *     "semantic-version": StrategyFn;
+ *     "timestamp-latest": StrategyFn;
  *   }
  * }
  * ```
  */
-export interface PluginStrategies {}
+// biome-ignore lint/complexity/noBannedTypes: For others to extend
+export type PluginStrategies = {};
 
 /**
  * All available strategy names (built-in + plugins).
@@ -172,7 +173,13 @@ export interface LoggerConfig {
 export type Parser = { name: string; parser: (input: string) => unknown };
 
 /** Built-in parser identifiers or a custom parser function. */
-export type SupportedParsers = "json" | "json5" | "yaml" | "toml" | "xml" | Parser;
+export type SupportedParsers =
+  | "json"
+  | "json5"
+  | "yaml"
+  | "toml"
+  | "xml"
+  | Parser;
 
 /**
  * Plugin interface that strategy plugins must implement.

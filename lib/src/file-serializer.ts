@@ -1,4 +1,7 @@
-export const serialize = async (format: string, value: unknown): Promise<string> => {
+export const serialize = async (
+  format: string,
+  value: unknown,
+): Promise<string> => {
   switch (format) {
     case "json":
     case "json5":

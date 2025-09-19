@@ -1,8 +1,7 @@
-// cli.test.ts
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import * as child_process from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import * as child_process from "node:child_process";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("node:fs");
 vi.mock("node:child_process");
@@ -22,14 +21,12 @@ vi.mock("node:url", () => ({
   pathToFileURL: vi.fn(() => ({ href: "file:///test/config.js" })),
 }));
 
-// Import after mocks
-import type { Config } from "./types";
-import { resolveConflicts } from "./index";
-import { restoreBackups } from "./utils";
-import { resolveGitMergeFiles } from "./merge-processor";
-
 // Import CLI functions directly
-import { findGitRoot, parseArgs, initConfig, loadConfigFile } from "./cli";
+import { findGitRoot, initConfig, loadConfigFile, parseArgs } from "./cli";
+import { resolveConflicts } from "./index";
+import { resolveGitMergeFiles } from "./merge-processor";
+// Import after mocks
+import { restoreBackups } from "./utils";
 
 describe("cli helpers", () => {
   beforeEach(() => {
@@ -38,7 +35,7 @@ describe("cli helpers", () => {
 
   describe("findGitRoot", () => {
     it("returns git root from execSync", () => {
-      vi.spyOn(child_process, "execSync").mockReturnValue("/git/root\n" as any);
+      vi.spyOn(child_process, "execSync").mockReturnValue("/git/root\n");
       const root = findGitRoot();
       expect(root).toBe("/git/root");
     });
@@ -99,13 +96,34 @@ describe("cli helpers", () => {
     });
 
     it("detects git merge files with 3 positional args", () => {
-      const result = parseArgs(["node", "cli", "ours.json", "base.json", "theirs.json"]);
-      expect(result.gitMergeFiles).toEqual(["ours.json", "base.json", "theirs.json"]);
+      const result = parseArgs([
+        "node",
+        "cli",
+        "ours.json",
+        "base.json",
+        "theirs.json",
+      ]);
+      expect(result.gitMergeFiles).toEqual([
+        "ours.json",
+        "base.json",
+        "theirs.json",
+      ]);
     });
 
     it("skips positional args in git merge mode with flags", () => {
-      const result = parseArgs(["node", "cli", "ours.json", "base.json", "theirs.json", "--debug"]);
-      expect(result.gitMergeFiles).toEqual(["ours.json", "base.json", "theirs.json"]);
+      const result = parseArgs([
+        "node",
+        "cli",
+        "ours.json",
+        "base.json",
+        "theirs.json",
+        "--debug",
+      ]);
+      expect(result.gitMergeFiles).toEqual([
+        "ours.json",
+        "base.json",
+        "theirs.json",
+      ]);
       expect(result.overrides.debug).toBe(true);
     });
 
@@ -126,13 +144,17 @@ describe("cli helpers", () => {
 
     it("writes starter config if none exists", () => {
       (fs.existsSync as any).mockReturnValue(false);
-      const writeFileSync = vi.spyOn(fs, "writeFileSync").mockImplementation(() => {});
+      const writeFileSync = vi
+        .spyOn(fs, "writeFileSync")
+        .mockImplementation(() => {});
       const log = vi.spyOn(console, "log").mockImplementation(() => {});
 
       initConfig(tmpDir);
 
       expect(writeFileSync).toHaveBeenCalled();
-      expect(log).toHaveBeenCalledWith(`Created starter config at ${configPath}`);
+      expect(log).toHaveBeenCalledWith(
+        `Created starter config at ${configPath}`,
+      );
     });
 
     it("exits if config already exists", () => {
@@ -143,7 +165,9 @@ describe("cli helpers", () => {
       const error = vi.spyOn(console, "error").mockImplementation(() => {});
 
       expect(() => initConfig(tmpDir)).toThrow("exit");
-      expect(error).toHaveBeenCalledWith(`Config file already exists: ${configPath}`);
+      expect(error).toHaveBeenCalledWith(
+        `Config file already exists: ${configPath}`,
+      );
       expect(exit).toHaveBeenCalledWith(1);
     });
   });
@@ -176,7 +200,7 @@ describe("CLI execution logic", () => {
       await restoreBackups(restore || fileConfig.backupDir || ".merge-backups");
       console.log(`Restored backups from ${restore}`);
       process.exit(0);
-    } catch (e) {
+    } catch (_e) {
       // Expected due to process.exit mock
     }
 
@@ -186,15 +210,24 @@ describe("CLI execution logic", () => {
   });
 
   it("should handle git merge mode logic", async () => {
-    const gitMergeFiles: [string, string, string] = ["ours.json", "base.json", "theirs.json"];
+    const gitMergeFiles: [string, string, string] = [
+      "ours.json",
+      "base.json",
+      "theirs.json",
+    ];
     const finalConfig = { debug: true };
 
     const [oursPath, basePath, theirsPath] = gitMergeFiles;
     await resolveGitMergeFiles(oursPath, basePath, theirsPath, finalConfig);
 
-    expect(resolveGitMergeFiles).toHaveBeenCalledWith("ours.json", "base.json", "theirs.json", {
-      debug: true,
-    });
+    expect(resolveGitMergeFiles).toHaveBeenCalledWith(
+      "ours.json",
+      "base.json",
+      "theirs.json",
+      {
+        debug: true,
+      },
+    );
   });
 
   it("should handle standard mode logic", async () => {
@@ -219,7 +252,7 @@ describe("CLI execution logic", () => {
     try {
       console.error("Failed:", err);
       process.exit(1);
-    } catch (e) {
+    } catch (_e) {
       // Expected due to process.exit mock
     }
 

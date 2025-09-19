@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { describe, it, expect, vi } from "vitest";
-import { Conflict, MergeContext, mergeObject, BuiltInStrategies, statusToString } from "./merger";
+import { describe, expect, it, vi } from "vitest";
+import {
+  BuiltInStrategies,
+  type Conflict,
+  type MergeContext,
+  mergeObject,
+  statusToString,
+} from "./merger";
 import { DROP } from "./utils";
 
 // Mock logger
@@ -16,11 +22,12 @@ const mockLogger = {
 vi.mock("./strategy-resolver", () => ({
   resolveStrategies: vi.fn(() => ["ours", "theirs", "merge"]),
 }));
+
 import { resolveStrategies } from "./strategy-resolver";
 import {
-  StrategyStatus_OK,
   StrategyStatus_CONTINUE,
   StrategyStatus_FAIL,
+  StrategyStatus_OK,
   StrategyStatus_SKIP,
 } from "./utils";
 
@@ -70,41 +77,66 @@ describe("BuiltInStrategies", () => {
 
   it("drop returns DROP symbol", () => {
     const r = BuiltInStrategies.drop(args);
-    // @ts-expect-error -- will fix later
-    expect(r.value).toBe(DROP);
+    expect(r.status).toBe(StrategyStatus_OK);
+    expect((r as any).value).toBe(DROP);
   });
 
   it("skip returns SKIP", () => {
     const r = BuiltInStrategies.skip(args);
     expect(r.status).toBe(StrategyStatus_SKIP);
-    // @ts-expect-error -- will fix later
-    expect(r.reason).toMatch(/Skip/);
+    expect((r as any).reason).toMatch(/Skip/);
   });
 
   it("non-empty prefers ours → theirs → base", () => {
-    // @ts-expect-error -- will fix later
-    expect(BuiltInStrategies["non-empty"]({ ...args, ours: "ours" }).value).toBe("ours");
-    // @ts-expect-error -- will fix later
-    expect(BuiltInStrategies["non-empty"]({ ...args, ours: "", theirs: "theirs" }).value).toBe(
-      "theirs",
-    );
     expect(
-      // @ts-expect-error -- will fix later
-      BuiltInStrategies["non-empty"]({ ...args, ours: "", theirs: "", base: "base" }).value,
+      (BuiltInStrategies["non-empty"]({ ...args, ours: "ours" }) as any).value,
+    ).toBe("ours");
+    expect(
+      (
+        BuiltInStrategies["non-empty"]({
+          ...args,
+          ours: "",
+          theirs: "theirs",
+        }) as any
+      ).value,
+    ).toBe("theirs");
+    expect(
+      (
+        BuiltInStrategies["non-empty"]({
+          ...args,
+          ours: "",
+          theirs: "",
+          base: "base",
+        }) as any
+      ).value,
     ).toBe("base");
-    expect(BuiltInStrategies["non-empty"]({ ...args, ours: "", theirs: "", base: "" }).status).toBe(
-      StrategyStatus_CONTINUE,
-    );
+    expect(
+      BuiltInStrategies["non-empty"]({
+        ...args,
+        ours: "",
+        theirs: "",
+        base: "",
+      }).status,
+    ).toBe(StrategyStatus_CONTINUE);
   });
 
   it("update keeps theirs if ours defined", () => {
-    // @ts-expect-error -- will fix later
-    expect(BuiltInStrategies.update({ ...args, ours: "x", theirs: "y" }).value).toBe("y");
+    expect(
+      (BuiltInStrategies.update({ ...args, ours: "x", theirs: "y" }) as any)
+        .value,
+    ).toBe("y");
   });
 
   it("update drops if ours undefined", () => {
-    // @ts-expect-error -- will fix later
-    expect(BuiltInStrategies.update({ ...args, ours: undefined, theirs: "y" }).value).toBe(DROP);
+    expect(
+      (
+        BuiltInStrategies.update({
+          ...args,
+          ours: undefined,
+          theirs: "y",
+        }) as any
+      ).value,
+    ).toBe(DROP);
   });
 
   it("concat arrays", () => {
@@ -118,7 +150,11 @@ describe("BuiltInStrategies", () => {
   });
 
   it("unique arrays", () => {
-    const r = BuiltInStrategies.unique({ ...args, ours: [1, 2], theirs: [2, 3] });
+    const r = BuiltInStrategies.unique({
+      ...args,
+      ours: [1, 2],
+      theirs: [2, 3],
+    });
     expect(r).toEqual({ status: StrategyStatus_OK, value: [1, 2, 3] });
   });
 
@@ -138,12 +174,15 @@ describe("BuiltInStrategies", () => {
     };
     const r = await BuiltInStrategies.merge(objArgs);
     expect(r.status).toBe(StrategyStatus_OK);
-    // @ts-expect-error -- will fix later
-    expect(r.value).toEqual({ a: 1 });
+    expect((r as any).value).toEqual({ a: 1 });
   });
 
   it("merge unmergeable types → CONTINUE", async () => {
-    const r = await BuiltInStrategies.merge({ ...args, ours: 1, theirs: "str" });
+    const r = await BuiltInStrategies.merge({
+      ...args,
+      ours: 1,
+      theirs: "str",
+    });
     expect(r.status).toBe(StrategyStatus_CONTINUE);
   });
 });
@@ -219,7 +258,10 @@ describe("mergeObject", () => {
   it("uses custom strategy from ctx.strategies", async () => {
     (resolveStrategies as any).mockReturnValueOnce(["custom"]);
     const ctx = makeCtx();
-    ctx.strategies.custom = vi.fn(() => ({ status: StrategyStatus_OK, value: "custom-result" }));
+    ctx.strategies.custom = vi.fn(() => ({
+      status: StrategyStatus_OK,
+      value: "custom-result",
+    }));
     const conflicts: Conflict[] = [];
     const v = await mergeObject({
       ours: "a",
@@ -274,5 +316,66 @@ describe("mergeObject", () => {
       theirs: "b",
       base: "c",
     });
+  });
+
+  it("properly escapes keys with dots when merging objects", async () => {
+    (resolveStrategies as any).mockReturnValueOnce(["ours"]);
+    const ctx = makeCtx();
+    const conflicts: Conflict[] = [];
+
+    const result = await mergeObject({
+      ours: { "key.with.dots": "ours-value", normal: "ours-normal" },
+      theirs: { "key.with.dots": "theirs-value", normal: "theirs-normal" },
+      path: "root",
+      ctx,
+      conflicts,
+      logger: mockLogger,
+    });
+
+    expect(result).toEqual({
+      "key.with.dots": "ours-value",
+      normal: "ours-normal",
+    });
+    expect(conflicts).toHaveLength(0);
+  });
+
+  it("properly escapes keys with backslashes when merging objects", async () => {
+    (resolveStrategies as any).mockReturnValueOnce(["theirs"]);
+    const ctx = makeCtx();
+    const conflicts: Conflict[] = [];
+
+    const result = await mergeObject({
+      ours: { "key\\with\\backslashes": "ours-value" },
+      theirs: { "key\\with\\backslashes": "theirs-value" },
+      path: "root",
+      ctx,
+      conflicts,
+      logger: mockLogger,
+    });
+
+    expect(result).toEqual({
+      "key\\with\\backslashes": "theirs-value",
+    });
+    expect(conflicts).toHaveLength(0);
+  });
+
+  it("properly escapes keys with both dots and backslashes", async () => {
+    (resolveStrategies as any).mockReturnValueOnce(["merge"]);
+    const ctx = makeCtx();
+    const conflicts: Conflict[] = [];
+
+    const result = await mergeObject({
+      ours: { "key.with\\mixed.chars": { nested: "ours" } },
+      theirs: { "key.with\\mixed.chars": { nested: "theirs" } },
+      path: "root",
+      ctx,
+      conflicts,
+      logger: mockLogger,
+    });
+
+    expect(result).toEqual({
+      "key.with\\mixed.chars": { nested: "ours" },
+    });
+    expect(conflicts).toHaveLength(0);
   });
 });

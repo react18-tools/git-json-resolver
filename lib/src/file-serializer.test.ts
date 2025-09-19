@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { serialize } from "./file-serializer";
 
 describe("serialize", () => {
@@ -53,6 +53,8 @@ describe("serialize", () => {
   });
 
   it("throws for unknown format", async () => {
-    await expect(serialize("unknown", sample)).rejects.toThrow(/Unknown format/);
+    await expect(serialize("unknown", sample)).rejects.toThrow(
+      /Unknown format/,
+    );
   });
 });

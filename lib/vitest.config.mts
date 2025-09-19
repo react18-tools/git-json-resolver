@@ -1,5 +1,5 @@
-import { defineConfig } from "vitest/config";
 import tsconfigPaths from "vite-tsconfig-paths";
+import { defineConfig } from "vitest/config";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -10,7 +10,11 @@ export default defineConfig({
     setupFiles: [],
     coverage: {
       include: ["src/**"],
-      exclude: ["src/**/*.test.*", "src/**/declaration.d.ts", "src/**/types.ts"],
+      exclude: [
+        "src/**/*.test.*",
+        "src/**/declaration.d.ts",
+        "src/**/types.ts",
+      ],
       reporter: ["text", "json", "clover", "html"],
     },
   },

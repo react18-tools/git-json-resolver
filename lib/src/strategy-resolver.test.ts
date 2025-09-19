@@ -1,13 +1,21 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
+import type {
+  NormalizedConfig,
+  StrategyItem,
+  StrategyList,
+} from "./normalizer";
 import { resolveStrategies } from "./strategy-resolver";
-import type { NormalizedConfig, StrategyItem, StrategyList } from "./normalizer";
 
 const makeStrategy = (name: string, important = false): StrategyItem => ({
   name,
   important,
 });
 
-const makeList = (strategies: StrategyItem[], order = 0, source = "test"): StrategyList => ({
+const makeList = (
+  strategies: StrategyItem[],
+  order = 0,
+  source = "test",
+): StrategyList => ({
   strategies,
   order,
   source,
@@ -16,7 +24,7 @@ const makeList = (strategies: StrategyItem[], order = 0, source = "test"): Strat
 describe("resolveStrategies", () => {
   const matcher = {
     isMatch: (path: string, patterns: string[]) =>
-      patterns.some(p => path.includes(p.replace("*", ""))),
+      patterns.some((p) => path.includes(p.replace("*", ""))),
   };
 
   it("resolves from exact path", () => {
@@ -95,7 +103,9 @@ describe("resolveStrategies", () => {
       matcher,
       rules: {
         exact: {
-          "foo.bar": [makeList([makeStrategy("normal"), makeStrategy("important", true)])],
+          "foo.bar": [
+            makeList([makeStrategy("normal"), makeStrategy("important", true)]),
+          ],
         },
         exactFields: {},
         patterns: {},

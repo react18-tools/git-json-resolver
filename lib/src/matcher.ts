@@ -32,7 +32,7 @@ export interface Matcher {
 export const basicMatcher: Matcher = {
   isMatch: (str, patterns) => {
     const internalStr = toInternal(str);
-    return patterns.some(p => matchOne(internalStr, toInternal(p)));
+    return patterns.some((p) => matchOne(internalStr, toInternal(p)));
   },
 };
 
@@ -42,9 +42,11 @@ export const basicMatcher: Matcher = {
  * @returns A Matcher implementation.
  */
 
-export const loadMatcher = async (name: "micromatch" | "picomatch"): Promise<Matcher> => {
+export const loadMatcher = async (
+  name: "micromatch" | "picomatch",
+): Promise<Matcher> => {
   if (name === "micromatch") {
-    let micromatch;
+    let micromatch: any;
     try {
       micromatch = await import("micromatch");
     } catch {
@@ -59,15 +61,17 @@ export const loadMatcher = async (name: "micromatch" | "picomatch"): Promise<Mat
         try {
           return micromatch.isMatch(toInternal(str), pats.map(toInternal));
         } catch (err) {
-          /* v8 ignore next 4 - difficult to simulate this case with micromatch/picomatch in devDeps */
-          throw new Error(`micromatch failed to run isMatch: ${(err as Error).message}`);
+          /* v8 ignore next 6 - difficult to simulate this case with micromatch/picomatch in devDeps */
+          throw new Error(
+            `micromatch failed to run isMatch: ${(err as Error).message}`,
+          );
         }
       },
     };
   }
 
   if (name === "picomatch") {
-    let picomatch;
+    let picomatch: any;
     try {
       picomatch = (await import("picomatch")).default;
     } catch {
@@ -84,7 +88,9 @@ export const loadMatcher = async (name: "micromatch" | "picomatch"): Promise<Mat
           return fn(toInternal(str));
         } catch (err) {
           /* v8 ignore next 4 - difficult to simulate this case with micromatch/picomatch in devDeps */
-          throw new Error(`picomatch failed to run isMatch: ${(err as Error).message}`);
+          throw new Error(
+            `picomatch failed to run isMatch: ${(err as Error).message}`,
+          );
         }
       },
     };
@@ -103,7 +109,7 @@ export const loadMatcher = async (name: "micromatch" | "picomatch"): Promise<Mat
  * - Escaped `\/` → `ESCAPED_SLASH`
  */
 const toInternal = (input: string): string =>
-  input.replace(/\\[./]|\./g, match =>
+  input.replace(/\\[./]|\./g, (match) =>
     match === "\\." ? ESCAPED_DOT : match === "\\/" ? ESCAPED_SLASH : "/",
   );
 
@@ -125,7 +131,7 @@ const splitPattern = (pattern: string): string[] => {
 
   for (const ch of raw) {
     if (escaped) {
-      buf += "\\" + ch;
+      buf += `\\${ch}`;
       escaped = false;
     } else if (ch === "\\") {
       escaped = true;
@@ -157,7 +163,10 @@ const matchOne = (str: string, pattern: string): boolean => {
 /**
  * `**` matches zero or more segments (only when unescaped as a whole segment).
  */
-const matchSegments = (strSegments: string[], patternSegments: string[]): boolean => {
+const matchSegments = (
+  strSegments: string[],
+  patternSegments: string[],
+): boolean => {
   let si = 0;
   let pi = 0;
 
@@ -167,7 +176,12 @@ const matchSegments = (strSegments: string[], patternSegments: string[]): boolea
     if (pat === "**") {
       if (pi === patternSegments.length - 1) return true; // consume rest
       for (let skip = 0; si + skip <= strSegments.length; skip++) {
-        if (matchSegments(strSegments.slice(si + skip), patternSegments.slice(pi + 1))) {
+        if (
+          matchSegments(
+            strSegments.slice(si + skip),
+            patternSegments.slice(pi + 1),
+          )
+        ) {
           return true;
         }
       }

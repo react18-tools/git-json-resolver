@@ -1,5 +1,10 @@
-import { describe, it, expect, vi } from "vitest";
-import { parseConflictContent, normalizeParsers, runParser, parseFormat } from "./file-parser";
+import { describe, expect, it, vi } from "vitest";
+import {
+  normalizeParsers,
+  parseConflictContent,
+  parseFormat,
+  runParser,
+} from "./file-parser";
 
 describe("parseConflictContent", () => {
   const makeConflict = (ours: string, theirs: string) =>
@@ -16,7 +21,10 @@ ${theirs}
 
   it("parses simple JSON conflict", async () => {
     const raw = makeConflict(`  "value": 1`, `  "value": 2`);
-    const result = await parseConflictContent(raw, { parsers: "json", filename: "" });
+    const result = await parseConflictContent(raw, {
+      parsers: "json",
+      filename: "",
+    });
 
     expect(result.format).toBe("json");
     expect(result.ours).toEqual({ name: "test", value: 1 });
@@ -40,7 +48,10 @@ theirs: 2
 
   it("respects explicit parsers array (json5 fallback)", async () => {
     const raw = makeConflict(`  value: 1,`, `  value: 2,`);
-    const result = await parseConflictContent(raw, { parsers: ["json5"], filename: "" });
+    const result = await parseConflictContent(raw, {
+      parsers: ["json5"],
+      filename: "",
+    });
     expect(result.format).toBe("json5");
     expect(result.ours).toMatchObject({ value: 1 });
     expect(result.theirs).toMatchObject({ value: 2 });
@@ -53,17 +64,24 @@ theirs: 2
       parser: (s: string) => ({ parsed: s.trim() }),
     };
 
-    const result = await parseConflictContent(raw, { parsers: custom, filename: "" });
+    const result = await parseConflictContent(raw, {
+      parsers: custom,
+      filename: "",
+    });
     expect(result.format).toBe("custom");
-    expect(result.ours).toMatchObject({ parsed: expect.stringContaining("ours-side") });
-    expect(result.theirs).toMatchObject({ parsed: expect.stringContaining("theirs-side") });
+    expect(result.ours).toMatchObject({
+      parsed: expect.stringContaining("ours-side"),
+    });
+    expect(result.theirs).toMatchObject({
+      parsed: expect.stringContaining("theirs-side"),
+    });
   });
 
   it("throws if parsing fails for all parsers", async () => {
     const raw = "invalid";
-    await expect(parseConflictContent(raw, { parsers: ["json"], filename: "" })).rejects.toThrow(
-      /Failed to parse/,
-    );
+    await expect(
+      parseConflictContent(raw, { parsers: ["json"], filename: "" }),
+    ).rejects.toThrow(/Failed to parse/);
   });
 
   it("throws if conflict markers produce empty side", async () => {
@@ -72,9 +90,9 @@ theirs: 2
 only ours
 >>>>>>> theirs
 `;
-    await expect(parseConflictContent(raw, { parsers: "json", filename: "" })).rejects.toThrow(
-      /empty content/,
-    );
+    await expect(
+      parseConflictContent(raw, { parsers: "json", filename: "" }),
+    ).rejects.toThrow(/empty content/);
   });
 });
 
@@ -112,21 +130,27 @@ describe("parseFormat", () => {
     vi.doMock("json5", () => {
       throw new Error("Module not found");
     });
-    await expect(parseFormat("json5", "{}")).rejects.toThrow(/json5 parser not installed/);
+    await expect(parseFormat("json5", "{}")).rejects.toThrow(
+      /json5 parser not installed/,
+    );
   });
 
   it("throws error for missing yaml dependency", async () => {
     vi.doMock("yaml", () => {
       throw new Error("Module not found");
     });
-    await expect(parseFormat("yaml", "key: value")).rejects.toThrow(/yaml parser not installed/);
+    await expect(parseFormat("yaml", "key: value")).rejects.toThrow(
+      /yaml parser not installed/,
+    );
   });
 
   it("throws error for missing toml dependency", async () => {
     vi.doMock("smol-toml", () => {
       throw new Error("Module not found");
     });
-    await expect(parseFormat("toml", "key = 'value'")).rejects.toThrow(/toml parser not installed/);
+    await expect(parseFormat("toml", "key = 'value'")).rejects.toThrow(
+      /toml parser not installed/,
+    );
   });
 
   it("parses xml successfully", async () => {

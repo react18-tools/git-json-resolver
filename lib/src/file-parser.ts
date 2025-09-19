@@ -1,6 +1,6 @@
 import { execFile } from "node:child_process";
-import { Config, SupportedParsers } from "./types";
 import { promisify } from "node:util";
+import type { Config, SupportedParsers } from "./types";
 
 const execFileAsync = promisify(execFile);
 
@@ -95,9 +95,13 @@ export const parseConflictContent = async <T = unknown>(
 
   let oursRaw = oursLines.join("\n");
   const theirsRaw = theirsLines.join("\n");
-  const baseRaw = await execFileAsync("git", ["show", `:1:${options.filename}`], {
-    maxBuffer: 1024 * 1024 * 50,
-  })
+  const baseRaw = await execFileAsync(
+    "git",
+    ["show", `:1:${options.filename}`],
+    {
+      maxBuffer: 1024 * 1024 * 50,
+    },
+  )
     .then(({ stdout }) => stdout)
     .catch(() => null);
 
@@ -120,7 +124,9 @@ export const parseConflictContent = async <T = unknown>(
 
   const [oursParsed, format] = await runParser(oursRaw, parsers);
   const [[theirsParsed], baseParsed] = await Promise.all(
-    (baseRaw ? [theirsRaw, baseRaw] : [theirsRaw]).map(raw => runParser(raw, [format])),
+    (baseRaw ? [theirsRaw, baseRaw] : [theirsRaw]).map((raw) =>
+      runParser(raw, [format]),
+    ),
   );
 
   return {
@@ -141,7 +147,9 @@ const FILE_EXTENSION_TO_PARSER_MAP: Record<string, SupportedParsers> = {
 };
 
 /** Normalize parsers based on filename + options. */
-export const normalizeParsers = (options: ParseConflictOptions): SupportedParsers[] => {
+export const normalizeParsers = (
+  options: ParseConflictOptions,
+): SupportedParsers[] => {
   if (Array.isArray(options.parsers)) return options.parsers;
 
   if (options.parsers) {
@@ -152,7 +160,9 @@ export const normalizeParsers = (options: ParseConflictOptions): SupportedParser
 
   if (options.filename) {
     const parserBasedOnExt =
-      FILE_EXTENSION_TO_PARSER_MAP[options.filename.split(".").pop()?.toLowerCase() ?? ""];
+      FILE_EXTENSION_TO_PARSER_MAP[
+        options.filename.split(".").pop()?.toLowerCase() ?? ""
+      ];
     if (parserBasedOnExt) {
       return [parserBasedOnExt];
     }
@@ -171,11 +181,14 @@ export const runParser = async (
       if (typeof parser !== "string") return [parser.parser(raw), parser];
       return [await parseFormat(parser, raw), parser];
     } catch (err) {
-      console.debug(`Parser ${typeof parser === "string" ? parser : parser.name} failed:`, err);
+      console.debug(
+        `Parser ${typeof parser === "string" ? parser : parser.name} failed:`,
+        err,
+      );
     }
   }
   throw new Error(
-    `Failed to parse content. Tried parsers: ${parsers.map(p => (typeof p === "string" ? p : p.name)).join(", ")}`,
+    `Failed to parse content. Tried parsers: ${parsers.map((p) => (typeof p === "string" ? p : p.name)).join(", ")}`,
   );
 };
 
@@ -192,7 +205,9 @@ export const parseFormat = async (
         const { parse } = await import("json5");
         return parse(raw);
       } catch {
-        throw new Error("json5 parser not installed. Please install as peer dependency.");
+        throw new Error(
+          "json5 parser not installed. Please install as peer dependency.",
+        );
       }
     }
     case "yaml": {
@@ -200,7 +215,9 @@ export const parseFormat = async (
         const { parse } = await import("yaml");
         return parse(raw);
       } catch {
-        throw new Error("yaml parser not installed. Please install as peer dependency.");
+        throw new Error(
+          "yaml parser not installed. Please install as peer dependency.",
+        );
       }
     }
     case "toml": {
@@ -208,7 +225,9 @@ export const parseFormat = async (
         const { parse } = await import("smol-toml");
         return parse(raw);
       } catch {
-        throw new Error("toml parser not installed. Please install as peer dependency.");
+        throw new Error(
+          "toml parser not installed. Please install as peer dependency.",
+        );
       }
     }
     case "xml": {
@@ -216,7 +235,9 @@ export const parseFormat = async (
         const { XMLParser } = await import("fast-xml-parser");
         return new XMLParser().parse(raw);
       } catch {
-        throw new Error("fast-xml-parser not installed. Please install as peer dependency.");
+        throw new Error(
+          "fast-xml-parser not installed. Please install as peer dependency.",
+        );
       }
     }
   }

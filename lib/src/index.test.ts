@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { resolveConflicts } from "./index";
 import { execSync } from "node:child_process";
 import fs from "node:fs/promises";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { resolveConflicts } from "./index";
 
 // Mock all dependencies
 vi.mock("node:child_process");
@@ -14,13 +14,13 @@ vi.mock("./utils");
 vi.mock("./conflict-helper");
 vi.mock("./logger");
 
+import { reconstructConflict } from "./conflict-helper";
 import { parseConflictContent } from "./file-parser";
 import { serialize } from "./file-serializer";
+import { createLogger } from "./logger";
 import { mergeObject } from "./merger";
 import { normalizeConfig } from "./normalizer";
 import { backupFile, listMatchingFiles } from "./utils";
-import { reconstructConflict } from "./conflict-helper";
-import { createLogger } from "./logger";
 
 const mockExecSync = vi.mocked(execSync);
 const mockFs = vi.mocked(fs);
@@ -72,7 +72,9 @@ describe("resolveConflicts", () => {
 
     expect(mockNormalizeConfig).toHaveBeenCalledWith(config);
     expect(mockListMatchingFiles).toHaveBeenCalled();
-    expect(mockParseConflictContent).toHaveBeenCalledWith("content", { filename: "test.json" });
+    expect(mockParseConflictContent).toHaveBeenCalledWith("content", {
+      filename: "test.json",
+    });
     expect(mockMergeObject).toHaveBeenCalledWith({
       ours: { a: 2 },
       theirs: { a: 1 },
@@ -89,7 +91,11 @@ describe("resolveConflicts", () => {
     });
     expect(mockBackupFile).toHaveBeenCalledWith("test.json", undefined);
     expect(mockSerialize).toHaveBeenCalledWith("json", mergedResult);
-    expect(mockFs.writeFile).toHaveBeenCalledWith("test.json", '{"a":2}', "utf8");
+    expect(mockFs.writeFile).toHaveBeenCalledWith(
+      "test.json",
+      '{"a":2}',
+      "utf8",
+    );
     expect(mockExecSync).toHaveBeenCalledWith("git add test.json");
     expect(mockLogger.flush).toHaveBeenCalled();
   });
@@ -99,8 +105,14 @@ describe("resolveConflicts", () => {
     const conflicts = [{ path: "a", reason: "test conflict" }];
     const reconstructedContent = "conflict content";
 
-    mockListMatchingFiles.mockResolvedValue([{ filePath: "test.json", content: "content" }]);
-    mockParseConflictContent.mockResolvedValue({ theirs: {}, ours: {}, format: "json" });
+    mockListMatchingFiles.mockResolvedValue([
+      { filePath: "test.json", content: "content" },
+    ]);
+    mockParseConflictContent.mockResolvedValue({
+      theirs: {},
+      ours: {},
+      format: "json",
+    });
     mockMergeObject.mockImplementation(({ conflicts: conflictsArray }) => {
       conflictsArray.push(...conflicts);
       return Promise.resolve({});
@@ -110,17 +122,27 @@ describe("resolveConflicts", () => {
     await resolveConflicts(config);
 
     expect(mockReconstructConflict).toHaveBeenCalledWith({}, {}, {}, "json");
-    expect(mockFs.writeFile).toHaveBeenCalledWith("test.json", reconstructedContent, "utf8");
+    expect(mockFs.writeFile).toHaveBeenCalledWith(
+      "test.json",
+      `${reconstructedContent}\n`,
+      "utf8",
+    );
     expect(mockFs.writeFile).toHaveBeenCalledWith(
       "test.json.conflict.json",
-      JSON.stringify(conflicts, null, 2),
+      `${JSON.stringify(conflicts, null, 2)}\n`,
     );
     expect(mockExecSync).not.toHaveBeenCalled();
   });
 
   it("handles git staging errors gracefully", async () => {
-    mockListMatchingFiles.mockResolvedValue([{ filePath: "test.json", content: "content" }]);
-    mockParseConflictContent.mockResolvedValue({ theirs: {}, ours: {}, format: "json" });
+    mockListMatchingFiles.mockResolvedValue([
+      { filePath: "test.json", content: "content" },
+    ]);
+    mockParseConflictContent.mockResolvedValue({
+      theirs: {},
+      ours: {},
+      format: "json",
+    });
     mockMergeObject.mockResolvedValue({});
     mockSerialize.mockResolvedValue("{}");
     mockExecSync.mockImplementation(() => {
@@ -137,9 +159,18 @@ describe("resolveConflicts", () => {
 
   it("enables debug logging when configured", async () => {
     const config = { debug: true };
-    mockNormalizeConfig.mockResolvedValue({ debug: true, customStrategies: {} } as any);
-    mockListMatchingFiles.mockResolvedValue([{ filePath: "test.json", content: "content" }]);
-    mockParseConflictContent.mockResolvedValue({ theirs: {}, ours: {}, format: "json" });
+    mockNormalizeConfig.mockResolvedValue({
+      debug: true,
+      customStrategies: {},
+    } as any);
+    mockListMatchingFiles.mockResolvedValue([
+      { filePath: "test.json", content: "content" },
+    ]);
+    mockParseConflictContent.mockResolvedValue({
+      theirs: {},
+      ours: {},
+      format: "json",
+    });
     mockMergeObject.mockResolvedValue({});
 
     await resolveConflicts(config);
@@ -152,7 +183,11 @@ describe("resolveConflicts", () => {
     ];
 
     mockListMatchingFiles.mockResolvedValue(files);
-    mockParseConflictContent.mockResolvedValue({ theirs: {}, ours: {}, format: "json" });
+    mockParseConflictContent.mockResolvedValue({
+      theirs: {},
+      ours: {},
+      format: "json",
+    });
     mockMergeObject.mockResolvedValue({});
     mockSerialize.mockResolvedValue("{}");
 
@@ -165,8 +200,14 @@ describe("resolveConflicts", () => {
 
   it("uses custom backup directory", async () => {
     const config = { backupDir: "custom-backup" };
-    mockListMatchingFiles.mockResolvedValue([{ filePath: "test.json", content: "content" }]);
-    mockParseConflictContent.mockResolvedValue({ theirs: {}, ours: {}, format: "json" });
+    mockListMatchingFiles.mockResolvedValue([
+      { filePath: "test.json", content: "content" },
+    ]);
+    mockParseConflictContent.mockResolvedValue({
+      theirs: {},
+      ours: {},
+      format: "json",
+    });
     mockMergeObject.mockResolvedValue({});
 
     await resolveConflicts(config);

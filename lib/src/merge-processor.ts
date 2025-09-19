@@ -1,13 +1,13 @@
 import { execSync } from "node:child_process";
-import { serialize } from "./file-serializer";
-import { Conflict, mergeObject } from "./merger";
-import { reconstructConflict } from "./conflict-helper";
-import { backupFile } from "./utils";
-import { Config, InbuiltMergeStrategies } from "./types";
-import { normalizeConfig, NormalizedConfig } from "./normalizer";
-import { createLogger } from "./logger";
 import fs from "node:fs/promises";
+import { reconstructConflict } from "./conflict-helper";
 import { normalizeParsers, runParser } from "./file-parser";
+import { serialize } from "./file-serializer";
+import { createLogger } from "./logger";
+import { type Conflict, mergeObject } from "./merger";
+import { type NormalizedConfig, normalizeConfig } from "./normalizer";
+import type { Config, InbuiltMergeStrategies } from "./types";
+import { backupFile } from "./utils";
 
 const _strategyCache = new Map<string, string[]>();
 
@@ -72,7 +72,10 @@ export const processMerge = async <T extends string = InbuiltMergeStrategies>({
     await Promise.all([
       fs.writeFile(filePath, `${serialized}\n`, "utf8"),
       config.writeConflictSidecar
-        ? fs.writeFile(`${filePath}.conflict.json`, `${JSON.stringify(conflicts, null, 2)}\n`)
+        ? fs.writeFile(
+            `${filePath}.conflict.json`,
+            `${JSON.stringify(conflicts, null, 2)}\n`,
+          )
         : null,
     ]);
     return { success: false, conflicts };
@@ -89,7 +92,9 @@ export const processMerge = async <T extends string = InbuiltMergeStrategies>({
  * @param config - Configuration for conflict resolution
  * @returns Promise that resolves when merge is complete
  */
-export const resolveGitMergeFiles = async <T extends string = InbuiltMergeStrategies>(
+export const resolveGitMergeFiles = async <
+  T extends string = InbuiltMergeStrategies,
+>(
   oursPath: string,
   basePath: string,
   theirsPath: string,
@@ -105,7 +110,9 @@ export const resolveGitMergeFiles = async <T extends string = InbuiltMergeStrate
 
   const [oursContent, baseContent, theirsContent] = await Promise.all([
     fs.readFile(oursPath, "utf8"),
-    fs.readFile(basePath, "utf8").catch(() => "{}"), // fallback if base doesn't exist
+    fs
+      .readFile(basePath, "utf8")
+      .catch(() => "{}"), // fallback if base doesn't exist
     fs.readFile(theirsPath, "utf8"),
   ]);
 
@@ -113,7 +120,7 @@ export const resolveGitMergeFiles = async <T extends string = InbuiltMergeStrate
 
   const [ours, parser] = await runParser(oursContent, parsers);
   const [base, theirs] = await Promise.all(
-    [baseContent, theirsContent].map(content =>
+    [baseContent, theirsContent].map((content) =>
       runParser(content, [parser]).then(([result]) => result),
     ),
   );

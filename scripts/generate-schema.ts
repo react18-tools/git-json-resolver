@@ -1,8 +1,8 @@
 /**
  * Generate JSON Schema from TypeScript types
  */
-import { writeFileSync } from "fs";
-import { resolve } from "path";
+import { writeFileSync } from "node:fs";
+import { resolve } from "node:path";
 
 const schema = {
   $schema: "http://json-schema.org/draft-07/schema#",

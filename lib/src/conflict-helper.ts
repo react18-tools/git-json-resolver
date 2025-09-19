@@ -2,7 +2,11 @@ import { serialize } from "./file-serializer";
 import { DROP } from "./utils";
 
 /** Remove DROP, replace undefined with conflict markers */
-const preprocessForConflicts = (node: any, path: string, conflicts: string[] = []): any => {
+const preprocessForConflicts = (
+  node: any,
+  path: string,
+  conflicts: string[] = [],
+): any => {
   if (node === DROP) {
     return undefined; // remove key later
   }
@@ -14,12 +18,16 @@ const preprocessForConflicts = (node: any, path: string, conflicts: string[] = [
   if (Array.isArray(node)) {
     return node
       .map((v, i) => preprocessForConflicts(v, `${path}[${i}]`, conflicts))
-      .filter(v => v !== undefined);
+      .filter((v) => v !== undefined);
   }
   if (node && typeof node === "object") {
     const out: Record<string, any> = {};
     for (const [k, v] of Object.entries(node)) {
-      const val = preprocessForConflicts(v, path ? `${path}.${k}` : k, conflicts);
+      const val = preprocessForConflicts(
+        v,
+        path ? `${path}.${k}` : k,
+        conflicts,
+      );
       if (val !== undefined) out[k] = val;
     }
     return out;
@@ -43,7 +51,7 @@ export const reconstructConflict = async (
     const theirsVal = getByPath(theirs, path);
 
     const [oursStr, theirsStr] = await Promise.all(
-      [oursVal, theirsVal].map(val => serialize(format, val)),
+      [oursVal, theirsVal].map((val) => serialize(format, val)),
     );
 
     const block = [
@@ -55,7 +63,10 @@ export const reconstructConflict = async (
     ].join("\n");
 
     const marker = `__CONFLICT_MARKER::${path}__`;
-    serialized = serialized.replace(/json/.test(format) ? JSON.stringify(marker) : marker, block);
+    serialized = serialized.replace(
+      /json/.test(format) ? JSON.stringify(marker) : marker,
+      block,
+    );
   }
 
   return serialized;
@@ -75,6 +86,6 @@ const indentBlock = (str: string, spaces: number) => {
   const pad = " ".repeat(spaces);
   return str
     .split("\n")
-    .map(line => (line ? pad + line : line))
+    .map((line) => (line ? pad + line : line))
     .join("\n");
 };

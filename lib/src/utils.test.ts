@@ -1,8 +1,13 @@
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { hasConflict, listMatchingFiles, backupFile, restoreBackups } from "./utils"; // adjust import
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { basicMatcher } from "./matcher";
+import {
+  backupFile,
+  hasConflict,
+  listMatchingFiles,
+  restoreBackups,
+} from "./utils"; // adjust import
 
 const matcher = basicMatcher;
 
@@ -46,7 +51,7 @@ describe("listMatchingFiles", () => {
       exclude: ["node_modules/**"],
       matcher,
     });
-    const names = files.map(f => path.basename(f.filePath));
+    const names = files.map((f) => path.basename(f.filePath));
     expect(names).toContain("conflict.txt");
     expect(names).not.toContain("clean.txt");
   });
@@ -59,8 +64,10 @@ describe("listMatchingFiles", () => {
       matcher,
       includeNonConflicted: true,
     });
-    const names = files.map(f => path.basename(f.filePath));
-    expect(names).toEqual(expect.arrayContaining(["clean.txt", "conflict.txt"]));
+    const names = files.map((f) => path.basename(f.filePath));
+    expect(names).toEqual(
+      expect.arrayContaining(["clean.txt", "conflict.txt"]),
+    );
   });
 
   it("only files - no dirs", async () => {
@@ -70,7 +77,7 @@ describe("listMatchingFiles", () => {
       exclude: [],
       matcher,
     });
-    const names = files.map(f => path.basename(f.filePath));
+    const names = files.map((f) => path.basename(f.filePath));
     expect(names).toEqual(expect.arrayContaining(["conflict.txt"]));
   });
 });
@@ -109,7 +116,10 @@ describe("restoreBackups", () => {
 
     await restoreBackups(backupDir);
 
-    const content = await fs.readFile(path.join("sub", "deep", "nested.txt"), "utf8");
+    const content = await fs.readFile(
+      path.join("sub", "deep", "nested.txt"),
+      "utf8",
+    );
     expect(content).toBe("deep file");
     process.chdir("..");
   });

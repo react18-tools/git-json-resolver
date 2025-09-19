@@ -1,13 +1,13 @@
-import { createLogger } from "./logger";
+import type { createLogger } from "./logger";
 import { ESCAPED_DOT, ESCAPED_SLASH } from "./matcher";
-import { NormalizedConfig } from "./normalizer";
+import type { NormalizedConfig } from "./normalizer";
 import { resolveStrategies } from "./strategy-resolver";
-import { StrategyFn, StrategyResult, StrategyStatus } from "./types";
+import type { StrategyFn, StrategyResult, StrategyStatus } from "./types";
 import {
   DROP,
-  StrategyStatus_OK,
   StrategyStatus_CONTINUE,
   StrategyStatus_FAIL,
+  StrategyStatus_OK,
   StrategyStatus_SKIP,
 } from "./utils";
 
@@ -95,10 +95,17 @@ export const BuiltInStrategies = {
     reason: `Skip strategy applied at ${path}`,
   }),
 
-  "non-empty": <TContext>({ ours, theirs, base }: MergeArgs<TContext>): StrategyResult => {
-    if (ours != null && ours !== "") return { status: StrategyStatus_OK, value: ours };
-    if (theirs != null && theirs !== "") return { status: StrategyStatus_OK, value: theirs };
-    if (base != null && base !== "") return { status: StrategyStatus_OK, value: base };
+  "non-empty": <TContext>({
+    ours,
+    theirs,
+    base,
+  }: MergeArgs<TContext>): StrategyResult => {
+    if (ours != null && ours !== "")
+      return { status: StrategyStatus_OK, value: ours };
+    if (theirs != null && theirs !== "")
+      return { status: StrategyStatus_OK, value: theirs };
+    if (base != null && base !== "")
+      return { status: StrategyStatus_OK, value: base };
     return { status: StrategyStatus_CONTINUE };
   },
 
@@ -107,7 +114,9 @@ export const BuiltInStrategies = {
     return { status: StrategyStatus_OK, value: DROP };
   },
 
-  merge: async <TContext>(args: MergeArgs<TContext>): Promise<StrategyResult> => {
+  merge: async <TContext>(
+    args: MergeArgs<TContext>,
+  ): Promise<StrategyResult> => {
     const { ours, theirs, base, path, filePath, ctx, conflicts, logger } = args;
 
     // Plain objects
@@ -115,11 +124,15 @@ export const BuiltInStrategies = {
       const allKeys = new Set([...Object.keys(ours), ...Object.keys(theirs)]);
       const result: Record<string, unknown> = {};
       for (const key of allKeys) {
-        const escapedKey = key.replace(/\./g, ESCAPED_DOT).replace(/\\/g, ESCAPED_SLASH);
+        const escapedKey = key
+          .replace(/\./g, ESCAPED_DOT)
+          .replace(/\\/g, ESCAPED_SLASH);
         result[key] = await mergeObject({
           ours: (ours as Record<string, unknown>)[key],
           theirs: (theirs as Record<string, unknown>)[key],
-          base: isPlainObject(base) ? (base as Record<string, unknown>)[key] : undefined,
+          base: isPlainObject(base)
+            ? (base as Record<string, unknown>)[key]
+            : undefined,
           path: path ? `${path}.${escapedKey}` : escapedKey,
           filePath,
           ctx,
@@ -133,18 +146,35 @@ export const BuiltInStrategies = {
     return { status: StrategyStatus_CONTINUE, reason: "Unmergeable type" };
   },
 
-  concat: <TContext>({ ours, theirs, path }: MergeArgs<TContext>): StrategyResult => {
+  concat: <TContext>({
+    ours,
+    theirs,
+    path,
+  }: MergeArgs<TContext>): StrategyResult => {
     if (Array.isArray(ours) && Array.isArray(theirs)) {
       return { status: StrategyStatus_OK, value: [...ours, ...theirs] };
     }
-    return { status: StrategyStatus_CONTINUE, reason: `Cannot concat at ${path}` };
+    return {
+      status: StrategyStatus_CONTINUE,
+      reason: `Cannot concat at ${path}`,
+    };
   },
 
-  unique: <TContext>({ ours, theirs, path }: MergeArgs<TContext>): StrategyResult => {
+  unique: <TContext>({
+    ours,
+    theirs,
+    path,
+  }: MergeArgs<TContext>): StrategyResult => {
     if (Array.isArray(ours) && Array.isArray(theirs)) {
-      return { status: StrategyStatus_OK, value: [...new Set([...ours, ...theirs])] };
+      return {
+        status: StrategyStatus_OK,
+        value: [...new Set([...ours, ...theirs])],
+      };
     }
-    return { status: StrategyStatus_CONTINUE, reason: `Cannot concat at ${path}` };
+    return {
+      status: StrategyStatus_CONTINUE,
+      reason: `Cannot concat at ${path}`,
+    };
   },
 } as const;
 
@@ -181,10 +211,16 @@ export const mergeObject = async <TContext>({
     ctx._strategyCache.set(path, strategies);
   }
 
-  logger.debug(filePath ?? "all", `path: ${path}, strategies: ${strategies.join(", ") || "none"}`);
+  logger.debug(
+    filePath ?? "all",
+    `path: ${path}, strategies: ${strategies.join(", ") || "none"}`,
+  );
 
   for (const strategy of strategies) {
-    logger.debug(filePath ?? "all", `Applying strategy '${strategy}' at ${path}`);
+    logger.debug(
+      filePath ?? "all",
+      `Applying strategy '${strategy}' at ${path}`,
+    );
     const fn = (BuiltInStrategies as any)[strategy] ?? ctx.strategies[strategy];
 
     if (!fn) continue;

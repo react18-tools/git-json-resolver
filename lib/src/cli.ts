@@ -1,13 +1,13 @@
 #!/usr/bin/env node
-import path from "node:path";
-import fs from "node:fs";
 import { execSync } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { resolveConflicts } from "./index";
-import type { Config } from "./types";
-import { DEFAULT_CONFIG } from "./normalizer";
-import { restoreBackups } from "./utils";
 import { resolveGitMergeFiles } from "./merge-processor";
+import { DEFAULT_CONFIG } from "./normalizer";
+import type { Config } from "./types";
+import { restoreBackups } from "./utils";
 
 const CONFIG_FILENAME = "git-json-resolver.config.js";
 
@@ -16,7 +16,9 @@ const CONFIG_FILENAME = "git-json-resolver.config.js";
  */
 export const findGitRoot = (): string => {
   try {
-    return execSync("git rev-parse --show-toplevel", { encoding: "utf8" }).trim();
+    return execSync("git rev-parse --show-toplevel", {
+      encoding: "utf8",
+    }).trim();
   } catch {
     return process.cwd();
   }
@@ -79,7 +81,7 @@ export const parseArgs = (
   let gitMergeFiles: [string, string, string] | undefined;
 
   // Check for Git merge driver mode (3 positional arguments)
-  const positionalArgs = argv.slice(2).filter(arg => !arg.startsWith("--"));
+  const positionalArgs = argv.slice(2).filter((arg) => !arg.startsWith("--"));
   if (positionalArgs.length === 3) {
     gitMergeFiles = [positionalArgs[0], positionalArgs[1], positionalArgs[2]];
   }

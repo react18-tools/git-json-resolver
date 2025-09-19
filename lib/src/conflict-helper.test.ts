@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { reconstructConflict } from "./conflict-helper";
 import { DROP } from "./utils";
 
@@ -46,7 +46,12 @@ describe("preprocessForConflicts + reconstructConflict", () => {
 
   it("does not break when no conflicts", async () => {
     const merged = { ok: 42 };
-    const out = await reconstructConflict(merged, { ok: 42 }, { ok: 42 }, "json");
+    const out = await reconstructConflict(
+      merged,
+      { ok: 42 },
+      { ok: 42 },
+      "json",
+    );
     expect(out).toContain("42");
     expect(out).not.toContain("<<<<<<< ours");
   });

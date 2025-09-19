@@ -1,7 +1,6 @@
-import fs from "fs";
-import { promises as fsPromises, Mode } from "fs";
-import path from "path";
-import { LogLevel, LoggerConfig } from "./types";
+import fs, { promises as fsPromises, type Mode } from "node:fs";
+import path from "node:path";
+import type { LoggerConfig, LogLevel } from "./types";
 
 interface LogEntry {
   timestamp: string;
@@ -9,14 +8,20 @@ interface LogEntry {
   message: string;
 }
 
-export const createLogger = async (config: LoggerConfig = {}, debug?: boolean) => {
+export const createLogger = async (
+  config: LoggerConfig = {},
+  debug?: boolean,
+) => {
   const mode: Mode = config.mode ?? "memory";
   const logDir = config.logDir ?? ".logs";
   const singleFile = config.singleFile ?? false;
   const levels = {
     stdout:
-      config.levels?.stdout ?? (debug ? ["debug", "info", "warn", "error"] : ["warn", "error"]),
-    file: config.levels?.file ?? (debug ? ["info", "debug", "warn", "error"] : ["error"]),
+      config.levels?.stdout ??
+      (debug ? ["debug", "info", "warn", "error"] : ["warn", "error"]),
+    file:
+      config.levels?.file ??
+      (debug ? ["info", "debug", "warn", "error"] : ["error"]),
   };
 
   // Async directory creation
@@ -33,28 +38,39 @@ export const createLogger = async (config: LoggerConfig = {}, debug?: boolean) =
   const getStream = (fileId: string) => {
     const key = singleFile ? "all" : fileId;
     if (!streams.has(key)) {
-      const filePath = path.join(logDir, singleFile ? "combined.log" : `${fileId}.log`);
+      const filePath = path.join(
+        logDir,
+        singleFile ? "combined.log" : `${fileId}.log`,
+      );
       streams.set(key, fs.createWriteStream(filePath, { flags: "a" }));
     }
-    return streams.get(key)!;
+    return streams.get(key);
   };
 
   const write = (fileId: string, level: LogLevel, message: string) => {
-    const entry: LogEntry = { timestamp: new Date().toISOString(), level, message };
+    const entry: LogEntry = {
+      timestamp: new Date().toISOString(),
+      level,
+      message,
+    };
 
     // Console output if enabled
     if (levels.stdout.includes(level)) {
       const fn = level === "error" ? console.error : console.log;
-      fn(`[${fileId}] [${entry.timestamp}] [${level.toUpperCase()}] ${entry.message}`);
+      fn(
+        `[${fileId}] [${entry.timestamp}] [${level.toUpperCase()}] ${entry.message}`,
+      );
     }
 
     // File output
     if (levels.file.includes(level)) {
       if (mode === "memory") {
         if (!buffers.has(fileId)) buffers.set(fileId, []);
-        buffers.get(fileId)!.push(entry);
+        buffers.get(fileId)?.push(entry);
       } else {
-        getStream(fileId).write(`[${entry.timestamp}] [${level.toUpperCase()}] ${entry.message}\n`);
+        getStream(fileId)?.write(
+          `[${entry.timestamp}] [${level.toUpperCase()}] ${entry.message}\n`,
+        );
       }
     }
   };
@@ -62,22 +78,26 @@ export const createLogger = async (config: LoggerConfig = {}, debug?: boolean) =
   const flush = async () => {
     if (mode === "memory") {
       const timestamp = new Date().toISOString().replace(/:/g, "-");
-      const writePromises = Array.from(buffers.entries()).map(async ([fileId, entries]) => {
-        try {
-          const filePath = path.join(
-            logDir,
-            singleFile ? `combined-${timestamp}.log` : `${fileId}-${timestamp}.log`,
-          );
-          const lines = entries.map(
-            e => `[${e.timestamp}] [${e.level.toUpperCase()}] ${e.message}`,
-          );
-          await fsPromises.mkdir(path.dirname(filePath), { recursive: true });
-          await fsPromises.appendFile(filePath, lines.join("\n") + "\n");
-        } catch (error) {
-          /* v8 ignore next 2 -- logs only */
-          console.warn(`Failed to write log file for ${fileId}: ${error}`);
-        }
-      });
+      const writePromises = Array.from(buffers.entries()).map(
+        async ([fileId, entries]) => {
+          try {
+            const filePath = path.join(
+              logDir,
+              singleFile
+                ? `combined-${timestamp}.log`
+                : `${fileId}-${timestamp}.log`,
+            );
+            const lines = entries.map(
+              (e) => `[${e.timestamp}] [${e.level.toUpperCase()}] ${e.message}`,
+            );
+            await fsPromises.mkdir(path.dirname(filePath), { recursive: true });
+            await fsPromises.appendFile(filePath, `${lines.join("\n")}\n`);
+          } catch (error) {
+            /* v8 ignore next 2 -- logs only */
+            console.warn(`Failed to write log file for ${fileId}: ${error}`);
+          }
+        },
+      );
       await Promise.all(writePromises);
     }
     for (const s of streams.values()) {
@@ -90,7 +110,7 @@ export const createLogger = async (config: LoggerConfig = {}, debug?: boolean) =
     }
 
     // Wait for stream to close
-    await new Promise(resolve => setTimeout(resolve, 10));
+    await new Promise((resolve) => setTimeout(resolve, 10));
   };
 
   return {

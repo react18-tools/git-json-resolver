@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { processMerge, resolveGitMergeFiles } from "./merge-processor";
 import { execSync } from "node:child_process";
 import fs from "node:fs/promises";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { processMerge, resolveGitMergeFiles } from "./merge-processor";
 
 // Mock all dependencies
 vi.mock("node:child_process");
@@ -14,13 +14,13 @@ vi.mock("./conflict-helper");
 vi.mock("./logger");
 vi.mock("./file-parser");
 
+import { reconstructConflict } from "./conflict-helper";
+import { normalizeParsers, runParser } from "./file-parser";
 import { serialize } from "./file-serializer";
+import { createLogger } from "./logger";
 import { mergeObject } from "./merger";
 import { normalizeConfig } from "./normalizer";
 import { backupFile } from "./utils";
-import { reconstructConflict } from "./conflict-helper";
-import { createLogger } from "./logger";
-import { normalizeParsers, runParser } from "./file-parser";
 
 const mockExecSync = vi.mocked(execSync);
 const mockFs = vi.mocked(fs);
@@ -83,7 +83,11 @@ describe("processMerge", () => {
     });
     expect(mockBackupFile).toHaveBeenCalledWith("test.json", undefined);
     expect(mockSerialize).toHaveBeenCalledWith("json", mergedResult);
-    expect(mockFs.writeFile).toHaveBeenCalledWith("test.json", '{"merged":true}', "utf8");
+    expect(mockFs.writeFile).toHaveBeenCalledWith(
+      "test.json",
+      '{"merged":true}',
+      "utf8",
+    );
     expect(mockExecSync).toHaveBeenCalledWith("git add test.json");
     expect(result).toEqual({ success: true, conflicts: [] });
   });
@@ -109,11 +113,20 @@ describe("processMerge", () => {
       autoStage: false,
     });
 
-    expect(mockReconstructConflict).toHaveBeenCalledWith({}, { a: 1 }, { a: 2 }, "json");
-    expect(mockFs.writeFile).toHaveBeenCalledWith("test.json", reconstructedContent, "utf8");
+    expect(mockReconstructConflict).toHaveBeenCalledWith(
+      {},
+      { a: 1 },
+      { a: 2 },
+      "json",
+    );
+    expect(mockFs.writeFile).toHaveBeenCalledWith(
+      "test.json",
+      `${reconstructedContent}\n`,
+      "utf8",
+    );
     expect(mockFs.writeFile).toHaveBeenCalledWith(
       "test.json.conflict.json",
-      JSON.stringify(conflicts, null, 2),
+      `${JSON.stringify(conflicts, null, 2)}\n`,
     );
     expect(mockExecSync).not.toHaveBeenCalled();
     expect(result).toEqual({ success: false, conflicts });
@@ -157,7 +170,10 @@ describe("processMerge", () => {
       logger: mockLogger,
     });
 
-    expect(mockLogger.debug).toHaveBeenCalledWith("test.json", expect.stringContaining("merged"));
+    expect(mockLogger.debug).toHaveBeenCalledWith(
+      "test.json",
+      expect.stringContaining("merged"),
+    );
   });
 
   it("skips auto-staging when disabled", async () => {
@@ -187,13 +203,18 @@ describe("resolveGitMergeFiles", () => {
     flush: vi.fn(),
   };
 
-  const mockExit = vi.spyOn(process, "exit").mockImplementation(() => undefined as never);
+  const mockExit = vi
+    .spyOn(process, "exit")
+    .mockImplementation(() => undefined as never);
 
   beforeEach(() => {
     vi.clearAllMocks();
     mockCreateLogger.mockResolvedValue(mockLogger);
-    mockNormalizeConfig.mockResolvedValue({ debug: false, customStrategies: {} } as any);
-    mockFs.readFile.mockImplementation(path => {
+    mockNormalizeConfig.mockResolvedValue({
+      debug: false,
+      customStrategies: {},
+    } as any);
+    mockFs.readFile.mockImplementation((path) => {
       if (path === "ours.json") return Promise.resolve('{"a":1}');
       if (path === "base.json") return Promise.resolve('{"a":0}');
       if (path === "theirs.json") return Promise.resolve('{"a":2}');
@@ -217,7 +238,11 @@ describe("resolveGitMergeFiles", () => {
     expect(mockFs.readFile).toHaveBeenCalledWith("base.json", "utf8");
     expect(mockFs.readFile).toHaveBeenCalledWith("theirs.json", "utf8");
     expect(mockRunParser).toHaveBeenCalledTimes(3);
-    expect(mockFs.writeFile).toHaveBeenCalledWith("ours.json", '{"a":1}', "utf8");
+    expect(mockFs.writeFile).toHaveBeenCalledWith(
+      "ours.json",
+      '{"a":1}',
+      "utf8",
+    );
     expect(mockLogger.flush).toHaveBeenCalled();
     expect(mockExit).toHaveBeenCalledWith(0);
   });
@@ -236,7 +261,7 @@ describe("resolveGitMergeFiles", () => {
   });
 
   it("handles missing base file gracefully", async () => {
-    mockFs.readFile.mockImplementation(path => {
+    mockFs.readFile.mockImplementation((path) => {
       if (path === "ours.json") return Promise.resolve('{"a":1}');
       if (path === "base.json") return Promise.reject(new Error("Not found"));
       if (path === "theirs.json") return Promise.resolve('{"a":2}');
@@ -250,9 +275,14 @@ describe("resolveGitMergeFiles", () => {
   });
 
   it("enables debug logging when configured", async () => {
-    mockNormalizeConfig.mockResolvedValue({ debug: true, customStrategies: {} } as any);
+    mockNormalizeConfig.mockResolvedValue({
+      debug: true,
+      customStrategies: {},
+    } as any);
 
-    await resolveGitMergeFiles("ours.json", "base.json", "theirs.json", { debug: true });
+    await resolveGitMergeFiles("ours.json", "base.json", "theirs.json", {
+      debug: true,
+    });
 
     expect(mockLogger.debug).toHaveBeenCalledWith(
       "git-merge",

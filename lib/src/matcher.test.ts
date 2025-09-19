@@ -1,9 +1,21 @@
-import { describe, it, expect } from "vitest";
-import { basicMatcher, ESCAPED_DOT, loadMatcher, ESCAPED_SLASH } from "./matcher";
+import { describe, expect, it } from "vitest";
+import {
+  basicMatcher,
+  ESCAPED_DOT,
+  ESCAPED_SLASH,
+  loadMatcher,
+} from "./matcher";
 
-for (const matcherName of ["basicMatcher", "micromatch", "picomatch"] as const) {
+for (const matcherName of [
+  "basicMatcher",
+  "micromatch",
+  "picomatch",
+] as const) {
   describe(matcherName, async () => {
-    const matcher = matcherName === "basicMatcher" ? basicMatcher : await loadMatcher(matcherName);
+    const matcher =
+      matcherName === "basicMatcher"
+        ? basicMatcher
+        : await loadMatcher(matcherName);
     it("matches exact strings", () => {
       expect(matcher.isMatch("foo.bar", ["foo.bar"])).toBe(true);
       expect(matcher.isMatch("foo.bar", ["foo.baz"])).toBe(false);
@@ -60,7 +72,9 @@ for (const matcherName of ["basicMatcher", "micromatch", "picomatch"] as const) 
     });
 
     it("negates simple * wildcard (recursive)", () => {
-      expect(matcher.isMatch("test/app.test.ts", ["!**/*.test.ts"])).toBe(false);
+      expect(matcher.isMatch("test/app.test.ts", ["!**/*.test.ts"])).toBe(
+        false,
+      );
       expect(matcher.isMatch("test/app.ts", ["!**/*.test.ts"])).toBe(true);
     });
 
@@ -71,8 +85,12 @@ for (const matcherName of ["basicMatcher", "micromatch", "picomatch"] as const) 
 
     it("handles object fields with dots and slashes", () => {
       // Test scoped package names like @m2d/core
-      expect(matcher.isMatch(`deps.@m2d${ESCAPED_SLASH}core`, ["deps.*"])).toBe(true);
-      expect(matcher.isMatch(`deps.@m2d${ESCAPED_SLASH}core`, ["deps.@m2d\\/core"])).toBe(true);
+      expect(matcher.isMatch(`deps.@m2d${ESCAPED_SLASH}core`, ["deps.*"])).toBe(
+        true,
+      );
+      expect(
+        matcher.isMatch(`deps.@m2d${ESCAPED_SLASH}core`, ["deps.@m2d\\/core"]),
+      ).toBe(true);
 
       // Test field names with both dots and slashes
       expect(
@@ -99,12 +117,18 @@ describe("loadMatcher", () => {
   });
 
   it("throws on unknown matcher", async () => {
-    await expect(() => loadMatcher("invalid" as any)).rejects.toThrow(/Unknown matcher/);
+    await expect(() => loadMatcher("invalid" as any)).rejects.toThrow(
+      /Unknown matcher/,
+    );
   });
 
   it("handles complex field names consistently across matchers", async () => {
     const testCases = [
-      { field: `deps.@m2d${ESCAPED_SLASH}core`, pattern: "deps.*", expected: true },
+      {
+        field: `deps.@m2d${ESCAPED_SLASH}core`,
+        pattern: "deps.*",
+        expected: true,
+      },
       {
         field: `urls.https:${ESCAPED_SLASH}${ESCAPED_SLASH}api${ESCAPED_DOT}example${ESCAPED_DOT}com${ESCAPED_SLASH}v1`,
         pattern: "urls.*",

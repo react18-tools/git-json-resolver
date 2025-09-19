@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { NormalizedConfig } from "./normalizer";
+import type { NormalizedConfig } from "./normalizer";
 
 export interface FileEntry {
   filePath: string;
@@ -27,12 +27,21 @@ export const StrategyStatus_SKIP = 3 as const;
  * @returns `true` if conflict markers exist, otherwise `false`.
  */
 export const hasConflict = (content: string): boolean => {
-  return content.includes("<<<<<<<") && content.includes("=======") && content.includes(">>>>>>>");
+  return (
+    content.includes("<<<<<<<") &&
+    content.includes("=======") &&
+    content.includes(">>>>>>>")
+  );
 };
 
 export type CollectFilesOptions = Pick<
   NormalizedConfig,
-  "include" | "exclude" | "matcher" | "includeNonConflicted" | "debug" | "backupDir"
+  | "include"
+  | "exclude"
+  | "matcher"
+  | "includeNonConflicted"
+  | "debug"
+  | "backupDir"
 > & {
   /** Root directory to start traversal (defaults to `process.cwd()`). */
   root?: string;
@@ -63,7 +72,8 @@ export const listMatchingFiles = async ({
     // ignore
   }
   for (const p of [...include, ...exclude]) {
-    if (p.startsWith("!")) throw new Error(`Negation not allowed in include/exclude: ${p}`);
+    if (p.startsWith("!"))
+      throw new Error(`Negation not allowed in include/exclude: ${p}`);
     if (p.includes("\\")) console.warn(`Use '/' as path separator: ${p}`);
   }
 
@@ -71,7 +81,10 @@ export const listMatchingFiles = async ({
 
   const fileMatcher = (filepath: string) => {
     const posixPath = filepath.replace(/\\/g, "/");
-    return matcher.isMatch(posixPath, include) && !matcher.isMatch(posixPath, exclude);
+    return (
+      matcher.isMatch(posixPath, include) &&
+      !matcher.isMatch(posixPath, exclude)
+    );
   };
 
   const skipDirMatcher = createSkipDirectoryMatcher(
@@ -97,7 +110,10 @@ export const listMatchingFiles = async ({
 
       if (entry.isDirectory()) {
         /* v8 ignore next */
-        if (!/node_modules|\.git/.test(entry.name) && !skipDirMatcher(relativePath)) {
+        if (
+          !/node_modules|\.git/.test(entry.name) &&
+          !skipDirMatcher(relativePath)
+        ) {
           await walk(fullPath);
         }
       } else if (fileMatcher(relativePath)) {
@@ -131,7 +147,10 @@ export const createSkipDirectoryMatcher = (
   matcher: NormalizedConfig["matcher"],
 ) => {
   // ---- Case 1: includes are only root-level files → prune all dirs
-  if (include.length > 0 && include.every(p => !p.includes("/") && !p.includes("**"))) {
+  if (
+    include.length > 0 &&
+    include.every((p) => !p.includes("/") && !p.includes("**"))
+  ) {
     return () => false; // minimal: just exclude all dirs
   }
 
@@ -166,7 +185,10 @@ export const createSkipDirectoryMatcher = (
   };
 };
 
-export const backupFile = async (filePath: string, backupDir = DEFAULT_BACKUP_DIR) => {
+export const backupFile = async (
+  filePath: string,
+  backupDir = DEFAULT_BACKUP_DIR,
+) => {
   const relPath = path.relative(process.cwd(), filePath);
   const backupPath = path.join(backupDir, relPath);
 
@@ -194,7 +216,9 @@ export const restoreBackups = async (backupDir = ".merge-backups") => {
             await fs.copyFile(srcPath, destPath);
           } catch (error) {
             /* v8 ignore next 2 -- Logging and warning only */
-            console.warn(`Failed to restore ${srcPath.replace(/[\r\n\t]/g, "")}: ${error}`);
+            console.warn(
+              `Failed to restore ${srcPath.replace(/[\r\n\t]/g, "")}: ${error}`,
+            );
           }
         }
       }

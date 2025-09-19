@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from "vitest";
-import { normalizeConfig } from "./normalizer";
+import { describe, expect, it, vi } from "vitest";
 import { basicMatcher } from "./matcher";
+import { normalizeConfig } from "./normalizer";
 import type { Config } from "./types";
 
 describe("normalizeConfig", () => {
@@ -14,11 +14,15 @@ describe("normalizeConfig", () => {
 
   it("accepts single default strategy", async () => {
     const result = await normalizeConfig({ defaultStrategy: "theirs" });
-    expect(result.rules.default).toEqual([{ name: "theirs", important: false }]);
+    expect(result.rules.default).toEqual([
+      { name: "theirs", important: false },
+    ]);
   });
 
   it("accepts multiple default strategies", async () => {
-    const result = await normalizeConfig({ defaultStrategy: ["merge", "theirs"] });
+    const result = await normalizeConfig({
+      defaultStrategy: ["merge", "theirs"],
+    });
     expect(result.rules.default).toEqual([
       { name: "merge", important: false },
       { name: "theirs", important: false },
@@ -74,7 +78,9 @@ describe("normalizeConfig", () => {
         merge: ["[a.b]"],
       },
     };
-    await expect(() => normalizeConfig(config)).rejects.toThrow(/Invalid bracket form/);
+    await expect(() => normalizeConfig(config)).rejects.toThrow(
+      /Invalid bracket form/,
+    );
   });
 
   it("throws on empty rule key", async () => {
@@ -83,7 +89,9 @@ describe("normalizeConfig", () => {
         merge: ["!"],
       },
     };
-    await expect(() => normalizeConfig(config)).rejects.toThrow(/Invalid rule key/);
+    await expect(() => normalizeConfig(config)).rejects.toThrow(
+      /Invalid rule key/,
+    );
   });
 
   it("expands rules tree into exact entries", async () => {
@@ -125,7 +133,9 @@ describe("normalizeConfig", () => {
         "merge!!": ["foo"],
       },
     };
-    await expect(normalizeConfig(config)).rejects.toThrow(/must not end with "!"/);
+    await expect(normalizeConfig(config)).rejects.toThrow(
+      /must not end with "!"/,
+    );
   });
 
   it("throws on empty rule key '!'", async () => {
@@ -165,7 +175,9 @@ describe("normalizeConfig", () => {
         merge: ["[a.b]"],
       },
     };
-    await expect(normalizeConfig(config)).rejects.toThrow(/Invalid bracket form/);
+    await expect(normalizeConfig(config)).rejects.toThrow(
+      /Invalid bracket form/,
+    );
   });
 
   it("throws on empty bracket form", async () => {
@@ -174,7 +186,9 @@ describe("normalizeConfig", () => {
         merge: ["[]"],
       },
     };
-    await expect(normalizeConfig(config)).rejects.toThrow(/Invalid bracket form/);
+    await expect(normalizeConfig(config)).rejects.toThrow(
+      /Invalid bracket form/,
+    );
   });
 
   it("throws on invalid escaped dot in bracket form", async () => {
@@ -183,7 +197,9 @@ describe("normalizeConfig", () => {
         merge: ["[a.b]"],
       },
     };
-    await expect(normalizeConfig(config)).rejects.toThrow(/Invalid bracket form/);
+    await expect(normalizeConfig(config)).rejects.toThrow(
+      /Invalid bracket form/,
+    );
   });
 
   it("expands deeply nested rule tree", async () => {
@@ -210,7 +226,7 @@ describe("normalizeConfig", () => {
       },
     };
     const result = await normalizeConfig(config);
-    expect(result.rules.exactFields.dup.map(r => r.strategies[0])).toEqual([
+    expect(result.rules.exactFields.dup.map((r) => r.strategies[0])).toEqual([
       { name: "merge", important: false },
       { name: "theirs", important: false },
     ]);

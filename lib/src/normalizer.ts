@@ -4,14 +4,13 @@
  * and classifies rules into exact / top-level / glob categories.
  */
 
-import { Matcher, basicMatcher, loadMatcher } from "./matcher";
-import {
-  InbuiltMergeStrategies,
+import { basicMatcher, loadMatcher, type Matcher } from "./matcher";
+import type {
   AllStrategies,
   Config,
   RuleTree,
-  StrategyPlugin,
   StrategyFn,
+  StrategyPlugin,
 } from "./types";
 
 export interface StrategyItem {
@@ -32,8 +31,10 @@ export interface NormalizedRules {
   default: StrategyItem[];
 }
 
-export interface NormalizedConfig<T extends string = AllStrategies, TContext = unknown>
-  extends Omit<
+export interface NormalizedConfig<
+  T extends string = AllStrategies,
+  TContext = unknown,
+> extends Omit<
     Config<T, TContext>,
     "byStrategy" | "rules" | "defaultStrategy" | "customStrategies"
   > {
@@ -86,14 +87,17 @@ export const normalizeConfig = async <T extends string = AllStrategies>(
   };
 
   const resolvedMatcher =
-    typeof matcher === "string" ? await loadMatcher(matcher) : (matcher ?? basicMatcher);
+    typeof matcher === "string"
+      ? await loadMatcher(matcher)
+      : (matcher ?? basicMatcher);
 
   let order = 0;
 
   if (byStrategy) {
     for (const [rawStrategy, fields] of Object.entries(byStrategy)) {
       if (!fields) continue;
-      const { name, important: strategyImportant } = parseStrategyName(rawStrategy);
+      const { name, important: strategyImportant } =
+        parseStrategyName(rawStrategy);
       for (const raw of fields as string[]) {
         const { key, important: keyImportant } = parseImportance(raw);
         addRule(normalizedRules, key, {
@@ -108,7 +112,7 @@ export const normalizeConfig = async <T extends string = AllStrategies>(
   if (rules) {
     expandRuleTree(rules, [], (pathKey, strategyNames) => {
       const { key, important: keyImportant } = parseImportance(pathKey);
-      const strategies = strategyNames.map(s => {
+      const strategies = strategyNames.map((s) => {
         const { name, important } = parseStrategyName(s);
         return { name, important: important || keyImportant };
       });
@@ -133,7 +137,7 @@ export const normalizeConfig = async <T extends string = AllStrategies>(
 const normalizeDefault = <T extends string>(def: T | T[]): StrategyItem[] => {
   const arr = Array.isArray(def) ? def : [def];
 
-  return arr.map(name => {
+  return arr.map((name) => {
     const important = name.endsWith("!");
     ensureStrategyNameValid(name.slice(0, -1));
     return {
@@ -176,7 +180,9 @@ const addRule = (target: NormalizedRules, key: string, entry: StrategyList) => {
   if (/^\[.*\]$/.test(key)) {
     const field = key.slice(1, -1);
     if (field.replace(/\\\./g, "").includes(".") || field.trim() === "") {
-      throw new Error(`Invalid bracket form "${key}". Use a single bare key like "[id]".`);
+      throw new Error(
+        `Invalid bracket form "${key}". Use a single bare key like "[id]".`,
+      );
     }
     const pattern = `**.${field}.**`;
     push(target.patterns, pattern, entry);
@@ -211,9 +217,13 @@ const expandRuleTree = <T extends string>(
   }
 };
 
-const push = (bucket: Record<string, StrategyList[]>, key: string, entry: StrategyList) => {
-  const arr = (bucket[key] ??= []);
-  arr.push(entry);
+const push = (
+  bucket: Record<string, StrategyList[]>,
+  key: string,
+  entry: StrategyList,
+) => {
+  bucket[key] ??= [];
+  bucket[key].push(entry);
 };
 
 /**
@@ -234,7 +244,8 @@ const loadPluginStrategies = async (
       const pluginOrFn: StrategyPlugin = pluginModule.default || pluginModule;
 
       const config = pluginConfig?.[pluginName];
-      const plugin = pluginOrFn instanceof Function ? await pluginOrFn(config) : pluginOrFn;
+      const plugin =
+        pluginOrFn instanceof Function ? await pluginOrFn(config) : pluginOrFn;
 
       if (!plugin.strategies) {
         throw new Error(`Plugin "${pluginName}" does not export strategies`);

@@ -5,36 +5,36 @@
     "build": "turbo build",
     "clean": "turbo clean",
     "dev": "turbo dev",
-    "doc": "node scripts/doc.js && typedoc && cp _config.yml docs && node scripts/add-frontmatter.mjs",
-    "format": "prettier --write \"**/*.{js,jsx,json,ts,tsx,md,css,scss}\"",
-    "lint": "turbo lint",
-    "lint:fix": "turbo lint:fix",
+    "doc": "tsx scripts/doc.ts && typedoc && cp _config.yml docs && tsx scripts/add-frontmatter.ts",
+    "format": "biome check . --write",
+    "lint": "biome check .",
+    "lint:fix": "biome check . --write",
+    "preinstall": "tsx scripts/update-pm.ts",
+    "prepare": "husky",
+    "release": "tsx ./scripts/publish.ts",
     "sync": "turborepo-template-upgrade",
     "test": "turbo test",
     "typecheck": "turbo typecheck",
-    "preinstall": "node scripts/update-pm.js"
+    "upgrade": "tsx ./scripts/upgrade.ts"
   },
-  "pre-commit": [
-    "lint:fix",
-    "format"
-  ],
   "devDependencies": {
     "@changesets/cli": "^2.29.7",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^24.5.2",
-    "pre-commit": "^1.2.2",
-    "prettier": "^3.6.2",
     "turbo": "^2.5.6",
-    "turborepo-template-upgrade": "^0.6.1",
+    "turborepo-template-upgrade": "^0.6.2",
     "typedoc": "^0.28.13",
     "typedoc-plugin-markdown": "^4.8.1",
     "typedoc-plugin-mdn-links": "^5.0.9",
     "typedoc-plugin-missing-exports": "^4.1.0",
-    "typedoc-plugin-rename-defaults": "^0.7.3"
+    "typedoc-plugin-rename-defaults": "^0.7.3",
+    "@biomejs/biome": "2.2.4",
+    "husky": "^9.1.7",
+    "tsx": "^4.20.5"
   },
-  "packageManager": "pnpm@9.15.5",
+  "packageManager": "pnpm@10.17.0",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "pnpm": {
     "overrides": {

@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createLogger } from "./logger";
 
 const TEST_LOG_DIR = "test-logs";
@@ -32,15 +32,23 @@ describe("createLogger", async () => {
     const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
     const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
-    const logger = await createLogger({ levels: { stdout: ["warn", "error"] } });
+    const logger = await createLogger({
+      levels: { stdout: ["warn", "error"] },
+    });
 
     logger.warn("test", "warning message");
     logger.error("test", "error message");
     logger.info("test", "info message");
 
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining("[WARN] warning message"));
-    expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining("[ERROR] error message"));
-    expect(consoleSpy).not.toHaveBeenCalledWith(expect.stringContaining("[INFO] info message"));
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining("[WARN] warning message"),
+    );
+    expect(errorSpy).toHaveBeenCalledWith(
+      expect.stringContaining("[ERROR] error message"),
+    );
+    expect(consoleSpy).not.toHaveBeenCalledWith(
+      expect.stringContaining("[INFO] info message"),
+    );
   });
 
   it("writes to files in memory mode", async () => {
@@ -57,7 +65,10 @@ describe("createLogger", async () => {
     const files = fs.readdirSync(TEST_LOG_DIR);
     expect(files.length).toBeGreaterThan(0);
 
-    const logContent = fs.readFileSync(path.join(TEST_LOG_DIR, files[0]), "utf8");
+    const logContent = fs.readFileSync(
+      path.join(TEST_LOG_DIR, files[0]),
+      "utf8",
+    );
     expect(logContent).toContain("[INFO] info message");
     expect(logContent).toContain("[WARN] warning message");
   });
@@ -82,7 +93,7 @@ describe("createLogger", async () => {
   });
 
   it("creates log directory if it doesn't exist", async () => {
-    const logger = await createLogger({ logDir: TEST_LOG_DIR });
+    const _logger = await createLogger({ logDir: TEST_LOG_DIR });
     expect(fs.existsSync(TEST_LOG_DIR)).toBe(true);
   });
 
